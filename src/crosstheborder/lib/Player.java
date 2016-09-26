@@ -8,6 +8,11 @@ public abstract class Player {
 
     private String name;
 
+    /**
+     * Abstract constructor that sets the name of the player.
+     *
+     * @param name The name of the player.
+     */
     public Player(String name) {
 
         this.name = name;

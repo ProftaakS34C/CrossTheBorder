@@ -1,7 +1,6 @@
 package crosstheborder.lib;
 
 import crosstheborder.lib.enums.MoveDirection;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -13,11 +12,10 @@ import java.util.ArrayList;
  */
 public class Game {
 
+    private ArrayList<Player> players;
+    private Map map;
     private Team usa;
     private Team mex;
-
-    ArrayList<Player> players;
-    Map map;
 
     /**
      * Constructor of Game class.
@@ -57,7 +55,7 @@ public class Game {
      * @return If player can move into this direction.
      */
     public boolean movePlayer(MoveDirection direction, Point point){
-        return true;
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -68,12 +66,7 @@ public class Game {
      * @return If obstacle can e placed.
      */
     public boolean addObstacle(Point location, Player player){
-        if(checkForTrump(player)){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return checkForTrump(player);
     }
 
     /**
@@ -81,14 +74,14 @@ public class Game {
      * they will respawn on a selected tile.
      */
     public void respawnMexican(){
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     /**
      * Gets called after each timerTick. Updates the UI.
      */
     public void update(){
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -98,14 +91,6 @@ public class Game {
      * @return returns what player it is.
      */
     private boolean checkForTrump(Player player){
-        try{
-            return true;
-        }
-        catch(Exception ex){
-            throw ex;
-        }
-
+        return true;
     }
-
-
 }

@@ -9,8 +9,13 @@ import java.awt.*;
  */
 public abstract class PlayerEntity extends Player {
 
-    private Point Location;
+    private Point location;
 
+    /**
+     * Abstract constructor that passes the name to the Player class.
+     *
+     * @param name The name of the player.
+     */
     public PlayerEntity(String name) {
         super(name);
     }
