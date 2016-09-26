@@ -33,6 +33,12 @@ public class Ability {
      * @return boolean returns true if the ability was activated, if not this method returns false
      */
     public boolean useAbility(){
-        return true;
+        if(readyToUse){
+            readyToUse = false;
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 }
