@@ -37,22 +37,6 @@ public class Lobby {
     }
 
     /**
-     * This method is used to get the password of the lobby object
-     * @return String this returns the password of the lobby object
-     */
-    public String getPassword(){
-        return name;
-    }
-
-    /**
-     * This method is used to get the maximum amount of players allowed inside the lobby
-     * @return int  this returns the maximum amount of players allowed inside the lobby
-     */
-    public int getMaxPlayers(){
-        return maxPlayers;
-    }
-
-    /**
      * This method is used to set the name of the lobby
      * @param value the new name of the lobby
      */
@@ -61,11 +45,28 @@ public class Lobby {
     }
 
     /**
+     * This method is used to get the password of the lobby object
+     * @return String this returns the password of the lobby object
+     */
+    public String getPassword() {
+        return name;
+    }
+
+    /**
      * This method is used to set the password of the lobby
      * @param value the new password of the lobby
      */
     public void setPassword(String value){
         password = value;
+    }
+
+    /**
+     * This method is used to get the maximum amount of players allowed inside the lobby
+     *
+     * @return int  this returns the maximum amount of players allowed inside the lobby
+     */
+    public int getMaxPlayers() {
+        return maxPlayers;
     }
 
     /**
@@ -88,7 +89,7 @@ public class Lobby {
     /**
      * This method is used to start the game
      */
-    public void startGame(){
-
+    public void startGame() {
+        throw new UnsupportedOperationException();
     }
 }

@@ -1,7 +1,5 @@
 package crosstheborder.lib;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -11,11 +9,10 @@ import java.util.ArrayList;
  */
 public class Map {
 
+    ArrayList<Tile> tiles;
     private String name;
     private int width;
     private int height;
-
-    ArrayList<Tile> tiles;
 
     /**
      * Constructor of Map class.
@@ -54,8 +51,8 @@ public class Map {
      *
      * @param location The location of the tile that will be checked.
      */
-    public void CanPlaceTileObject(Point location){
-        throw new NotImplementedException();
+    public void canPlaceTileObject(Point location) {
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -65,7 +62,7 @@ public class Map {
      * @param to The kind of tile that the tile has to become.
      */
     public void changeTileObject(Point location, TileObject to){
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
 }

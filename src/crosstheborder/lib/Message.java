@@ -1,7 +1,6 @@
 package crosstheborder.lib;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalTime;
 
 /**
  *  Represents a single message typed in chat by an user.
@@ -10,7 +9,7 @@ import java.util.Date;
 public class Message {
     private String author;
     private String message;
-    private Date time;
+    private LocalTime time;
 
     /**
      * Creates a new message object with the given author and message.
@@ -22,7 +21,7 @@ public class Message {
     public Message(String author, String message) {
         this.author = author;
         this.message = message;
-        this.time = Calendar.getInstance().getTime();
+        this.time = LocalTime.now();
     }
 
     /**
@@ -32,7 +31,7 @@ public class Message {
      */
     @Override
     public String toString() {
-        return this.time.getHours() + ":" + this.time.getMinutes() + " " +
+        return this.time.getHour() + ":" + this.time.getMinute() + " " +
                 this.author + ": " + this.message;
     }
 }
