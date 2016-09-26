@@ -1,6 +1,6 @@
-package crossTheBorder.lib;
+package crosstheborder.lib;
 
-import crossTheBorder.lib.enums.TeamName;
+import crosstheborder.lib.enums.TeamName;
 
 /**
  * @author guillaime

@@ -1,4 +1,4 @@
-package crossTheBorder.lib;
+package crosstheborder.lib;
 
 /**
  * This class represents an ability that is used by a mexican

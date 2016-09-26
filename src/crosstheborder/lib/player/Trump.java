@@ -1,6 +1,6 @@
-package crossTheBorder.lib.player;
+package crosstheborder.lib.player;
 
-import crossTheBorder.lib.Player;
+import crosstheborder.lib.Player;
 
 /**
  *  Represents the Trump player object.

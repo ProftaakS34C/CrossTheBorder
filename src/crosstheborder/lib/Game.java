@@ -1,7 +1,6 @@
-package crossTheBorder.lib;
+package crosstheborder.lib;
 
-import crossTheBorder.lib.enums.MoveDirection;
-import crossTheBorder.lib.enums.TeamName;
+import crosstheborder.lib.enums.MoveDirection;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.awt.*;
