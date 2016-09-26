@@ -51,20 +51,6 @@ public class Game {
     }
 
     /**
-     * Give a point to a team.
-     *
-     * @param teamNameName Name of the team which gets a point.
-     */
-    public void increaseTeamScore(TeamName teamNameName){
-        if(teamNameName == TeamName.USA){
-            usa.increaseScore();
-        }
-        else if(teamNameName == TeamName.MEX){
-            mex.increaseScore();
-        }
-    }
-
-    /**
      * Moves a player to certain position.
      *
      * @param direction Direction which the player is moving in.
