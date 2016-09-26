@@ -1,4 +1,4 @@
-package crossTheBorder.lib;
+package crosstheborder.lib;
 
 /**
  * Created by Oscar on 26-Sep-16.

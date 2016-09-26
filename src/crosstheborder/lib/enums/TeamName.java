@@ -1,4 +1,4 @@
-package crossTheBorder.lib.enums;
+package crosstheborder.lib.enums;
 
 /**
  * Created by guillaime on 26-9-2016.

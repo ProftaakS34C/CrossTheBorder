@@ -1,4 +1,4 @@
-package crossTheBorder.lib;
+package crosstheborder.lib;
 
 import java.util.Calendar;
 import java.util.Date;

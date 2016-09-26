@@ -1,4 +1,4 @@
-package crossTheBorder.ui;/**
+package crosstheborder.ui;/**
  * Created by Oscar on 26-Sep-16.
  */
 

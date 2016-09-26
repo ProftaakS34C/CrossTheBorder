@@ -1,4 +1,4 @@
-package crossTheBorder.lib.tileobject;
+package crosstheborder.lib.tileobject;
 
 /**
  * Created by Oscar on 26-Sep-16.
