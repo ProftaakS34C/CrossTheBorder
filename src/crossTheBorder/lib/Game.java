@@ -1,9 +1,8 @@
 package crossTheBorder.lib;
 
 import crossTheBorder.lib.enums.MoveDirection;
-import crossTheBorder.lib.enums.Team;
-import crossTheBorder.lib.player.PlayerEntity;
-import crossTheBorder.lib.player.Trump;
+import crossTheBorder.lib.enums.TeamName;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -15,8 +14,8 @@ import java.util.ArrayList;
  */
 public class Game {
 
-    private int scoreUSA;
-    private int scoreMexico;
+    private Team usa;
+    private Team mex;
 
     ArrayList<Player> players;
     Map map;
@@ -25,10 +24,12 @@ public class Game {
      * Constructor of Game class.
      */
     public Game(){
-        this.scoreUSA = 0;
-        this.scoreMexico = 0;
+        usa = new Team("USA");
+        mex = new Team("MEX");
+
         players = new ArrayList<>();
         map = new Map("The Border", 20, 20);
+
     }
 
     /**
@@ -37,7 +38,7 @@ public class Game {
      * @return score of USA
      */
     public int getScoreUSA(){
-        return scoreUSA;
+        return usa.getScore();
     }
 
     /**
@@ -46,20 +47,20 @@ public class Game {
      * @return score of MEX
      */
     public int getScoreMexico(){
-        return scoreMexico;
+        return mex.getScore();
     }
 
     /**
      * Give a point to a team.
      *
-     * @param teamName Name of the team which gets a point.
+     * @param teamNameName Name of the team which gets a point.
      */
-    public void setScore(Team teamName){
-        if(teamName == Team.USA){
-            scoreUSA++;
+    public void increaseTeamScore(TeamName teamNameName){
+        if(teamNameName == TeamName.USA){
+            usa.increaseScore();
         }
-        else if(teamName == Team.MEX){
-            scoreMexico++;
+        else if(teamNameName == TeamName.MEX){
+            mex.increaseScore();
         }
     }
 
@@ -95,14 +96,14 @@ public class Game {
      * they will respawn on a selected tile.
      */
     public void respawnMexican(){
-
+        throw new NotImplementedException();
     }
 
     /**
      * Gets called after each timerTick. Updates the UI.
      */
     public void update(){
-
+        throw new NotImplementedException();
     }
 
     /**
@@ -115,7 +116,9 @@ public class Game {
         try{
             return true;
         }
-        catch(Exception ex){return false;}
+        catch(Exception ex){
+            throw ex;
+        }
 
     }
 
