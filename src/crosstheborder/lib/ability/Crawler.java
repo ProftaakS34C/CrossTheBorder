@@ -3,7 +3,8 @@ package crosstheborder.lib.ability;
 import crosstheborder.lib.Ability;
 
 /**
- * Created by Oscar on 26-Sep-16.
+ * Ability Crawler, a crawler can climb over walls.
+ * Overrides the method useAbility from Ability.
  */
 public class Crawler extends Ability {
     /**
