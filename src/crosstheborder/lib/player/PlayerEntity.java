@@ -13,6 +13,7 @@ public abstract class PlayerEntity extends Player {
 
     /**
      * Abstract constructor that passes the name to the Player class.
+     * Calls the {@link Player#Player(String)} constructor.
      *
      * @param name The name of the player.
      */

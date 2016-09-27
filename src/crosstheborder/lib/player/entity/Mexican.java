@@ -15,6 +15,7 @@ public class Mexican extends PlayerEntity {
     /**
      * This is the constructor method of the class "Mexican".
      * in the constructor the name of the Mexican is set.
+     * Calls the {@link PlayerEntity#PlayerEntity(String)} constructor.
      *
      * @param name    The name of the Mexican.
      * @param ability The ability of the Mexican.
@@ -44,7 +45,7 @@ public class Mexican extends PlayerEntity {
 
     /**
      * This method is used when a Mexican uses his ability.
-     * the method useAbility of class Ability is called.
+     * the method {@link Ability#useAbility()} of {@link Ability} is called.
      */
     public void useAbility() {
         ability.useAbility();
