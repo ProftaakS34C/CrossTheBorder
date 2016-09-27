@@ -25,9 +25,6 @@ public class Tank extends Ability {
      */
     @Override
     public boolean useAbility() {
-        if (super.useAbility()) {
-
-        }
         throw new UnsupportedOperationException();
     }
 }

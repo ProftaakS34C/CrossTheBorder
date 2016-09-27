@@ -26,9 +26,6 @@ public class Runner extends Ability {
      */
     @Override
     public boolean useAbility() {
-        if (super.useAbility()) {
-
-        }
         throw new UnsupportedOperationException();
     }
 }
