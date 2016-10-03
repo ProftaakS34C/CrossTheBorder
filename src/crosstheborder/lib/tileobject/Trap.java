@@ -19,7 +19,7 @@ public class Trap implements TileObject {
      */
     @Override
     public void interactWith(TileObject o) {
-
+        o.interactWith(this);
     }
 
     /**
