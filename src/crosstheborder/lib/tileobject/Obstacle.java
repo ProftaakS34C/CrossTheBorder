@@ -3,7 +3,7 @@ package crosstheborder.lib.tileobject;
 import crosstheborder.lib.TileObject;
 
 /**
- * Represents an obstacle like a tree
+ * Represents an obstacle like a tree.
  */
 public class Obstacle implements TileObject {
     private boolean isPassable;
