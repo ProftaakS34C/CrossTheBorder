@@ -1,6 +1,6 @@
 package crosstheborder.lib;
 
-import crosstheborder.lib.enums.MoveDirection;
+import crosstheborder.lib.enumeration.MoveDirection;
 
 import java.awt.*;
 import java.util.ArrayList;
