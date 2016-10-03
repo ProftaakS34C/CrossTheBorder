@@ -5,7 +5,7 @@ package crosstheborder.lib;
  * @author Joram
  * @version 1.0
  */
-public class Ability {
+public abstract class Ability {
     private boolean readyToUse;
     private int cooldownTime;
 
@@ -28,17 +28,8 @@ public class Ability {
     }
 
     /**
-     * This method is used when a player activates an ability.
-     * readyToUse is set to false.
+     * Method used to activate the ability. Must be overriden in all children.
      * @return boolean returns true if the ability was activated, if not this method returns false.
      */
-    public boolean useAbility(){
-        if(readyToUse){
-            readyToUse = false;
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
+    public abstract boolean useAbility();
 }
