@@ -2,14 +2,24 @@ package crosstheborder.lib.tileobject;
 
 import crosstheborder.lib.TileObject;
 
+import java.awt.*;
+
 /**
  * Represents a trap build by {@link crosstheborder.lib.player.Trump}.
  */
 public class Trap implements TileObject {
     private boolean isPassable;
+    private Point location;
 
-    public Trap() {
+    /**
+     * Creates a new trap object.
+     * Sets isPassable to true;
+     *
+     * @param location The location of the Trap.
+     */
+    public Trap(Point location) {
         isPassable = true;
+        this.location = location;
     }
 
     /**
@@ -30,5 +40,15 @@ public class Trap implements TileObject {
     @Override
     public boolean isPassable() {
         return isPassable;
+    }
+
+    /**
+     * Gets the location of the {@link TileObject}.
+     *
+     * @return A point that represents the location of the {@link TileObject}.
+     */
+    @Override
+    public Point getLocation() {
+        return location;
     }
 }

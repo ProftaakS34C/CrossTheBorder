@@ -2,18 +2,24 @@ package crosstheborder.lib.tileobject;
 
 import crosstheborder.lib.TileObject;
 
+import java.awt.*;
+
 /**
  * Represents a wall that can be build by {@link crosstheborder.lib.player.Trump}.
  */
 public class Wall implements TileObject {
     private boolean isPassable;
+    private Point location;
 
     /**
      * Creates a new wall.
      * Sets isPassable to false.
+     *
+     * @param location The location of the wall.
      */
-    public Wall() {
+    public Wall(Point location) {
         isPassable = false;
+        this.location = location;
     }
 
     /**
@@ -34,5 +40,15 @@ public class Wall implements TileObject {
     @Override
     public boolean isPassable() {
         return false;
+    }
+
+    /**
+     * Gets the location of the {@link TileObject}.
+     *
+     * @return A point that represents the location of the {@link TileObject}.
+     */
+    @Override
+    public Point getLocation() {
+        return this.location;
     }
 }

@@ -1,5 +1,7 @@
 package crosstheborder.lib;
 
+import java.awt.*;
+
 /**
  * Represents an object on a tile.
  */
@@ -17,4 +19,11 @@ public interface TileObject {
      * @return A boolean that determines whether the object is passable or not.
      */
     boolean isPassable();
+
+    /**
+     * Gets the location of the {@link TileObject}.
+     *
+     * @return A point that represents the location of the {@link TileObject}.
+     */
+    Point getLocation();
 }

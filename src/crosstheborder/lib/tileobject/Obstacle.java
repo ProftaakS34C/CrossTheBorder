@@ -2,17 +2,24 @@ package crosstheborder.lib.tileobject;
 
 import crosstheborder.lib.TileObject;
 
+import java.awt.*;
+
 /**
  * Represents an obstacle like a tree.
  */
 public class Obstacle implements TileObject {
     private boolean isPassable;
+    private Point location;
 
     /**
-     * Creates a new TileObject.
+     * Creates a new Obstacle.
+     * Sets isPassable to false;
+     *
+     * @param location The location of the Obstacle.
      */
-    public Obstacle() {
+    public Obstacle(Point location) {
         isPassable = false;
+        this.location = location;
     }
 
     /**
@@ -33,5 +40,15 @@ public class Obstacle implements TileObject {
     @Override
     public boolean isPassable() {
         return isPassable;
+    }
+
+    /**
+     * Gets the location of the {@link TileObject}.
+     *
+     * @return A point that represents the location of the {@link TileObject}.
+     */
+    @Override
+    public Point getLocation() {
+        return location;
     }
 }
