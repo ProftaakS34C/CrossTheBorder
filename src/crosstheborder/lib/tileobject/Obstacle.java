@@ -24,4 +24,14 @@ public class Obstacle implements TileObject {
         //Other object should be a player so have the player interact with the tileobject.
         o.interactWith(this);
     }
+
+    /**
+     * Method for getting whether the object is passable or not.
+     *
+     * @return A boolean that determines whether the object is passable or not.
+     */
+    @Override
+    public boolean isPassable() {
+        return isPassable;
+    }
 }
