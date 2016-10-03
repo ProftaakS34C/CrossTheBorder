@@ -1,6 +1,8 @@
 package crosstheborder.lib.player;
 
 import crosstheborder.lib.Player;
+import crosstheborder.lib.enums.MoveDirection;
+import crosstheborder.lib.player.entity.Mexican;
 
 import java.awt.*;
 /**
@@ -16,8 +18,22 @@ public abstract class PlayerEntity extends Player {
      *
      * @param name The name of the player.
      */
-    public PlayerEntity(String name) {
+    public PlayerEntity(String name, Point location) {
         super(name);
+        this.location = location;
+    }
+
+    /**
+     * This method returns location of the player
+     *
+     * @return Location of the player
+     */
+    public Point getLocation(){ return this.location; }
+
+    public void respawn(Point location){
+        if(this.getClass().equals(Mexican.class)){
+            this.location = location;
+        }
     }
 
     /**
@@ -26,8 +42,31 @@ public abstract class PlayerEntity extends Player {
      * @param moveDirection direction.
      * @return if player can move.
      */
-    public boolean moveDirection(String moveDirection){
-        return true;
+    public boolean moveDirection(MoveDirection moveDirection){
+
+        int tilewidth = 10;
+
+        if(moveDirection.equals(MoveDirection.UP)){
+            location = new Point(location.x, location.y - tilewidth);
+            return true;
+        }
+        else if(moveDirection.equals(MoveDirection.DOWN)){
+            location = new Point(location.x, location.y + tilewidth);
+            return true;
+        }
+        else if(moveDirection.equals(MoveDirection.LEFT)){
+            location = new Point(location.x - tilewidth, location.y);
+            return true;
+        }
+        else if(moveDirection.equals(MoveDirection.RIGHT)){
+            location = new Point(location.x + tilewidth, location.y);
+            return true;
+        }
+        else if(moveDirection.equals(MoveDirection.NONE)){
+            this.location = location;
+            return true;
+        }
+        return false;
     }
 
 }

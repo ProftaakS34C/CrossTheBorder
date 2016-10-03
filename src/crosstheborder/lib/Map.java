@@ -1,5 +1,8 @@
 package crosstheborder.lib;
 
+import crosstheborder.lib.enums.MoveDirection;
+import crosstheborder.lib.tileobject.Wall;
+
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -13,6 +16,7 @@ public class Map {
     private String name;
     private int width;
     private int height;
+    private int tilewidth = 10;
 
     /**
      * Constructor of Map class.
@@ -26,6 +30,23 @@ public class Map {
         this.name = name;
         this.width = width;
         this.height = height;
+        tiles = new ArrayList<Tile>();
+
+        int x = 0;
+
+        for(int ix = width; ix > 0; ix--){
+
+            int y = 0;
+            tiles.add(new Tile(new Point(x, y)));
+
+            for(int iy = height -1; iy > 0; iy--){
+
+                y += tilewidth;
+                tiles.add(new Tile(new Point(x, y)));
+            }
+
+            x += tilewidth;
+        }
     }
 
     /**
@@ -47,22 +68,87 @@ public class Map {
     }
 
     /**
+     * Gives the width of a tile.
+     *
+     * @return The width of a tile
+     */
+    public int getTilewidth(){ return this.tilewidth; }
+
+    /**
      * Check if there can be an object on this tile.
      *
      * @param location The location of the tile that will be checked.
      */
-    public void canPlaceTileObject(Point location) {
-        throw new UnsupportedOperationException();
+    public boolean canPlaceTileObject(Point location) {
+
+        for(Tile t : tiles){
+
+            if(t.getLocation().equals(location)){
+
+                if(t.hasTileObject()){
+                    return false;
+                }
+                else{
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
      * Change a tile to a tile with an object.
-     *
-     * @param location The location of the tile that has to be changed.
+     *  @param location The location of the tile that has to be changed.
      * @param to The kind of tile that the tile has to become.
      */
     public void changeTileObject(Point location, TileObject to){
-        throw new UnsupportedOperationException();
+
+        for (Tile t : tiles) {
+
+            if(t.getLocation().equals(location)){
+
+                int index = tiles.indexOf(t);
+                Tile temp = new Tile(location);
+                temp.setTileObject(to);
+
+                tiles.set(index, temp);
+            }
+        }
+    }
+
+    public boolean checkMoveDirection(Point point, MoveDirection direction){
+
+        Point p = null;
+
+        for(Tile t : tiles) {
+
+            if (direction.equals(MoveDirection.DOWN)) {
+
+                p = new Point(point.x, point.y + tilewidth);
+
+            } else if (direction.equals(MoveDirection.LEFT)) {
+
+                p = new Point(point.x - tilewidth, point.y);
+
+            } else if (direction.equals(MoveDirection.RIGHT)) {
+
+                p = new Point(point.x + tilewidth, point.y);
+
+            } else if (direction.equals(MoveDirection.UP)) {
+
+                p = new Point(point.x, point.y - tilewidth);
+            }
+
+            if(t.getLocation().equals(p)){
+
+                if(t.isAccessable()){
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
 }
