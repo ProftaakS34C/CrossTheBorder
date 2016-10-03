@@ -1,4 +1,4 @@
-package crosstheborder.lib.enums;
+package crosstheborder.lib.enumeration;
 
 /**
  * Enumeration that covers the different classes that implement TileObject.

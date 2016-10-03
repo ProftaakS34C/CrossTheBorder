@@ -1,4 +1,4 @@
-package crosstheborder.lib;
+package crosstheborder.lib.interfaces;
 
 import java.awt.*;
 

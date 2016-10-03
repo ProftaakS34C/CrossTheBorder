@@ -1,6 +1,6 @@
 package crosstheborder.lib.tileobject;
 
-import crosstheborder.lib.TileObject;
+import crosstheborder.lib.interfaces.TileObject;
 
 import java.awt.*;
 

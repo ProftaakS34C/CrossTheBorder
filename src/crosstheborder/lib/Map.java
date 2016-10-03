@@ -1,5 +1,7 @@
 package crosstheborder.lib;
 
+import crosstheborder.lib.interfaces.TileObject;
+
 import java.awt.*;
 import java.util.ArrayList;
 
