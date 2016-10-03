@@ -1,7 +1,27 @@
 package crosstheborder.lib.tileobject;
 
+import crosstheborder.lib.TileObject;
+
 /**
- * Created by Oscar on 26-Sep-16.
+ * Represents an obstacle like a tree
  */
-public class Obstacle {
+public class Obstacle implements TileObject {
+    private boolean isPassable;
+
+    /**
+     * Creates a new TileObject.
+     */
+    public Obstacle() {
+        isPassable = false;
+    }
+
+    /**
+     * Method for handling the interaction between two {@link TileObject}s.
+     *
+     * @param o The TileObject that is interacting with this object.
+     */
+    public void interactWith(TileObject o) {
+        //Other object should be a player so have the player interact with the tileobject.
+        o.interactWith(this);
+    }
 }
