@@ -1,5 +1,6 @@
 package crosstheborder.ui.controller;
 
+import crosstheborder.ui.ClientMain;
 import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -21,7 +22,14 @@ public class LayoutController {
     private MenuItem testLobby;
 
     public void testLobbyAction(){
-        //todo implement
+        ClientMain.getInstance().showLobbyMenu();
     }
 
+    public void testMainAction(){
+        ClientMain.getInstance().showMainMenu();
+    }
+
+    public LayoutController(){
+
+    }
 }

@@ -9,6 +9,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -22,7 +23,7 @@ public class ClientMain extends Application {
 
     private Stage primaryStage;
     private BorderPane root;
-
+    private static ClientMain thisInstance;
     /**
      * not a Temp method.
      *
@@ -41,13 +42,16 @@ public class ClientMain extends Application {
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
-
+        thisInstance = this;
         initLayout();
-
+        //show login menu?
         showMainMenu();
 
     }
 
+    public static ClientMain getInstance(){
+        return thisInstance;
+    }
     /**
      * loads the layout into the stage
      */
@@ -84,16 +88,28 @@ public class ClientMain extends Application {
      * loads the lobby menu onto the layout
      */
     public void showLobbyMenu(){
-        //lobby menu does not exist yet.
         Pane lobbyRoot;
-        Scene scene;
         try{
-            lobbyRoot = FXMLLoader.load(getClass().getResource("LobbyMenu.fxml"));
+            lobbyRoot = FXMLLoader.load(getClass().getResource("Views/LobbyMenu.fxml"));
             root.setCenter(lobbyRoot);
-            primaryStage.setTitle("lobby menu");
+            primaryStage.setTitle("Lobby menu");
         }
         catch (IOException x){
             System.err.println("could not load lobby menu fxml");
+            x.printStackTrace();
+        }
+    }
+
+    public void showGameScreen(){
+        //load the game fxml file.
+        Canvas lobbyRoot;
+        try{
+            lobbyRoot = FXMLLoader.load(getClass().getResource("Views/GameScreen.fxml"));
+            root.setCenter(lobbyRoot);
+            primaryStage.setTitle("in game");
+        }
+        catch (IOException x){
+            System.err.println("could not load game screen fxml");
             x.printStackTrace();
         }
     }
