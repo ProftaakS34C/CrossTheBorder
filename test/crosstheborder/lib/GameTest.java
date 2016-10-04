@@ -1,6 +1,7 @@
 package crosstheborder.lib;
 
-import crosstheborder.lib.enums.MoveDirection;
+import crosstheborder.lib.ability.Crawler;
+import crosstheborder.lib.enumeration.MoveDirection;
 import crosstheborder.lib.player.Trump;
 import crosstheborder.lib.player.entity.BorderPatrol;
 import crosstheborder.lib.player.entity.Mexican;
@@ -56,7 +57,7 @@ public class GameTest {
      */
     @Test
     public void addObstacle() throws Exception {
-        Assert.assertTrue(game.addObstacle(new Point(90,60), new Wall(), new Trump("Trump")));
+        Assert.assertTrue(game.addObstacle(new Point(90,60), new Wall(new Point(90, 60)), new Trump("Trump")));
     }
 
     /**
@@ -68,7 +69,7 @@ public class GameTest {
      */
     @Test
     public void respawnMexican() throws Exception {
-        Mexican mex = new Mexican("Juan", new Point(40, 40));
+        Mexican mex = new Mexican("Juan", new Point(40, 40), new Crawler(5));
         game.addPlayer(mex);
         Assert.assertTrue(game.movePlayer(MoveDirection.UP, mex));
         Assert.assertEquals(1, game.getScoreMexico());

@@ -32,7 +32,7 @@ public abstract class PlayerEntity extends Player implements TileObject {
      *
      * @return Location of the player
      */
-    public Point getLocation(){ return this.location; }
+    public abstract Point getLocation();
 
     public void respawn(Point location){
         if(this.getClass().equals(Mexican.class)){
@@ -46,30 +46,26 @@ public abstract class PlayerEntity extends Player implements TileObject {
      * @param moveDirection direction.
      * @return if player can move.
      */
-    public boolean moveDirection(MoveDirection moveDirection){
+    public boolean moveDirection(MoveDirection moveDirection, int tilewidth){
 
-        int tilewidth = 10;
+        switch (moveDirection){
+            case UP:
+                    location = new Point(location.x, location.y - tilewidth);
+                return true;
+            case DOWN:
+                    location = new Point(location.x, location.y + tilewidth);
+                return true;
+            case LEFT:
+                    location = new Point(location.x - tilewidth, location.y);
+                return true;
+            case RIGHT:
+                    location = new Point(location.x + tilewidth, location.y);
+                return true;
+            case NONE:
+                this.location = location;
+                return true;
+        }
 
-        if(moveDirection.equals(MoveDirection.UP)){
-            location = new Point(location.x, location.y - tilewidth);
-            return true;
-        }
-        else if(moveDirection.equals(MoveDirection.DOWN)){
-            location = new Point(location.x, location.y + tilewidth);
-            return true;
-        }
-        else if(moveDirection.equals(MoveDirection.LEFT)){
-            location = new Point(location.x - tilewidth, location.y);
-            return true;
-        }
-        else if(moveDirection.equals(MoveDirection.RIGHT)){
-            location = new Point(location.x + tilewidth, location.y);
-            return true;
-        }
-        else if(moveDirection.equals(MoveDirection.NONE)){
-            this.location = location;
-            return true;
-        }
         return false;
     }
 

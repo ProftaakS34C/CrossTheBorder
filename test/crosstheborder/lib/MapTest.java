@@ -1,5 +1,6 @@
 package crosstheborder.lib;
 
+import crosstheborder.lib.interfaces.TileObject;
 import crosstheborder.lib.tileobject.Wall;
 import org.junit.After;
 import org.junit.Assert;
@@ -55,7 +56,7 @@ public class MapTest {
         Tile t = map.tiles.get(3);
         Assert.assertEquals(new Point(10, 10), t.getLocation());
 
-        TileObject to = new Wall();
+        TileObject to = new Wall(new Point(10, 10));
 
         map.changeTileObject(new Point(10, 10), to);
         Assert.assertFalse(map.canPlaceTileObject(new Point(10, 10)));

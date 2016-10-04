@@ -101,7 +101,7 @@ public class Game {
                     }
 
                     // change the location in the Playerentity
-                    if(pe.moveDirection(direction)){
+                    if(pe.moveDirection(direction, map.getTilewidth())){
                         // Checks if the player is a Mexican and looks if he's moving into USA, so he can respawn.
                         if(pl.getClass().equals(Mexican.class)){
                             if(location.y >= usaY){

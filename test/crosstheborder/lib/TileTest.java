@@ -1,5 +1,7 @@
 package crosstheborder.lib;
 
+import crosstheborder.lib.interfaces.TileObject;
+import crosstheborder.lib.tileobject.Wall;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -34,7 +36,7 @@ public class TileTest {
     public void hasTileObjectTest() throws Exception {
         Assert.assertFalse(tile.hasTileObject());
 
-        tile.setTileObject(new TileObject());
+        tile.setTileObject(new Wall(new Point(2, 2)));
         Assert.assertTrue(tile.hasTileObject());
     }
 }
