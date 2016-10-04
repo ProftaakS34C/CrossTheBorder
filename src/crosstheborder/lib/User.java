@@ -27,6 +27,12 @@ public class User {
     }
 
     /**
+     * This method is used to get the player object of the user
+     * @return Player the player object of the user
+     */
+    public Player getPlayer(){return player;}
+
+    /**
      * This method is used to get the name of the user
      * @return String the name of the user
      */
