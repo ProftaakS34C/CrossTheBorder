@@ -1,6 +1,7 @@
-package crosstheborder.ui.input;
+package crosstheborder.lib;
 
 import crosstheborder.lib.enumeration.MoveDirection;
+import crosstheborder.lib.interfaces.InputPropertiesGetter;
 
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -8,19 +9,20 @@ import java.util.concurrent.ArrayBlockingQueue;
 /**
  * Represents a buffer for inputMoves.
  * Handles what the users next desired action is going to be.
- * Saves up to 10 inputs at the same time and retrieves the oldest input first.
+ * Saves up to a certain amount of inputs for movement at the same time and retrieves the oldest input first.
  * Thread safe.
  *
  * @author Oscar de Leeuw
  */
 public class InputBuffer {
     private Queue<MoveDirection> inputMoves;
+    private InputPropertiesGetter properties = ServerSettings.getInstance();
 
     /**
      * Creates a new InputBuffer.
      */
     public InputBuffer() {
-        inputMoves = new ArrayBlockingQueue<>(10);
+        inputMoves = new ArrayBlockingQueue<>(properties.getInputBufferSize());
     }
 
     /**
