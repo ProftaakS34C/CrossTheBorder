@@ -1,17 +1,20 @@
 package crosstheborder.lib.player;
 
+import crosstheborder.lib.InputBuffer;
 import crosstheborder.lib.Player;
 import crosstheborder.lib.interfaces.TileObject;
 
 import java.awt.*;
 /**
- * Created by Oscar on 26-Sep-16.
  * Player entity is the super class for the Mexican and border patrol.
+ *
+ * @author Oscar de Leeuw
  */
 public abstract class PlayerEntity extends Player implements TileObject {
 
     protected Point location;
     protected boolean isPassable;
+    private InputBuffer inputBuffer;
 
     /**
      * Abstract constructor that passes the name to the Player class.
@@ -23,16 +26,12 @@ public abstract class PlayerEntity extends Player implements TileObject {
     public PlayerEntity(String name, Point location) {
         super(name);
         this.location = location;
+        this.inputBuffer = new InputBuffer();
     }
 
-    /**
-     * Method which returns if the players can move or not
-     *
-     * @param moveDirection direction.
-     * @return if player can move.
-     */
-    public boolean moveDirection(String moveDirection){
-        return true;
+    public InputBuffer getInputBuffer() {
+        return this.inputBuffer;
     }
+
 
 }
