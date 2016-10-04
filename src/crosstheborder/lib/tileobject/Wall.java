@@ -1,19 +1,54 @@
 package crosstheborder.lib.tileobject;
 
-import crosstheborder.lib.TileObject;
+import crosstheborder.lib.interfaces.TileObject;
+
+import java.awt.*;
 
 /**
- * Created by Oscar on 26-Sep-16.
+ * Represents a wall that can be build by {@link crosstheborder.lib.player.Trump}.
  */
-public class Wall extends TileObject{
+public class Wall implements TileObject {
+    private boolean isPassable;
+    private Point location;
 
-    int level;
-
-    public Wall(){
-        level = 1;
+    /**
+     * Creates a new wall.
+     * Sets isPassable to false.
+     *
+     * @param location The location of the wall.
+     */
+    public Wall(Point location) {
+        isPassable = false;
+        this.location = location;
     }
 
-    public void increaseLevel(){
-        level++;
+    /**
+     * Method for handling the interaction between two {@link TileObject}s.
+     *
+     * @param o The TileObject that is interacting with this object.
+     */
+    @Override
+    public void interactWith(TileObject o) {
+        o.interactWith(this);
+    }
+
+    /**
+     * Method for getting whether the object is passable or not.
+     *
+     * @return A boolean that determines whether the object is passable or not.
+     */
+    @Override
+    public boolean isPassable() {
+        return false;
+    }
+
+    /**
+     * Gets the location of the {@link TileObject}.
+     *
+     * @return A point that represents the location of the {@link TileObject}.
+     */
+    @Override
+    public Point getLocation() {
+        return this.location;
     }
 }

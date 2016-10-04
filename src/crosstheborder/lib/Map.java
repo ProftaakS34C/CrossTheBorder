@@ -1,5 +1,7 @@
 package crosstheborder.lib;
 
+import crosstheborder.lib.interfaces.TileObject;
+
 import crosstheborder.lib.enums.MoveDirection;
 import crosstheborder.lib.tileobject.Wall;
 
@@ -99,7 +101,7 @@ public class Map {
 
     /**
      * Change a tile to a tile with an object.
-     *  @param location The location of the tile that has to be changed.
+     * @param location The location of the tile that has to be changed.
      * @param to The kind of tile that the tile has to become.
      */
     public void changeTileObject(Point location, TileObject to){

@@ -5,6 +5,8 @@ import crosstheborder.lib.tileobject.Obstacle;
 import crosstheborder.lib.tileobject.Trap;
 import crosstheborder.lib.tileobject.Wall;
 
+import crosstheborder.lib.interfaces.TileObject;
+
 import java.awt.*;
 
 /**

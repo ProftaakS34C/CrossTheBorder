@@ -14,6 +14,7 @@ public class Trump extends Player {
 
     /**
      * Creates a new Trump object with the given name.
+     * Calls the {@link Player#Player(String)} constructor.
      *
      * @param name The name of the player.
      */
