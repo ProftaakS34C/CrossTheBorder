@@ -2,7 +2,7 @@ package crosstheborder.lib.player;
 
 import crosstheborder.lib.Player;
 import crosstheborder.lib.interfaces.TileObject;
-import crosstheborder.lib.enums.MoveDirection;
+import crosstheborder.lib.enumeration.MoveDirection;
 import crosstheborder.lib.player.entity.Mexican;
 
 import java.awt.*;

@@ -2,7 +2,7 @@ package crosstheborder.lib;
 
 import crosstheborder.lib.interfaces.TileObject;
 
-import crosstheborder.lib.enums.MoveDirection;
+import crosstheborder.lib.enumeration.MoveDirection;
 import crosstheborder.lib.tileobject.Wall;
 
 import java.awt.*;
@@ -18,6 +18,9 @@ public class Map {
     private String name;
     private int width;
     private int height;
+
+    // This value is to give a tile a width, so the tile next to the first tile
+    // will not overlap the other one.
     private int tilewidth = 10;
 
     /**
@@ -34,20 +37,14 @@ public class Map {
         this.height = height;
         tiles = new ArrayList<Tile>();
 
-        int x = 0;
-
-        for(int ix = width; ix > 0; ix--){
-
-            int y = 0;
-            tiles.add(new Tile(new Point(x, y)));
-
-            for(int iy = height -1; iy > 0; iy--){
-
-                y += tilewidth;
-                tiles.add(new Tile(new Point(x, y)));
+        /**
+         * Fills the ArrayList with points.
+         * For x < width, look if y < height and make an tile
+         */
+        for(int x = 0; x < width; x++) {
+            for(int y = 0; y < height; y++) {
+                tiles.add(new Tile(new Point(x,y)));
             }
-
-            x += tilewidth;
         }
     }
 
@@ -87,12 +84,7 @@ public class Map {
 
             if(t.getLocation().equals(location)){
 
-                if(t.hasTileObject()){
-                    return false;
-                }
-                else{
-                    return true;
-                }
+                return t.hasTileObject();
             }
         }
 
@@ -106,50 +98,39 @@ public class Map {
      */
     public void changeTileObject(Point location, TileObject to){
 
-        for (Tile t : tiles) {
-
-            if(t.getLocation().equals(location)){
-
-                int index = tiles.indexOf(t);
-                Tile temp = new Tile(location);
-                temp.setTileObject(to);
-
-                tiles.set(index, temp);
-            }
-        }
+        tiles.stream().filter(x -> x.equals(location)).findFirst().get().setTileObject(to);
     }
 
     public boolean checkMoveDirection(Point point, MoveDirection direction){
 
+        // Make new point, look in which direction the player is moving
+        // And change the x or y value.
         Point p = null;
 
-        for(Tile t : tiles) {
+        if (direction.equals(MoveDirection.DOWN)) {
 
-            if (direction.equals(MoveDirection.DOWN)) {
+            p = new Point(point.x, point.y + tilewidth);
 
-                p = new Point(point.x, point.y + tilewidth);
+        } else if (direction.equals(MoveDirection.LEFT)) {
 
-            } else if (direction.equals(MoveDirection.LEFT)) {
+            p = new Point(point.x - tilewidth, point.y);
 
-                p = new Point(point.x - tilewidth, point.y);
+        } else if (direction.equals(MoveDirection.RIGHT)) {
 
-            } else if (direction.equals(MoveDirection.RIGHT)) {
+            p = new Point(point.x + tilewidth, point.y);
 
-                p = new Point(point.x + tilewidth, point.y);
+        } else if (direction.equals(MoveDirection.UP)) {
 
-            } else if (direction.equals(MoveDirection.UP)) {
-
-                p = new Point(point.x, point.y - tilewidth);
-            }
-
-            if(t.getLocation().equals(p)){
-
-                if(t.isAccessable()){
-                    return true;
-                }
-            }
+            p = new Point(point.x, point.y - tilewidth);
         }
 
+        // Look for the tile that corresponds
+        for(Tile t : tiles) {
+
+            if(t.getLocation().equals(p)){
+                return t.isAccessable();
+            }
+        }
         return false;
     }
 
