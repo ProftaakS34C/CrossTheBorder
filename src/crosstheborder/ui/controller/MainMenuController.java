@@ -15,7 +15,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 public class MainMenuController {
 
     @FXML
-    public void initialize(){
+    private void initialize(){
         //constructor type stuff
 
         //setLblPlayerName(ClientMain.getInstance().getUser().getName());

@@ -11,7 +11,8 @@ import javafx.scene.control.MenuItem;
  */
 public class LayoutController {
 
-    public void initialize(){
+    @FXML
+    private void initialize(){
 
     }
 
@@ -28,11 +29,11 @@ public class LayoutController {
     @FXML
     private MenuItem testGame;
 
-    public void testLobbyAction(){
+    public void showLobbyScreen(){
         ClientMain.getInstance().showLobbyMenu();
     }
 
-    public void testMainAction(){
+    public void showMainScreen(){
         ClientMain.getInstance().showMainMenu();
     }
 

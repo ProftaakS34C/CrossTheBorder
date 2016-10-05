@@ -24,7 +24,7 @@ public class LobbyMenuController {
 
     }
     @FXML
-    public void initialize(){
+    private void initialize(){
 
         int maxPlayers = ClientMain.getInstance().getMaxPlayers();
         for(int i = maxPlayers; i > 0; i--){
