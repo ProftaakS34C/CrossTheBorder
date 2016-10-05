@@ -12,23 +12,24 @@
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="crosstheborder.ui.controller.LobbyMenuController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="435.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="crosstheborder.ui.controller.LobbyMenuController">
    <children>
-      <ListView layoutX="384.0" layoutY="207.0" prefHeight="200.0" prefWidth="252.0" />
-      <TableView layoutX="14.0" layoutY="13.0" prefHeight="423.0" prefWidth="265.0">
+      <ListView layoutX="385.0" layoutY="178.0" prefHeight="200.0" prefWidth="252.0" />
+      <TableView fx:id="tablePlayers" layoutX="14.0" layoutY="13.0" prefHeight="395.0" prefWidth="252.0">
         <columns>
           <TableColumn prefWidth="185.0" text="Speler" />
           <TableColumn prefWidth="79.0" text="team" />
         </columns>
       </TableView>
-      <TextField layoutX="385.0" layoutY="411.0" prefHeight="25.0" prefWidth="192.0" />
-      <CheckBox layoutX="575.0" layoutY="34.0" mnemonicParsing="false" text="private" />
-      <PasswordField layoutX="487.0" layoutY="58.0" />
-      <ToggleButton layoutX="287.0" layoutY="382.0" mnemonicParsing="false" text="ToggleButton" />
-      <ToggleButton layoutX="287.0" layoutY="350.0" mnemonicParsing="false" text="ToggleButton" />
-      <ToggleButton layoutX="287.0" layoutY="319.0" mnemonicParsing="false" text="ToggleButton" />
-      <Button layoutX="584.0" layoutY="411.0" mnemonicParsing="false" text="Chat" />
-      <ChoiceBox layoutX="486.0" layoutY="117.0" prefWidth="150.0" />
+      <TextField fx:id="tfieldChatInput" layoutX="384.0" layoutY="386.0" prefHeight="25.0" prefWidth="192.0" />
+      <CheckBox fx:id="checkBoxIsPrivate" layoutX="575.0" layoutY="34.0" mnemonicParsing="false" onAction="#textBoxIsPrivate_OnAction" text="private" />
+      <PasswordField fx:id="tfieldPassInput" layoutX="487.0" layoutY="58.0" />
+      <ToggleButton layoutX="340.0" layoutY="119.0" mnemonicParsing="false" text="ToggleButton" />
+      <ToggleButton layoutX="340.0" layoutY="87.0" mnemonicParsing="false" text="ToggleButton" />
+      <ToggleButton layoutX="340.0" layoutY="56.0" mnemonicParsing="false" text="ToggleButton" />
+      <Button fx:id="btnChat" layoutX="583.0" layoutY="386.0" mnemonicParsing="false" onAction="#btnChat_OnAction" prefHeight="25.0" prefWidth="51.0" text="Chat" />
+      <ChoiceBox fx:id="choiceBoxAmountOfPlayers" layoutX="486.0" layoutY="117.0" prefWidth="150.0" />
       <Label layoutX="561.0" layoutY="91.0" text="aantal spelers" />
+      <Button fx:id="btnStartGame" layoutX="279.0" layoutY="178.0" mnemonicParsing="false" onAction="#btnStartGame_OnAction" prefHeight="81.0" prefWidth="88.0" text="Start game" />
    </children>
 </Pane>

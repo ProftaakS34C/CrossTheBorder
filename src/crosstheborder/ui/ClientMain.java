@@ -113,6 +113,11 @@ public class ClientMain extends Application {
             x.printStackTrace();
         }
     }
+
+    public int getMaxPlayers() {
+        //temp method, kan miss vervangen worden door  getGame().getMaxPlayers ofzo
+        return 8;
+    }
     //add stage loading methods here
     //zoals, loadLayout
     //loadMenu

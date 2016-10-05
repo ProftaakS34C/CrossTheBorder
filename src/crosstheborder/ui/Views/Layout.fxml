@@ -26,6 +26,7 @@
             <items>
               <MenuItem fx:id="testMain" mnemonicParsing="false" onAction="#testMainAction" text="test menu" />
               <MenuItem fx:id="testLobby" mnemonicParsing="false" onAction="#testLobbyAction" text="test lobby" />
+              <MenuItem fx:id="testGame" mnemonicParsing="false" onAction="#showGameScreen" text="test game" />
             </items>
           </Menu>
         </menus>

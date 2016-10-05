@@ -10,6 +10,11 @@ import javafx.scene.control.MenuItem;
  * Created by yannic on 04/10/2016.
  */
 public class LayoutController {
+
+    public void initialize(){
+
+    }
+
     @FXML
     private MenuBar menuBar;
     @FXML
@@ -20,6 +25,8 @@ public class LayoutController {
     private MenuItem testMain;
     @FXML
     private MenuItem testLobby;
+    @FXML
+    private MenuItem testGame;
 
     public void testLobbyAction(){
         ClientMain.getInstance().showLobbyMenu();
@@ -29,7 +36,7 @@ public class LayoutController {
         ClientMain.getInstance().showMainMenu();
     }
 
-    public LayoutController(){
-
+    public void showGameScreen(){
+        ClientMain.getInstance().showGameScreen();
     }
 }

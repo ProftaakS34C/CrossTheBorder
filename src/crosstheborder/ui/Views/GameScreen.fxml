@@ -3,4 +3,4 @@
 <?import javafx.scene.canvas.Canvas?>
 
 
-<Canvas fx:id="gameCanvas" height="450.0" width="650.0" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller=""/>
+<Canvas fx:id="gameCanvas" height="450.0" width="650.0" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="crosstheborder.ui.controller.GameScreenController"/>
