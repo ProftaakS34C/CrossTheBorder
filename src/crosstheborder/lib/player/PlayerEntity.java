@@ -66,14 +66,16 @@ public abstract class PlayerEntity extends Player implements TileObject {
                     location = new Point(location.x + tilewidth, location.y);
                 return true;
             case NONE:
-                this.location = location;
                 return true;
         }
 
         return false;
     }
-    
 
+    /**
+     * Gets the inputbuffer of the entity.
+     * @return The inputbuffer of the player entity.
+     */
     public InputBuffer getInputBuffer() {
         return this.inputBuffer;
     }
