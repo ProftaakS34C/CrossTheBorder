@@ -7,7 +7,8 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 
 /**
- * Created by yannic on 04/10/2016.
+ * @author Yannic
+ * The controller class for the basic layout.
  */
 public class LayoutController {
 
@@ -21,22 +22,31 @@ public class LayoutController {
     @FXML
     private Menu fileMenu;
     @FXML
-    private MenuItem menuItemClose;
+    private MenuItem closeMenuItem;
     @FXML
-    private MenuItem testMain;
+    private MenuItem testMainMenuItem;
     @FXML
-    private MenuItem testLobby;
+    private MenuItem testLobbyMenuItem;
     @FXML
-    private MenuItem testGame;
+    private MenuItem testGameMenuItem;
 
+    /**
+     * Shows the lobby menu screen, see showLobbyMenu in ClientMain.
+     */
     public void showLobbyScreen(){
         ClientMain.getInstance().showLobbyMenu();
     }
 
+    /**
+     * Shows the main screen, see showMainMenu in ClientMain.
+     */
     public void showMainScreen(){
         ClientMain.getInstance().showMainMenu();
     }
 
+    /**
+     * Shows the game screen, see showGameScreen in ClientMain.
+     */
     public void showGameScreen(){
         ClientMain.getInstance().showGameScreen();
     }

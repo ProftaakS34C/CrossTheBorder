@@ -1,16 +1,13 @@
 package crosstheborder.ui.controller;
 
 /**
- * Created by yannic on 03/10/2016.
+ * @author yannic
  */
 
-import crosstheborder.ui.ClientMain;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
-import javafx.stage.Stage;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class MainMenuController {
 
@@ -22,47 +19,48 @@ public class MainMenuController {
     }
 
     @FXML
-    private Button btnJoinLobby;
+    private Button joinLobbyButton;
     @FXML
-    private Button btnCreateLobby;
+    private Button createLobbyButton;
     @FXML
-    private Button btnJoinRandomLobby;
+    private Button joinRandomLobbyButton;
     @FXML
-    private Button btnSettings;
+    private Button settingsButton;
     @FXML
-    private Label labelSpelerNaam;
+    private Label playerNameLabel;
     @FXML
-    private TableView lobbyTable;
+    private TableView lobbyTableView;
 
-/*    public void testButtonMethod(){
-        System.out.println("button pressed");
-    }*/
-
+    /**
+     * sets the text of the label used for displaying the name of the current user.
+     * @param name the desired name.
+     */
     public void setLblPlayerName(String name){
-        labelSpelerNaam.setText(name);
+        playerNameLabel.setText(name);
     }
+
     @FXML
     private void btnCreateLobby_OnAction(){
         //do something
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
     @FXML
     private void btnJoinLobby_OnAction(){
         //join a lobby
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
     @FXML
     private void btnJoinRandomLobby_OnAction(){
         //join a random lobby
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
     @FXML
     private void btnSettings_OnAction(){
         //open settings
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
-    public TableView getLobbyTable() {
-        return lobbyTable;
+    public TableView getLobbyTableView() {
+        return lobbyTableView;
     }
 }

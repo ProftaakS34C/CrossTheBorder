@@ -1,8 +1,9 @@
 package crosstheborder.ui;
 
 /**
- * Created by Oscar on 26-Sep-16.
- * Modified by Yannic on 03-Oct-16.
+ * @author Oscar
+ * @autor Yannic
+ *
  */
 
 import javafx.application.Application;
@@ -17,7 +18,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 /**
- * Temp class for project registration in IntelliJ.
+ * Main class of the application
  */
 public class ClientMain extends Application {
 
@@ -25,9 +26,9 @@ public class ClientMain extends Application {
     private BorderPane root;
     private static ClientMain thisInstance;
     /**
-     * not a Temp method.
+     * the main method for the class
      *
-     * @param args penis
+     * @param args not used.
      */
     public static void main(String[] args) {
 
@@ -35,7 +36,7 @@ public class ClientMain extends Application {
     }
 
     /**
-     * no Temp method no more.
+     * the start method of main, loads the basic layout and shows the main menu on it.
      *
      * @param primaryStage penis
      */
@@ -49,6 +50,10 @@ public class ClientMain extends Application {
 
     }
 
+    /**
+     * used to execute methods in this class from anywhere.
+     * @return this instance of the class
+     */
     public static ClientMain getInstance(){
         return thisInstance;
     }
@@ -63,7 +68,7 @@ public class ClientMain extends Application {
             primaryStage.show();
 
         } catch (IOException e) {
-            System.out.println("something went wrong loading the layout");
+            System.err.println("could not load layout fxml");
             e.printStackTrace();
         }
     }
@@ -79,7 +84,7 @@ public class ClientMain extends Application {
             primaryStage.setTitle("main menu");
         }
         catch (IOException x){
-            System.err.println("could not main menu fxml");
+            System.err.println("could not load main menu fxml");
             x.printStackTrace();
         }
     }
@@ -118,9 +123,4 @@ public class ClientMain extends Application {
         //temp method, kan miss vervangen worden door  getGame().getMaxPlayers ofzo
         return 8;
     }
-    //add stage loading methods here
-    //zoals, loadLayout
-    //loadMenu
-    //loadLobbyMenu
-    //loadGameScreen
 }

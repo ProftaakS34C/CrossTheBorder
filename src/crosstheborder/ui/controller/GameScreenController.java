@@ -5,27 +5,33 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
 /**
- * Created by yannic on 04/10/2016.
+ * @author Yannic
+ * this is the controller for the GameScreen fxml,
+ * which is used for displaying the game to the users
  */
 public class GameScreenController {
     GraphicsContext gc;
 
     @FXML
+    private Canvas gameCanvas;
+    @FXML
     private void initialize(){
         gc = gameCanvas.getGraphicsContext2D();
     }
-    @FXML
-    private Canvas gameCanvas;
 
-    public Canvas getGameCanvas() {
-        return gameCanvas;
-    }
 
+    /**
+     *
+     * @return the graphicsContext of the gameCanvas used to draw on the canvas.
+     */
     public GraphicsContext getGc() {
         return gc;
     }
 
+    /**
+     * tbt
+     */
     public void draw(){
-        //bla bla bla teken game ofzo
+        //draw the game using a Paintable interface similar to JCC.
     }
 }
