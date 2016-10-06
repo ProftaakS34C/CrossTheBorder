@@ -14,9 +14,8 @@ public class User {
      * in the constructor the name of the player is set
      * @param name the name of the user
      */
-    public User(String name, Player player){
+    public User(String name){
         this.name = name;
-        this.player = player;
     }
 
     /**
@@ -26,6 +25,12 @@ public class User {
     public void setPlayer(Player player){
         this.player = player;
     }
+
+    /**
+     * This method is used to get the player object of the user
+     * @return Player the player object of the user
+     */
+    public Player getPlayer(){return player;}
 
     /**
      * This method is used to get the name of the user
