@@ -55,14 +55,4 @@ public class BorderPatrol extends PlayerEntity {
     public boolean isPassable() {
         return this.isPassable;
     }
-
-    /**
-     * Gets the location of the {@link TileObject}.
-     *
-     * @return A point that represents the location of the {@link TileObject}.
-     */
-    @Override
-    public Point getLocation() {
-        return this.location;
-    }
 }

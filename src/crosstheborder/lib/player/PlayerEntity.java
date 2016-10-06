@@ -32,44 +32,12 @@ public abstract class PlayerEntity extends Player implements TileObject {
     }
 
     /**
-     * This method returns location of the player
+     * Gets the location of the {@link TileObject}.
      *
-     * @return Location of the player
+     * @return A point that represents the location of the {@link TileObject}.
      */
-    public abstract Point getLocation();
-
-    public void respawn(Point location){
-        if(this.getClass().equals(Mexican.class)){
-            this.location = location;
-        }
-    }
-
-    /**
-     * Method which returns if the players can move or not
-     *
-     * @param moveDirection direction.
-     * @return if player can move.
-     */
-    public boolean moveDirection(MoveDirection moveDirection, int tilewidth){
-
-        switch (moveDirection){
-            case UP:
-                    location = new Point(location.x, location.y - tilewidth);
-                return true;
-            case DOWN:
-                    location = new Point(location.x, location.y + tilewidth);
-                return true;
-            case LEFT:
-                    location = new Point(location.x - tilewidth, location.y);
-                return true;
-            case RIGHT:
-                    location = new Point(location.x + tilewidth, location.y);
-                return true;
-            case NONE:
-                return true;
-        }
-
-        return false;
+    public Point getLocation() {
+        return this.location;
     }
 
     /**
