@@ -1,13 +1,6 @@
 package crosstheborder.lib;
 
-import crosstheborder.lib.player.Trump;
-import crosstheborder.lib.tileobject.Obstacle;
-import crosstheborder.lib.tileobject.Trap;
-import crosstheborder.lib.tileobject.Wall;
-
 import crosstheborder.lib.interfaces.TileObject;
-
-import java.awt.*;
 
 /**
  *  Represents a single tile that composes the map.
@@ -15,16 +8,13 @@ import java.awt.*;
  *  Can have a {@link TileObject} that fills the tile.
  */
 public class Tile {
-    private Point location;
     private TileObject tileObject;
 
     /**
      * Creates a new tile object with the given location.
-     *
-     * @param location The location of the tile.
      */
-    public Tile(Point location) {
-        this.location = location;
+    public Tile() {
+
     }
 
     /**
@@ -33,30 +23,17 @@ public class Tile {
      * @return True if the tile has a {@link TileObject}. False if it doesn't have a {@link TileObject}.
      */
     public boolean hasTileObject() {
-
-        if (this.tileObject != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return tileObject != null;
     }
 
-    public boolean isAccessable(){
-
-        if(tileObject == null){
-            return true;
-        }
-        else if(tileObject.getClass().equals(Trap.class)){
-            return true;
-        }
-        else if(tileObject.getClass().equals(Wall.class)){
-            return false;
-        }
-        else if(tileObject.getClass().equals(Obstacle.class)){
-            return false;
-        }
-
-        return false;
+    /**
+     * Checks whether this tile is accessible or not.
+     *
+     * @return A boolean value that is true when the tile is accessible and false when it's inaccessible.
+     */
+    public boolean isAccessible() {
+        //If the tile does not have a TileObject return true otherwise check from object.isPassable().
+        return tileObject == null || tileObject.isPassable();
     }
 
     /**
@@ -66,15 +43,6 @@ public class Tile {
      */
     public TileObject getTileObject() {
         return this.tileObject;
-    }
-
-    /**
-     * Returns the location of the tile.
-     *
-     * @return The location of this tile.
-     */
-    public Point getLocation() {
-        return this.location;
     }
 
     /**
