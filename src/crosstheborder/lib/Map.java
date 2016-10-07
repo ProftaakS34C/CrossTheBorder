@@ -2,9 +2,6 @@ package crosstheborder.lib;
 
 import crosstheborder.lib.interfaces.TileObject;
 
-import crosstheborder.lib.enumeration.MoveDirection;
-import crosstheborder.lib.tileobject.Wall;
-
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -13,7 +10,8 @@ import java.util.ArrayList;
  * The class map provides for the name , height and weight for the map.
  */
 public class Map {
-    ArrayList<Tile> tiles;
+
+    Tile[][] tiles;
     private String name;
     private int width;
     private int height;
@@ -30,16 +28,7 @@ public class Map {
         this.name = name;
         this.width = width;
         this.height = height;
-        this.tiles = new ArrayList<>();
-
-
-        //Fills the ArrayList with points.
-        //For x < width, look if y < height and make an tile
-        for(int x = 0; x < width; x++) {
-            for(int y = 0; y < height; y++) {
-                tiles.add(new Tile(new Point(x,y)));
-            }
-        }
+        tiles = new Tile[width][height];
     }
 
     /**
@@ -58,6 +47,21 @@ public class Map {
      */
     public int getHeight() {
         return height;
+    }
+
+    /**
+     * Gets the tile from a given location.
+     *
+     * @param location The tile that is requested.
+     * @return The tile at the given location.
+     */
+    public Tile getTile(Point location) {
+        try {
+            return tiles[location.x][location.y];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            e.printStackTrace(System.err);
+        }
+        return null;
     }
 
     /**
