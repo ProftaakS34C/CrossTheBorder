@@ -3,15 +3,17 @@ package crosstheborder.lib;
 import crosstheborder.lib.interfaces.TileObject;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 /**
- * Created by Oscar on 26-Sep-16.
- * The class map provides for the name , height and weight for the map.
+ * Represents the map that the game is played upon.
+ * Is in charge of managing all the tiles on the map.
+ *
+ * @author Oscar de Leeuw
+ * @author guill
  */
 public class Map {
 
-    ArrayList<Tile> tiles;
+    Tile[][] tiles;
     private String name;
     private int width;
     private int height;
@@ -28,6 +30,7 @@ public class Map {
         this.name = name;
         this.width = width;
         this.height = height;
+        tiles = new Tile[width][height];
     }
 
     /**
@@ -46,6 +49,21 @@ public class Map {
      */
     public int getHeight() {
         return height;
+    }
+
+    /**
+     * Gets the tile from a given location.
+     *
+     * @param location The tile that is requested.
+     * @return The tile at the given location.
+     */
+    public Tile getTile(Point location) {
+        try {
+            return tiles[location.x][location.y];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            e.printStackTrace(System.err);
+        }
+        return null;
     }
 
     /**
