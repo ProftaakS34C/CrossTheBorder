@@ -3,13 +3,11 @@ package crosstheborder.lib;
 import crosstheborder.lib.interfaces.TileObject;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
- * Represents the map that the game is played upon.
- * Is in charge of managing all the tiles on the map.
- *
- * @author Oscar de Leeuw
- * @author guill
+ * Created by Oscar on 26-Sep-16.
+ * The class map provides for the name , height and weight for the map.
  */
 public class Map {
 
@@ -71,18 +69,60 @@ public class Map {
      *
      * @param location The location of the tile that will be checked.
      */
-    public void canPlaceTileObject(Point location) {
-        throw new UnsupportedOperationException();
+    public boolean canPlaceTileObject(Point location) {
+
+        for(Tile t : tiles){
+
+            if(t.getLocation().equals(location)){
+
+                return t.hasTileObject();
+            }
+        }
+
+        return false;
     }
 
     /**
      * Change a tile to a tile with an object.
-     *
      * @param location The location of the tile that has to be changed.
      * @param to The kind of tile that the tile has to become.
      */
     public void changeTileObject(Point location, TileObject to){
-        throw new UnsupportedOperationException();
+
+        tiles.stream().filter(x -> x.equals(location)).findFirst().get().setTileObject(to);
+    }
+
+    public boolean checkMoveDirection(Point point, MoveDirection direction){
+
+        // Make new point, look in which direction the player is moving
+        // And change the x or y value.
+        Point p = null;
+
+        if (direction.equals(MoveDirection.DOWN)) {
+
+            p = new Point(point.x, point.y);
+
+        } else if (direction.equals(MoveDirection.LEFT)) {
+
+            p = new Point(point.x, point.y);
+
+        } else if (direction.equals(MoveDirection.RIGHT)) {
+
+            p = new Point(point.x, point.y);
+
+        } else if (direction.equals(MoveDirection.UP)) {
+
+            p = new Point(point.x, point.y);
+        }
+
+        // Look for the tile that corresponds
+        for(Tile t : tiles) {
+
+            if(t.getLocation().equals(p)){
+                return t.isAccessable();
+            }
+        }
+        return false;
     }
 
 }

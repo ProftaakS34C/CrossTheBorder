@@ -3,6 +3,8 @@ package crosstheborder.lib.player;
 import crosstheborder.lib.InputBuffer;
 import crosstheborder.lib.Player;
 import crosstheborder.lib.interfaces.TileObject;
+import crosstheborder.lib.enumeration.MoveDirection;
+import crosstheborder.lib.player.entity.Mexican;
 
 import java.awt.*;
 /**
@@ -29,6 +31,19 @@ public abstract class PlayerEntity extends Player implements TileObject {
         this.inputBuffer = new InputBuffer();
     }
 
+    /**
+     * Gets the location of the {@link TileObject}.
+     *
+     * @return A point that represents the location of the {@link TileObject}.
+     */
+    public Point getLocation() {
+        return this.location;
+    }
+
+    /**
+     * Gets the inputbuffer of the entity.
+     * @return The inputbuffer of the player entity.
+     */
     public InputBuffer getInputBuffer() {
         return this.inputBuffer;
     }
