@@ -13,15 +13,10 @@ import java.util.ArrayList;
  * The class map provides for the name , height and weight for the map.
  */
 public class Map {
-
     ArrayList<Tile> tiles;
     private String name;
     private int width;
     private int height;
-
-    // This value is to give a tile a width, so the tile next to the first tile
-    // will not overlap the other one.
-    private int tilewidth = 10;
 
     /**
      * Constructor of Map class.
@@ -35,12 +30,11 @@ public class Map {
         this.name = name;
         this.width = width;
         this.height = height;
-        tiles = new ArrayList<Tile>();
+        this.tiles = new ArrayList<>();
 
-        /**
-         * Fills the ArrayList with points.
-         * For x < width, look if y < height and make an tile
-         */
+
+        //Fills the ArrayList with points.
+        //For x < width, look if y < height and make an tile
         for(int x = 0; x < width; x++) {
             for(int y = 0; y < height; y++) {
                 tiles.add(new Tile(new Point(x,y)));
@@ -65,13 +59,6 @@ public class Map {
     public int getHeight() {
         return height;
     }
-
-    /**
-     * Gives the width of a tile.
-     *
-     * @return The width of a tile
-     */
-    public int getTilewidth(){ return this.tilewidth; }
 
     /**
      * Check if there can be an object on this tile.
@@ -109,19 +96,19 @@ public class Map {
 
         if (direction.equals(MoveDirection.DOWN)) {
 
-            p = new Point(point.x, point.y + tilewidth);
+            p = new Point(point.x, point.y);
 
         } else if (direction.equals(MoveDirection.LEFT)) {
 
-            p = new Point(point.x - tilewidth, point.y);
+            p = new Point(point.x, point.y);
 
         } else if (direction.equals(MoveDirection.RIGHT)) {
 
-            p = new Point(point.x + tilewidth, point.y);
+            p = new Point(point.x, point.y);
 
         } else if (direction.equals(MoveDirection.UP)) {
 
-            p = new Point(point.x, point.y - tilewidth);
+            p = new Point(point.x, point.y);
         }
 
         // Look for the tile that corresponds
