@@ -37,4 +37,13 @@ public interface GameManipulator {
      * @param newLocation The new location of the tileObject.
      */
     void changeTileObjectLocation(TileObject tileObject, Point newLocation);
+
+    /**
+     * Moves a player entity to the given location if possible.
+     * If there is a tile object at the other location interact with it.
+     *
+     * @param player       The player that should be moved.
+     * @param nextLocation The location the player wants to move to.
+     */
+    void movePlayerEntity(PlayerEntity player, Point nextLocation);
 }

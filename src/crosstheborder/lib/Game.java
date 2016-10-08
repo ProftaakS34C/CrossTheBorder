@@ -1,9 +1,10 @@
 package crosstheborder.lib;
 
-import crosstheborder.lib.enumeration.MoveDirection;
+import crosstheborder.lib.interfaces.GameManipulator;
 import crosstheborder.lib.interfaces.TileObject;
 import crosstheborder.lib.player.PlayerEntity;
 import crosstheborder.lib.player.Trump;
+import crosstheborder.lib.tileobject.Placeable;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ import java.util.Random;
  * @author guillaime
  * @author Oscar de Leeuw
  */
-public class Game {
+public class Game implements GameManipulator {
 
     private ArrayList<Player> players;
     private Map map;
@@ -52,69 +53,30 @@ public class Game {
         return mex.getScore();
     }
 
-    /**
-     * Moves a {@link PlayerEntity} according to the next input from it's {@link InputBuffer}.
-     *
-     * @param player The {@link PlayerEntity} that should be moved.
-     */
-    public void movePlayer(PlayerEntity player) {
-        //TODO PlayerEntity should be checked whether it can move.
-        MoveDirection moveDirection = player.getInputBuffer().getNextInputMove();
-
-        //Exit the method as quickly as possible when there should be no movement.
-        if (moveDirection == MoveDirection.NONE) {
-            return;
-        }
-
+    @Override
+    public void movePlayerEntity(PlayerEntity player, Point nextLocation) {
         Point currentLocation = player.getLocation();
-        Point translation = moveDirection.getTranslation();
-        Point nextLocation = new Point(currentLocation.x + translation.x, currentLocation.y + translation.y);
 
         //Check whether there's a tileObject at the next location.
         if (map.hasTileObject(nextLocation)) {
-            player.interactWith(map.getTileObject(nextLocation));
-            //TODO let interactWith return a boolean that indicates whether it has called InteractionHandler.
+            map.getTileObject(nextLocation).interactWith(player, this);
         }
-
-        //Move the player to the next location if possible.
-        if (map.isAccessible(nextLocation)) {
+        //If there is no tileObject move the player.
+        else {
             map.changeTileObject(currentLocation, null);
             map.changeTileObject(nextLocation, player);
-            //Translates the location of the playerEntity. Saves having to recreate a new point object every time.
-            currentLocation.translate(translation.x, translation.y);
+            //Move the location of the entity to the next location. Saves having to recreate a new point object every time.
+            currentLocation.move(nextLocation.x, nextLocation.y);
         }
     }
 
-    /**
-     * Adds an obstacle
-     *
-     * @param location Location where the obstacle must be created.
-     * @param player Will get checked if player is authorized.
-     * @return If obstacle can e placed.
-     */
-    public boolean addObstacle(Point location, TileObject tileObject, Player player){
 
-        // Gets the location of usa border * tileWidth and mex border * tileWidth
-        // Now we can look if the tileObject isn't in USA or MEX.
-        int usa = usaY * map.getTilewidth();
-        int mex = (map.getHeight() - mexY) * map.getTilewidth();
+    public void addObstacle(Point location, Placeable tileObject) {
 
-        // check if the player is a trump
-        if(checkForTrump(player)){
-            // check if point isn't in MEX or USA
-            if(location.y > usa && location.y < mex){
-                // Check if the tile can be changed
-                if(map.canPlaceTileObject(location)) {
-                    // Change the tileObject of the tile.
-                    map.changeTileObject(location, tileObject);
-                    return true;
-                }
-            }
-            else{
-                return false;
-            }
+        if (!map.hasTileObject(location) || map.getMexicoArea().contains(location) || map.getUsaArea().contains(location)) {
+            //TODO add code that checks walls are not placed next to each other.
+            map.changeTileObject(location, tileObject);
         }
-        return false;
     }
 
     /**
@@ -156,10 +118,22 @@ public class Game {
     }
 
     /**
-     * Gets called after each timerTick. Updates the UI.
+     * Update is called every at tick of the server clock.
      */
     public void update(){
-        throw new UnsupportedOperationException();
+        //Update all the players.
+        for (Player player : players) {
+            //Update the player entities.
+            if (player instanceof PlayerEntity) {
+                PlayerEntity entity = (PlayerEntity) player;
+                entity.decreaseMoveTimer();
+
+                Point nextLocation = entity.getNextMove();
+                if (nextLocation != null) {
+                    movePlayerEntity(entity, nextLocation);
+                }
+            }
+        }
     }
 
     /**
@@ -179,5 +153,20 @@ public class Game {
             }
         }
         return false;
+    }
+
+    @Override
+    public void respawnPlayer(PlayerEntity player) {
+
+    }
+
+    @Override
+    public void increaseScore(Team team, int amount) {
+
+    }
+
+    @Override
+    public void changeTileObjectLocation(TileObject tileObject, Point newLocation) {
+
     }
 }

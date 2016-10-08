@@ -3,6 +3,7 @@ package crosstheborder.lib.player;
 import crosstheborder.lib.InputBuffer;
 import crosstheborder.lib.Player;
 import crosstheborder.lib.Team;
+import crosstheborder.lib.enumeration.MoveDirection;
 import crosstheborder.lib.interfaces.TileObject;
 
 import java.awt.*;
@@ -42,12 +43,17 @@ public abstract class PlayerEntity extends Player implements TileObject {
         return this.location;
     }
 
-    /**
-     * Gets the inputbuffer of the entity.
-     * @return The inputbuffer of the player entity.
-     */
-    public InputBuffer getInputBuffer() {
-        return this.inputBuffer;
+    public Point getNextMove() {
+        MoveDirection moveDirection = inputBuffer.getNextInputMove();
+
+        //Exit the method as quickly as possible when there should be no movement.
+        if (moveDirection == MoveDirection.NONE || !canMove) {
+            return null;
+        }
+
+        Point currentLocation = getLocation();
+        Point translation = moveDirection.getTranslation();
+        return new Point(currentLocation.x + translation.x, currentLocation.y + translation.y);
     }
 
     /**
