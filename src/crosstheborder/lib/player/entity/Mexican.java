@@ -4,17 +4,25 @@ import crosstheborder.lib.Ability;
 import crosstheborder.lib.enumeration.TileObjectType;
 import crosstheborder.lib.interfaces.TileObject;
 import crosstheborder.lib.player.PlayerEntity;
+import crosstheborder.lib.tileobject.placeable.Wall;
 
 import java.awt.*;
 
 /**
  * This class represents the Mexican player object.
  * @author Joram
+ * @author Oscar de Leeuw
  * @version 1.0
  */
 public class Mexican extends PlayerEntity {
+    //Indicates how many seconds it will take to climb the wall.
+    private static final float CLIMB_MODIFIER = 0.5f; //TODO Gather from GameSettings file.
+
     private boolean isTrapped;
     private Ability ability;
+
+    private int climbTime;
+    private Wall climbingWall;
 
     /**
      * This is the constructor method of the class "Mexican".
@@ -56,6 +64,32 @@ public class Mexican extends PlayerEntity {
      */
     public void useAbility() {
         ability.useAbility();
+    }
+
+    /**
+     * Climbs a wall.
+     *
+     * @param wall The wall that should be scaled.
+     * @return A boolean value that is true when the wall is successfully scaled.
+     */
+    public boolean climbWall(Wall wall) {
+        //If the current wall isn't being climbed, or is not the same wall, start a new climbing session.
+        if (climbingWall == null || !climbingWall.equals(wall)) {
+            climbingWall = wall;
+            //Set the abilityTime to the total time it will take to scale the wall based on server ticks.
+            climbTime = (int) ((wall.getHeight() * CLIMB_MODIFIER * SERVER_REFRESH_RATE));
+        }
+        //If we are still climbing the same wall lower the timer.
+        else if (climbingWall.equals(wall)) {
+            climbTime -= SERVER_REFRESH_RATE;
+            //If the timer runs out reset everything and return a true.
+            if (climbTime <= 0) {
+                climbingWall = null;
+                climbTime = 0;
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

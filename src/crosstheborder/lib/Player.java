@@ -1,10 +1,12 @@
 package crosstheborder.lib;
 
 /**
- * Created by Oscar on 26-Sep-16.
- * player is the super class for Trump and PlayerEntity
+ * Player is the super class for Trump and PlayerEntity.
+ *
+ * @author Oscar de Leeuw
  */
 public abstract class Player {
+    protected static final int SERVER_REFRESH_RATE = ServerSettings.getInstance().getServerRefreshRate();
 
     private String name;
 
