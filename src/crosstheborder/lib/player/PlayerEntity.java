@@ -3,8 +3,6 @@ package crosstheborder.lib.player;
 import crosstheborder.lib.InputBuffer;
 import crosstheborder.lib.Player;
 import crosstheborder.lib.interfaces.TileObject;
-import crosstheborder.lib.enumeration.MoveDirection;
-import crosstheborder.lib.player.entity.Mexican;
 
 import java.awt.*;
 /**
@@ -13,10 +11,11 @@ import java.awt.*;
  * @author Oscar de Leeuw
  */
 public abstract class PlayerEntity extends Player implements TileObject {
-
     protected Point location;
     protected boolean isPassable;
     private InputBuffer inputBuffer;
+    private boolean canMove = true;
+    private int canMoveTimer;
 
     /**
      * Abstract constructor that passes the name to the Player class.
@@ -48,5 +47,37 @@ public abstract class PlayerEntity extends Player implements TileObject {
         return this.inputBuffer;
     }
 
+    /**
+     * Gets whether the player can move or not.
+     *
+     * @return A boolean that represents whether the player can move.
+     */
+    public boolean getCanMove() {
+        return this.canMove;
+    }
 
+    /**
+     * Decreases the timer on the movement timer if the entity can't move.
+     */
+    public void decreaseMoveTimer() {
+        //If the player can't move decrease the move timer.
+        if (!canMove) {
+            canMoveTimer -= SERVER_REFRESH_RATE;
+
+            if (canMoveTimer <= 0) {
+                canMove = true;
+                canMoveTimer = 0;
+            }
+        }
+    }
+
+    /**
+     * Immobilizes the player and sets the timer for when the player can move again.
+     *
+     * @param seconds The amount of seconds the player is immobile.
+     */
+    public void setCanMoveTimer(int seconds) {
+        canMove = false;
+        canMoveTimer = SERVER_REFRESH_RATE * seconds;
+    }
 }
