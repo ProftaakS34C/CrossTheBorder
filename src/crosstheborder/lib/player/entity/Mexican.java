@@ -93,14 +93,4 @@ public class Mexican extends PlayerEntity {
             game.respawnPlayer(this);
         }
     }
-
-    /**
-     * Method for getting whether the object is passable or not.
-     *
-     * @return A boolean that determines whether the object is passable or not.
-     */
-    @Override
-    public boolean isPassable() {
-        return this.isPassable;
-    }
 }

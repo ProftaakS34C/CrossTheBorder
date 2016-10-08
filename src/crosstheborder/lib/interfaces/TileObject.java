@@ -20,13 +20,6 @@ public interface TileObject {
     void interactWith(PlayerEntity player, GameManipulator game);
 
     /**
-     * Method for getting whether the object is passable or not.
-     *
-     * @return A boolean that determines whether the object is passable or not.
-     */
-    boolean isPassable();
-
-    /**
      * Gets the location of the {@link TileObject}.
      *
      * @return A point that represents the location of the {@link TileObject}.

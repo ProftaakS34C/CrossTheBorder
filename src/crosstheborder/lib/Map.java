@@ -126,16 +126,6 @@ public class Map {
     }
 
     /**
-     * Checks whether a given location is accessible.
-     *
-     * @param location The location that is being checked.
-     * @return A boolean that is true when the location is accessible and false when it is not accessible.
-     */
-    public boolean isAccessible(Point location) {
-        return getTile(location).isAccessible();
-    }
-
-    /**
      * Changes a {@link Tile}'s {@link TileObject} to the given {@link TileObject}.
      *
      * @param location The location of the tile that has to be changed.

@@ -40,11 +40,6 @@ public class Obstacle implements TileObject {
     }
 
     @Override
-    public boolean isPassable() {
-        return this.isPassable;
-    }
-
-    @Override
     public Point getLocation() {
         return this.location;
     }

@@ -57,15 +57,6 @@ public abstract class PlayerEntity extends Player implements TileObject {
     }
 
     /**
-     * Gets whether the player can move or not.
-     *
-     * @return A boolean that represents whether the player can move.
-     */
-    public boolean getCanMove() {
-        return this.canMove;
-    }
-
-    /**
      * Decreases the timer on the movement timer if the entity can't move.
      */
     public void decreaseMoveTimer() {

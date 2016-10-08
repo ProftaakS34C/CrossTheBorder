@@ -27,16 +27,6 @@ public class Tile {
     }
 
     /**
-     * Checks whether this tile is accessible or not.
-     *
-     * @return A boolean value that is true when the tile is accessible and false when it's inaccessible.
-     */
-    public boolean isAccessible() {
-        //If the tile does not have a TileObject return true otherwise check from object.isPassable().
-        return tileObject == null || tileObject.isPassable();
-    }
-
-    /**
      * Returns the {@link TileObject} this tile has. Returns null if it does not have a {@link TileObject}.
      *
      * @return The {@link TileObject} object. Can be null.

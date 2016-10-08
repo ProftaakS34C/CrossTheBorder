@@ -29,11 +29,6 @@ public abstract class Placeable implements TileObject {
     public abstract void interactWith(PlayerEntity player, GameManipulator game);
 
     @Override
-    public boolean isPassable() {
-        return this.isPassable;
-    }
-
-    @Override
     public Point getLocation() {
         return this.location;
     }
