@@ -14,8 +14,10 @@ public abstract class PlayerEntity extends Player implements TileObject {
     protected Point location;
     protected boolean isPassable;
     private InputBuffer inputBuffer;
+
     private boolean canMove = true;
-    private int canMoveTimer;
+    //The amount of ticks till the player can move again.
+    private int canMoveTicks;
 
     /**
      * Abstract constructor that passes the name to the Player class.
@@ -62,11 +64,12 @@ public abstract class PlayerEntity extends Player implements TileObject {
     public void decreaseMoveTimer() {
         //If the player can't move decrease the move timer.
         if (!canMove) {
-            canMoveTimer -= SERVER_REFRESH_RATE;
+            //Decrease by 1 tick
+            canMoveTicks--;
 
-            if (canMoveTimer <= 0) {
+            if (canMoveTicks <= 0) {
                 canMove = true;
-                canMoveTimer = 0;
+                canMoveTicks = 0;
             }
         }
     }
@@ -76,8 +79,8 @@ public abstract class PlayerEntity extends Player implements TileObject {
      *
      * @param seconds The amount of seconds the player is immobile.
      */
-    public void setCanMoveTimer(int seconds) {
+    public void setCanMoveTicks(int seconds) {
         canMove = false;
-        canMoveTimer = SERVER_REFRESH_RATE * seconds;
+        canMoveTicks = SERVER_TICK_RATE * seconds;
     }
 }

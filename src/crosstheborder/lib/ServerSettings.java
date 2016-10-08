@@ -61,14 +61,14 @@ public class ServerSettings implements InputPropertiesGetter {
     }
 
     /**
-     * Gets the refresh rate of the server.
-     * <p>If the key is not found in the properties it returns the integer value 200.</p>
+     * Gets the tick rate of the server.
+     * <p>If the key is not found in the properties it returns the integer value 0.2f.</p>
      *
-     * @return An integer that represents the refresh rate of the server.
+     * @return An integer that represents the tick rate of the server.
      */
-    public int getServerRefreshRate() {
+    public int getServerTickRate() {
         try {
-            return Integer.parseInt(properties.getProperty("ServerRefreshRate"));
+            return Integer.parseInt(properties.getProperty("ServerTickRate"));
         } catch (NumberFormatException ex) {
             ex.printStackTrace(System.err);
         }

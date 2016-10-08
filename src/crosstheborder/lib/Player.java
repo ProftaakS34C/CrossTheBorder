@@ -6,7 +6,7 @@ package crosstheborder.lib;
  * @author Oscar de Leeuw
  */
 public abstract class Player {
-    protected static final int SERVER_REFRESH_RATE = ServerSettings.getInstance().getServerRefreshRate();
+    protected static final int SERVER_TICK_RATE = ServerSettings.getInstance().getServerTickRate();
 
     private String name;
 

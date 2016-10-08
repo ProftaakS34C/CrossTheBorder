@@ -21,7 +21,7 @@ public class Mexican extends PlayerEntity {
     private boolean isTrapped;
     private Ability ability;
 
-    private int climbTime;
+    private int climbTicks;
     private Wall climbingWall;
 
     /**
@@ -77,15 +77,16 @@ public class Mexican extends PlayerEntity {
         if (climbingWall == null || !climbingWall.equals(wall)) {
             climbingWall = wall;
             //Set the abilityTime to the total time it will take to scale the wall based on server ticks.
-            climbTime = (int) ((wall.getHeight() * CLIMB_MODIFIER * SERVER_REFRESH_RATE));
+            climbTicks = (int) ((wall.getHeight() * CLIMB_MODIFIER * SERVER_TICK_RATE));
         }
         //If we are still climbing the same wall lower the timer.
         else if (climbingWall.equals(wall)) {
-            climbTime -= SERVER_REFRESH_RATE;
+            //Lower amount of ticks needed by one.
+            climbTicks--;
             //If the timer runs out reset everything and return a true.
-            if (climbTime <= 0) {
+            if (climbTicks <= 0) {
                 climbingWall = null;
-                climbTime = 0;
+                climbTicks = 0;
                 return true;
             }
         }

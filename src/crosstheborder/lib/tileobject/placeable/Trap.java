@@ -46,7 +46,7 @@ public class Trap extends Placeable {
     public void interactWith(PlayerEntity player, GameManipulator game) {
         //Trap the player if it is a mexican.
         if (player instanceof Mexican) {
-            player.setCanMoveTimer(trapTime);
+            player.setCanMoveTicks(trapTime);
             //Removes the trap and relocates the player to the location of the trap.
             game.changeTileObjectLocation(player, this.location);
         }
