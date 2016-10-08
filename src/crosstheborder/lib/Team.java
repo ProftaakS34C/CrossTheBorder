@@ -2,6 +2,7 @@ package crosstheborder.lib;
 
 import crosstheborder.lib.enumeration.TeamName;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,16 +16,18 @@ public class Team {
     private TeamName name;
     private int score;
     private List<Player> teamMembers = new ArrayList();
-
+    private Rectangle teamArea;
 
     /**
      * Constructor of Team class.
      *
      * @param name Name of the team
      */
-    public Team(String name){
+    public Team(String name, Rectangle teamArea) {
         this.name = TeamName.valueOf(name);
         this.score = 0;
+        this.teamArea = teamArea;
+
     }
 
     /**
@@ -44,6 +47,15 @@ public class Team {
      */
     public TeamName getName(){
         return name;
+    }
+
+    /**
+     * Gets the area that belongs to this team.
+     *
+     * @return A rectangle object that represents the area.
+     */
+    public Rectangle getTeamArea() {
+        return teamArea;
     }
 
     /**
