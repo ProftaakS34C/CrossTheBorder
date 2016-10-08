@@ -1,7 +1,7 @@
 package crosstheborder.lib.player.entity;
 
 import crosstheborder.lib.Team;
-import crosstheborder.lib.enumeration.TileObjectType;
+import crosstheborder.lib.interfaces.GameManipulator;
 import crosstheborder.lib.interfaces.TileObject;
 import crosstheborder.lib.player.PlayerEntity;
 
@@ -9,8 +9,9 @@ import java.awt.*;
 
 /**
  * This class represents the Border Patrol player object.
- * Extends the {@link PlayerEntity} class.
+ *
  * @author Joram
+ * @author Oscar de Leeuw
  * @version 1.0
  */
 public class BorderPatrol extends PlayerEntity {
@@ -30,21 +31,23 @@ public class BorderPatrol extends PlayerEntity {
     }
 
     /**
-     * Method for handling the interaction between two {@link TileObject}s.
-     *
-     * @param o The TileObject that is interacting with this object.
+     * {@inheritDoc}
+     * <p>
+     * If the other playerEntity is a {@link Mexican}, respawn the Mexican and raise the score of the BorderPatrol team.
+     * </p>
+     * Calls the following methods from GameManipulator:
+     * <ul>
+     * <li>{@link GameManipulator#increaseScore(Team, int)} when the other entity is a Mexican.</li>
+     * <li>{@link GameManipulator#respawnPlayer(PlayerEntity)} with the Mexican when the other entity is a Mexican.</li>
+     * <li>{@link GameManipulator#changeTileObjectLocation(TileObject, Point)} With itself to the location of the Mexican.</li>
+     * </ul>
      */
     @Override
-    public void interactWith(TileObject o) {
-        if (o.isPassable()) {
-            this.location = o.getLocation();
-        }
-
-        TileObjectType type = TileObjectType.valueOf(o.getClass().getSimpleName());
-        switch (type) {
-            case Mexican:
-                //TODO add interaction between mexican and borderpatrol.
-                break;
+    public void interactWith(PlayerEntity player, GameManipulator game) {
+        if (player instanceof Mexican) {
+            game.increaseScore(getTeam(), 1); //TODO Gather from game properties.
+            game.respawnPlayer(player);
+            game.changeTileObjectLocation(this, player.getLocation());
         }
     }
 
