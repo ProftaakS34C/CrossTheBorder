@@ -4,8 +4,6 @@ import crosstheborder.lib.enumeration.MoveDirection;
 import crosstheborder.lib.interfaces.TileObject;
 import crosstheborder.lib.player.PlayerEntity;
 import crosstheborder.lib.player.Trump;
-import crosstheborder.lib.player.entity.BorderPatrol;
-import crosstheborder.lib.player.entity.Mexican;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -67,61 +65,36 @@ public class Game {
     }
 
     /**
-     * Moves a player to certain position.
+     * Moves a {@link PlayerEntity} according to the next input from it's {@link InputBuffer}.
      *
-     * @param direction Direction which the player is moving in.
-     * @return If player can move into this direction.
+     * @param player The {@link PlayerEntity} that should be moved.
      */
-    public boolean movePlayer(MoveDirection direction, PlayerEntity player){
+    public void movePlayer(PlayerEntity player) {
+        //TODO PlayerEntity should be checked whether it can move.
+        MoveDirection moveDirection = player.getInputBuffer().getNextInputMove();
 
-        // sets a variable for this method.
-        Point location = null;
-
-        // Looks for each Player in players if the names are equal.
-        for(Player pl : players){
-            if(pl.toString().equals(player.toString())){
-
-                // Checks if player isn't Trump
-                if(checkForTrump(player)){
-                    return false;
-                }
-
-                // Puts pl in a new PlayerEntity and gets the location of it.
-                PlayerEntity pe = (PlayerEntity) pl;
-                location = pe.getLocation();
-
-                // Checks if the player can move into the direction he wants to go.
-                if(map.checkMoveDirection(location, direction)){
-
-                    // Looks if the player is a BorderPatrol and looks if he isn't moving into Mexico.
-                    if(pl.getClass().equals(BorderPatrol.class)){
-                        if(location.y <= mexY){
-                            return false;
-                        }
-                    }
-
-                    // change the location in the Playerentity
-                    if(pe.moveDirection(direction, map.getTilewidth())){
-                        // Checks if the player is a Mexican and looks if he's moving into USA, so he can respawn.
-                        if(pl.getClass().equals(Mexican.class)){
-                            if(location.y >= usaY){
-                                respawnMexican(pe);
-                                mex.increaseScore();
-                            }
-                        }
-
-                        // Put the player back into the list of players
-                        players.set(players.indexOf(pl), respawnMexican(pe));
-                        return true;
-                    } else{
-                        return false;
-                    }
-                }else{
-                    return false;
-                }
-            }
+        //Exit the method as quickly as possible when there should be no movement.
+        if (moveDirection == MoveDirection.NONE) {
+            return;
         }
-        return false;
+
+        Point currentLocation = player.getLocation();
+        Point translation = moveDirection.getTranslation();
+        Point nextLocation = new Point(currentLocation.x + translation.x, currentLocation.y + translation.y);
+
+        //Check whether there's a tileObject at the next location.
+        if (map.hasTileObject(nextLocation)) {
+            player.interactWith(map.getTileObject(nextLocation));
+            //TODO let interactWith return a boolean that indicates whether it has called InteractionHandler.
+        }
+
+        //Move the player to the next location if possible.
+        if (map.isAccessible(nextLocation)) {
+            map.changeTileObject(currentLocation, null);
+            map.changeTileObject(nextLocation, player);
+            //Translates the location of the playerEntity. Saves having to recreate a new point object every time.
+            currentLocation.translate(translation.x, translation.y);
+        }
     }
 
     /**

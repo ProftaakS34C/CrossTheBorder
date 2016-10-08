@@ -65,13 +65,23 @@ public class Map {
      * @param location The location of the requested tile.
      * @return The tile at the given location. Returns null when the given location is out of bounds.
      */
-    public Tile getTile(Point location) {
+    private Tile getTile(Point location) {
         try {
             return tiles[location.x][location.y];
         } catch (ArrayIndexOutOfBoundsException e) {
             e.printStackTrace(System.err);
         }
         return null;
+    }
+
+    /**
+     * Gets a {@link TileObject} from a {@link Tile} with a given location.
+     *
+     * @param location A point that represents the location of a tile.
+     * @return The TileObject at the given location. Returns null when there is no tileObject.
+     */
+    public TileObject getTileObject(Point location) {
+        return getTile(location).getTileObject();
     }
 
     /**
