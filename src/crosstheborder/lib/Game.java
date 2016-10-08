@@ -12,7 +12,8 @@ import java.util.Random;
 /**
  * This class makes an instance of Game
  *
- * @author guillaime 
+ * @author guillaime
+ * @author Oscar de Leeuw
  */
 public class Game {
 
@@ -20,14 +21,6 @@ public class Game {
     private Map map;
     private Team usa;
     private Team mex;
-
-    /**
-     * int that shows on what Y-coordinate USA and MEX start.
-     * With this values you can check if the mexican is in USA to respawn
-     * also we can see if the BorderPatrol is not going into MEX.
-     */
-    private int usaY;
-    private int mexY;
 
     /**
      * Constructor of Game class.
@@ -39,11 +32,6 @@ public class Game {
 
         // For now we use 20 as width and height, this can be changed if we want to.
         map = new Map("The Border", 20, 20);
-
-
-        // The numbers 6 and 4 are chosen to devide the map in 3 pieces.
-        usaY = map.getHeight() / 6;
-        mexY = map.getHeight() / 4;
     }
 
     /**

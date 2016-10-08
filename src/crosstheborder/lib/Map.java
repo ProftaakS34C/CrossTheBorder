@@ -5,15 +5,24 @@ import crosstheborder.lib.interfaces.TileObject;
 import java.awt.*;
 
 /**
- * Created by Oscar on 26-Sep-16.
- * The class map provides for the name , height and weight for the map.
+ * The Map class represents a collection of tiles that form a map within the CrossTheBorder game.
+ *
+ * A map is always created from a file with the .ctbmap extension.
+ * This file contains the width and the height of the map, the type of tiles that compose the map,
+ * the objects that exist on the map and the areas for the Mexican and USA teams.
+ *
+ * @author Oscar de Leeuw
  */
 public class Map {
-
-    private Tile[][] tiles;
     private String name;
+
     private int width;
     private int height;
+
+    private Tile[][] tiles;
+
+    private Rectangle usaArea;
+    private Rectangle mexicoArea;
 
     /**
      * Constructor of Map class.
@@ -22,7 +31,6 @@ public class Map {
      * @param width  The width of the map.
      * @param height The height of the map.
      */
-
     public Map(String name, int width, int height) {
         this.name = name;
         this.width = width;
@@ -33,11 +41,17 @@ public class Map {
     }
 
     private void generateMap() {
+
+        //Temp code for generating a map.
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 this.tiles[x][y] = new Tile();
             }
         }
+
+        //Temp code for generating USA and mexico code.
+        this.usaArea = new Rectangle(0, 0, width, height / 10);
+        this.mexicoArea = new Rectangle(0, height - (height / 10), width, height / 10);
     }
 
     /**
@@ -46,7 +60,7 @@ public class Map {
      * @return The width of the map.
      */
     public int getWidth() {
-        return width;
+        return this.width;
     }
 
     /**
@@ -55,7 +69,25 @@ public class Map {
      * @return The height of the map.
      */
     public int getHeight() {
-        return height;
+        return this.height;
+    }
+
+    /**
+     * Gets the area that is considered USA.
+     *
+     * @return A rectangle object that represents the USA area.
+     */
+    public Rectangle getUsaArea() {
+        return this.usaArea;
+    }
+
+    /**
+     * Get the area that is considered Mexican.
+     *
+     * @return A rectangle object that represents the Mexican area.
+     */
+    public Rectangle getMexicoArea() {
+        return this.mexicoArea;
     }
 
     /**
