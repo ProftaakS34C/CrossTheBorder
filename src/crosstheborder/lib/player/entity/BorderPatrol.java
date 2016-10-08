@@ -1,5 +1,6 @@
 package crosstheborder.lib.player.entity;
 
+import crosstheborder.lib.Team;
 import crosstheborder.lib.enumeration.TileObjectType;
 import crosstheborder.lib.interfaces.TileObject;
 import crosstheborder.lib.player.PlayerEntity;
@@ -16,14 +17,15 @@ public class BorderPatrol extends PlayerEntity {
 
     /**
      * This is the constructor of the {@link BorderPatrol} class.
-     * Calls the {@link PlayerEntity#PlayerEntity(String, Point)} constructor.
+     * Calls the {@link PlayerEntity#PlayerEntity(String, Point, Team)} constructor.
      * Sets isPassable to false;
      *
      * @param name The name of the player.
      * @param location The location of the player.
+     * @param team The team this BorderPatrol is part of.
      */
-    public BorderPatrol(String name, Point location) {
-        super(name, location);
+    public BorderPatrol(String name, Point location, Team team) {
+        super(name, location, team);
         isPassable = false;
     }
 

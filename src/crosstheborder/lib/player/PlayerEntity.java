@@ -2,6 +2,7 @@ package crosstheborder.lib.player;
 
 import crosstheborder.lib.InputBuffer;
 import crosstheborder.lib.Player;
+import crosstheborder.lib.Team;
 import crosstheborder.lib.interfaces.TileObject;
 
 import java.awt.*;
@@ -14,20 +15,20 @@ public abstract class PlayerEntity extends Player implements TileObject {
     protected Point location;
     protected boolean isPassable;
     private InputBuffer inputBuffer;
-
     private boolean canMove = true;
     //The amount of ticks till the player can move again.
     private int canMoveTicks;
 
     /**
      * Abstract constructor that passes the name to the Player class.
-     * Calls the {@link Player#Player(String)} constructor.
+     * Calls the {@link Player#Player(String, Team)} constructor.
      *
      * @param name The name of the player.
      * @param location The location of the player.
+     * @param team The team this player is part of.
      */
-    public PlayerEntity(String name, Point location) {
-        super(name);
+    public PlayerEntity(String name, Point location, Team team) {
+        super(name, team);
         this.location = location;
         this.inputBuffer = new InputBuffer();
     }

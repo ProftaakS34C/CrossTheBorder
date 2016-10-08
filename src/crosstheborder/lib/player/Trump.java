@@ -1,6 +1,7 @@
 package crosstheborder.lib.player;
 
 import crosstheborder.lib.Player;
+import crosstheborder.lib.Team;
 
 /**
  *  Represents the Trump player object.
@@ -14,12 +15,13 @@ public class Trump extends Player {
 
     /**
      * Creates a new Trump object with the given name.
-     * Calls the {@link Player#Player(String)} constructor.
+     * Calls the {@link Player#Player(String, Team)} constructor.
      *
      * @param name The name of the player.
+     * @param team The team this player is part of.
      */
-    public Trump(String name) {
-        super(name);
+    public Trump(String name, Team team) {
+        super(name, team);
     }
 
     /**

@@ -26,15 +26,16 @@ public class Mexican extends PlayerEntity {
     /**
      * This is the constructor method of the class "Mexican".
      * in the constructor the name of the Mexican is set.
-     * Calls the {@link PlayerEntity#PlayerEntity(String, Point)} constructor.
+     * Calls the {@link PlayerEntity#PlayerEntity(String, Point, Team)} constructor.
      * Sets isPassable to false;
      *
      * @param name    The name of the Mexican.
      * @param location The location of the player.
      * @param ability The ability of the Mexican.
+     * @param team The team this Mexican belongs to.
      */
-    public Mexican(String name, Point location, Ability ability) {
-        super(name, location);
+    public Mexican(String name, Point location, Team team, Ability ability) {
+        super(name, location, team);
         this.ability = ability;
         isPassable = false;
     }
@@ -88,7 +89,7 @@ public class Mexican extends PlayerEntity {
     @Override
     public void interactWith(PlayerEntity player, GameManipulator game) {
         if (player instanceof BorderPatrol) {
-            game.increaseScore(player.getTeam, 1); //TODO replace 1 with a game property.
+            game.increaseScore(player.getTeam(), 1); //TODO replace 1 with a game property.
             game.respawnPlayer(this);
         }
     }
