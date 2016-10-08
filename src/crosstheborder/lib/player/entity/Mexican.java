@@ -1,8 +1,8 @@
 package crosstheborder.lib.player.entity;
 
 import crosstheborder.lib.Ability;
-import crosstheborder.lib.enumeration.TileObjectType;
-import crosstheborder.lib.interfaces.TileObject;
+import crosstheborder.lib.Team;
+import crosstheborder.lib.interfaces.GameManipulator;
 import crosstheborder.lib.player.PlayerEntity;
 import crosstheborder.lib.tileobject.placeable.Wall;
 
@@ -18,7 +18,6 @@ public class Mexican extends PlayerEntity {
     //Indicates how many seconds it will take to climb the wall.
     private static final float CLIMB_MODIFIER = 0.5f; //TODO Gather from GameSettings file.
 
-    private boolean isTrapped;
     private Ability ability;
 
     private int climbTicks;
@@ -38,24 +37,6 @@ public class Mexican extends PlayerEntity {
         super(name, location);
         this.ability = ability;
         isPassable = false;
-    }
-
-    /**
-     * This method is used to get isTrapped.
-     *
-     * @return The boolean the value of isTrapped.
-     */
-    public boolean getIsTrapped() {
-        return isTrapped;
-    }
-
-    /**
-     * Sets the value of the isTrapped field.
-     *
-     * @param value The new boolean value.
-     */
-    public void setIsTrapped(boolean value) {
-        isTrapped = value;
     }
 
     /**
@@ -94,31 +75,21 @@ public class Mexican extends PlayerEntity {
     }
 
     /**
-     * Method for handling the interaction between two {@link TileObject}s.
-     *
-     * @param o The TileObject that is interacting with this object.
+     * {@inheritDoc}
+     * <p>
+     * If the other playerEntity is a {@link BorderPatrol}, respawn the mexican and raise the score of the BorderPatrol team.
+     * </p>
+     * Calls the following methods from GameManipulator:
+     * <ul>
+     * <li>Calls {@link GameManipulator#increaseScore(Team, int)} when the other entity is a BorderPatrol.</li>
+     * <li>Calls {@link GameManipulator#respawnPlayer(PlayerEntity)} with itself when the other entity is a BorderPatrol.</li>
+     * </ul>
      */
     @Override
-    public void interactWith(TileObject o) {
-        if (o.isPassable()) {
-            this.location = o.getLocation();
-        }
-
-        TileObjectType type = TileObjectType.valueOf(o.getClass().getSimpleName());
-        switch (type) {
-            case BorderPatrol:
-                //TODO add mexican borderpatrol interaction.
-                break;
-            case Trap:
-                if (this.isTrapped) {
-                    //TODO increase trapped timer.
-                } else {
-                    this.isTrapped = true;
-                }
-                break;
-            case Wall:
-                //TODO add wall interaction.
-                break;
+    public void interactWith(PlayerEntity player, GameManipulator game) {
+        if (player instanceof BorderPatrol) {
+            game.increaseScore(player.getTeam, 1); //TODO replace 1 with a game property.
+            game.respawnPlayer(this);
         }
     }
 
