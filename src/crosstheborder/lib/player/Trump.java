@@ -7,6 +7,8 @@ import crosstheborder.lib.Team;
  *  Represents the Trump player object.
  *  Extends the {@link Player} class.
  *  Holds the amount of walls and traps the Trump has.
+ *
+ *  @author Oscar de Leeuw
  */
 public class Trump extends Player {
 

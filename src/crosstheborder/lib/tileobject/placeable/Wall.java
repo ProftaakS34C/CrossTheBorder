@@ -10,6 +10,8 @@ import java.awt.*;
 
 /**
  * Represents a wall that can be build by {@link crosstheborder.lib.player.Trump}.
+ *
+ * @author Oscar de Leeuw
  */
 public class Wall extends Placeable {
     private boolean isPassable;

@@ -6,6 +6,8 @@ import crosstheborder.lib.interfaces.TileObject;
  *  Represents a single tile that composes the map.
  *  The tile has a certain location.
  *  Can have a {@link TileObject} that fills the tile.
+ *
+ *  @author Oscar de Leeuw
  */
 public class Tile {
     private TileObject tileObject;

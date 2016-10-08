@@ -5,6 +5,8 @@ import crosstheborder.lib.Ability;
 /**
  * Tank Ability. Unknown ability.
  * Must override the {@link Ability#useAbility()} method from {@link Ability}.
+ *
+ * @author Oscar de Leeuw
  */
 public class Tank extends Ability {
     /**

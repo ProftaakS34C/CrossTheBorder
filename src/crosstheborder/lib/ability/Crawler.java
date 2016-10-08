@@ -5,6 +5,8 @@ import crosstheborder.lib.Ability;
 /**
  * Ability Crawler, a crawler can climb over walls.
  * Must override the {@link Ability#useAbility()} method from {@link Ability}.
+ *
+ * @author Oscar de Leeuw
  */
 public class Crawler extends Ability {
     /**
