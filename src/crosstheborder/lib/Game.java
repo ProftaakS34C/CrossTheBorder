@@ -115,14 +115,14 @@ public class Game implements GameManipulator {
             Ability ability = new Crawler(0); //TODO something with abilities.
             Point location = map.getFreePointInArea(mex.getTeamArea());
 
-            player = new Mexican(user.getName(), location, mex, ability);
+            player = new Mexican(user.getName(), mex, ability);
             changeTileObjectLocation((Mexican) player, location);
         }
         //Else make a new american.
         else {
             Point location = map.getFreePointInArea(usa.getTeamArea());
 
-            player = new BorderPatrol(user.getName(), location, usa);
+            player = new BorderPatrol(user.getName(), usa);
             changeTileObjectLocation((BorderPatrol) player, location);
         }
 
