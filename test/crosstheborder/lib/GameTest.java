@@ -1,82 +1,126 @@
 package crosstheborder.lib;
 
-import crosstheborder.lib.ability.Crawler;
-import crosstheborder.lib.enumeration.MoveDirection;
 import crosstheborder.lib.player.Trump;
 import crosstheborder.lib.player.entity.BorderPatrol;
 import crosstheborder.lib.player.entity.Mexican;
-import crosstheborder.lib.tileobject.Wall;
-import org.junit.After;
-import org.junit.Assert;
+import crosstheborder.lib.tileobject.placeable.Wall;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.awt.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
- * Created by guill on 3-10-2016.
+ * @author Oscar de Leeuw
  */
 public class GameTest {
+    private static final int TICK_RATE = ServerSettings.getInstance().getServerTickRate();
 
     private Game game;
+
+    private User user1 = new User("Trump");
+    private User user2 = new User("Juan");
+    private User user3 = new User("Pete");
+
+    private Trump trump;
+    private Mexican mexican;
+    private BorderPatrol borderPatrol;
+
 
     @Before
     public void setUp() throws Exception {
         game = new Game();
-        game.addPlayer(new Trump("Trump"));
+
+        game.addPlayer(user1);
+        game.addPlayer(user2);
+        game.addPlayer(user3);
+
+        trump = (Trump) user1.getPlayer();
+        mexican = (Mexican) user2.getPlayer();
+        borderPatrol = (BorderPatrol) user3.getPlayer();
     }
 
-    @After
-    public void tearDown() throws Exception {
-
-    }
-
-    /**
-     * Looks if the playerEntity ("Henkie") has been moved,
-     * this can we see if we return a true value.
-     *
-     * @throws Exception
-     */
     @Test
-    public void movePlayer() throws Exception {
+    public void addPlayer() throws Exception {
+        assertTrue(user1.getPlayer() instanceof Trump);
+        assertTrue(user2.getPlayer() instanceof Mexican);
+        assertTrue(user3.getPlayer() instanceof BorderPatrol);
 
-        BorderPatrol bp = new BorderPatrol("Henkie", new Point(50, 70));
-        game.addPlayer(bp);
-
-        Assert.assertTrue(game.movePlayer(MoveDirection.DOWN, bp));
-    }
-
-    /**
-     * This will call the addObstacle Method.
-     * It wil send a point, tileObject and player with it.
-     * And it looks at the end if the tile has been added.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void addObstacle() throws Exception {
-        Assert.assertTrue(game.addObstacle(new Point(90,60), new Wall(new Point(90, 60)), new Trump("Trump")));
-    }
-
-    /**
-     * Tests if the respawing of a mexican works.
-     * First add a new mexican to the game. Than move that mexican.
-     * At last look if the score of mex has changed.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void respawnMexican() throws Exception {
-        Mexican mex = new Mexican("Juan", new Point(40, 40), new Crawler(5));
-        game.addPlayer(mex);
-        Assert.assertTrue(game.movePlayer(MoveDirection.UP, mex));
-        Assert.assertEquals(1, game.getScoreMexico());
+        assertTrue(mexican.getTeam().getTeamArea().contains(mexican.getLocation()));
+        //TODO add code that checks the map contains a tileObject at the location of the mexican.
+        //TODO add code that checks the teams contain the players.
     }
 
     @Test
     public void update() throws Exception {
+        Point initialBPLocation = new Point(borderPatrol.getLocation().x, borderPatrol.getLocation().y);
+        Point initialMexLocation = new Point(mexican.getLocation().x, mexican.getLocation().y);
+
+        //Immobilize the mexican.
+        mexican.setCanMoveTicks(1);
+
+        //Process the amount of ticks that equals 1 second, which should allow the mexican to move again.
+        for (int i = 0; i < 1 * TICK_RATE; i++) {
+            //Push movement. up to mexico and down to border patrol
+
+
+            game.update();
+            assertEquals(initialMexLocation.x, mexican.getLocation().x);
+            assertEquals(initialMexLocation.y, mexican.getLocation().y);
+
+            initialBPLocation.translate(0, 1);
+            assertEquals(initialBPLocation.x, borderPatrol.getLocation().x);
+            assertEquals(initialBPLocation.y, borderPatrol.getLocation().y);
+        }
+
+        //Push one more up movement to the mexican object.
+
+        //update one more time which should move the mexican.
+        game.update();
+        assertEquals(initialMexLocation.x, mexican.getLocation().x);
+        assertEquals(initialMexLocation.y - 1, mexican.getLocation().y);
+
+
+    }
+
+    @Test
+    public void addObstacle() throws Exception {
+        Point location = new Point(20, 20);
+
+        game.addObstacle(location, new Wall(location, 2));
+
+        //TODO check that the object was actually placed at the location.
+        //TODO try to add an object at a location that is taken.
+    }
+
+    @Test
+    public void movePlayerEntity() throws Exception {
+
+    }
+
+    @Test
+    public void respawnPlayer() throws Exception {
+
+    }
+
+    @Test
+    public void increaseScore() throws Exception {
+        int initUsaScore = game.getScoreUSA();
+        int initMexScore = game.getScoreMexico();
+        int amount1 = 1;
+        int amount2 = 3;
+
+        game.increaseScore(borderPatrol.getTeam(), amount1);
+        game.increaseScore(mexican.getTeam(), amount2);
+
+        assertEquals(initUsaScore + amount1, game.getScoreUSA());
+        assertEquals(initMexScore + amount2, game.getScoreMexico());
+    }
+
+    @Test
+    public void changeTileObjectLocation() throws Exception {
 
     }
 
