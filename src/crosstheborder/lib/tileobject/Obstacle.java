@@ -14,7 +14,6 @@ import java.awt.*;
  * @author Oscar de Leeuw
  */
 public class Obstacle implements TileObject {
-    private boolean isPassable;
     private Point location;
     private ObstacleType type;
 
@@ -22,13 +21,11 @@ public class Obstacle implements TileObject {
      * Creates a new Obstacle.
      * Sets isPassable to false;
      *
-     * @param location The location of the Obstacle.
      * @param type The {@link ObstacleType} of the Obstacle.
      */
-    public Obstacle(Point location, ObstacleType type) {
-        this.isPassable = false;
-        this.location = location;
+    public Obstacle(ObstacleType type) {
         this.type = type;
+        location = new Point();
     }
 
     /**

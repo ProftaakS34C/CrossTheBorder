@@ -101,18 +101,18 @@ public class GameTest {
     @Test
     public void addObstacle() throws Exception {
         Point location = new Point(20, 20);
-        Wall wall = new Wall(location, 2);
-        Trap trap = new Trap(location, 3);
+        Wall wall = new Wall(2);
+        Trap trap = new Trap(3);
         int wallCount = trump.getWallAmount();
         int trapCount = trump.getTrapAmount();
 
         //Add a placeable at a (free) location.
-        game.addObstacle(location, wall);
+        game.addPlaceable(location, wall);
         assertEquals(game.getMap().getTileObject(location), wall);
         assertEquals(wallCount - 1, trump.getWallAmount());
 
         //Try to add a placeable at the same location.
-        game.addObstacle(location, trap);
+        game.addPlaceable(location, trap);
         assertEquals(game.getMap().getTileObject(location), wall);
         assertEquals(trapCount, trump.getTrapAmount());
     }
@@ -133,7 +133,7 @@ public class GameTest {
         assertEquals(mexican.getLocation().y, nextLocation1.y);
 
         //Set an obstacle at the location the mexican wants to move to.
-        Obstacle obstacle = new Obstacle(nextLocation2, ObstacleType.Tree);
+        Obstacle obstacle = new Obstacle(ObstacleType.Tree);
         game.changeTileObjectLocation(obstacle, nextLocation2);
 
         assertEquals(obstacle, game.getMap().getTileObject(nextLocation2));
@@ -173,7 +173,7 @@ public class GameTest {
     @Test
     public void changeTileObjectLocation() throws Exception {
         Point location = new Point(10, 10);
-        Obstacle obstacle = new Obstacle(location, ObstacleType.Tree);
+        Obstacle obstacle = new Obstacle(ObstacleType.Tree);
 
         //Set a new tile object on the map.
         game.changeTileObjectLocation(obstacle, location);

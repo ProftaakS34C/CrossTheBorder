@@ -13,17 +13,12 @@ import java.awt.*;
  */
 public abstract class Placeable implements TileObject {
     private Point location;
-    private boolean isPassable;
 
     /**
      * Creates a new placeable with the given location and isPassable status.
-     *
-     * @param location   A {@link Point} that represents the location of the object.
-     * @param isPassable A boolean that represents the passability of the object.
      */
-    protected Placeable(Point location, boolean isPassable) {
-        this.location = location;
-        this.isPassable = isPassable;
+    protected Placeable() {
+        this.location = new Point();
     }
 
     public abstract void interactWith(PlayerEntity player, GameManipulator game);
