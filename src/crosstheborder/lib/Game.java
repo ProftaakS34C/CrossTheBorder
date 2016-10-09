@@ -127,12 +127,15 @@ public class Game implements GameManipulator {
             //Update the player entities.
             if (player instanceof PlayerEntity) {
                 PlayerEntity entity = (PlayerEntity) player;
-                entity.decreaseMoveTimer();
 
+                //Move the player if there is input.
                 Point nextLocation = entity.getNextMove();
                 if (nextLocation != null) {
                     movePlayerEntity(entity, nextLocation);
                 }
+
+                //Decrease the immobilization timer.
+                entity.decreaseMoveTimer();
             }
         }
     }
