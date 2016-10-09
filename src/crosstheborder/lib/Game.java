@@ -83,6 +83,19 @@ public class Game implements GameManipulator {
     }
 
     /**
+     * Gets the Trump in the list of players.
+     * @return The Trump object.
+     */
+    private Trump getTrump() {
+        for (Player player : players) {
+            if (player instanceof Trump) {
+                return (Trump) player;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Turns a user into a player and adds the player to the game.
      * Will try to create a Trump if there is none.
      * Will try to create a Mexican if there are more Americans than Mexicans.
@@ -127,21 +140,34 @@ public class Game implements GameManipulator {
             //Update the player entities.
             if (player instanceof PlayerEntity) {
                 PlayerEntity entity = (PlayerEntity) player;
-                entity.decreaseMoveTimer();
 
+                //Move the player if there is input.
                 Point nextLocation = entity.getNextMove();
                 if (nextLocation != null) {
                     movePlayerEntity(entity, nextLocation);
                 }
+
+                //Decrease the immobilization timer.
+                entity.decreaseMoveTimer();
+            } else if (player instanceof Trump) {
+                ((Trump) player).tickPlaceableAmount();
             }
         }
     }
 
-    public void addObstacle(Point location, Placeable tileObject) {
+    /**
+     * Adds a new Placeable to the map.
+     *
+     * @param location  The location the placeable should be placed.
+     * @param placeable The placeable that should be placed on the map.
+     */
+    public void addPlaceable(Point location, Placeable placeable) {
+        Trump trump = getTrump();
 
-        if (!map.hasTileObject(location) || map.getMexicoArea().contains(location) || map.getUsaArea().contains(location)) {
+        if (trump.canPlace(placeable) && !map.hasTileObject(location) && !map.getMexicoArea().contains(location) && !map.getUsaArea().contains(location)) {
             //TODO add code that checks walls are not placed next to each other.
-            map.changeTileObject(location, tileObject);
+            map.changeTileObject(location, placeable);
+            trump.decreasePlaceableAmount(placeable);
         }
     }
 
