@@ -65,6 +65,6 @@ public class Wall extends Placeable {
 
         Point newLocation = new Point(mexican.getLocation().x + translationX, mexican.getLocation().y + translationY);
 
-        game.changeTileObjectLocation(mexican, newLocation);
+        game.movePlayerEntity(mexican, newLocation);
     }
 }
