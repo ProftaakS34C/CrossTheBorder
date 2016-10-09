@@ -1,13 +1,16 @@
 package crosstheborder.lib;
 
+import crosstheborder.lib.ability.Crawler;
 import crosstheborder.lib.interfaces.GameManipulator;
 import crosstheborder.lib.interfaces.TileObject;
 import crosstheborder.lib.player.PlayerEntity;
+import crosstheborder.lib.player.Trump;
+import crosstheborder.lib.player.entity.BorderPatrol;
+import crosstheborder.lib.player.entity.Mexican;
 import crosstheborder.lib.tileobject.Placeable;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * This class makes an instance of Game.
@@ -53,11 +56,38 @@ public class Game implements GameManipulator {
     }
 
     /**
-     * Adds a player to the game.
+     * Turns a user into a player and adds the player to the game.
+     * Will try to create a Trump if there is none.
+     * Will try to create a Mexican if there are more Americans than Mexicans.
+     * Will otherwise try to create a BorderPatrol.
      *
-     * @param player The player that has to added to the game.
+     * @param user The user that joined this game.
      */
-    public void addPlayer(Player player){
+    public void addPlayer(User user) {
+        Player player;
+
+        //If trump does not exist make the user a trump.
+        if (!players.stream().anyMatch(x -> x instanceof Trump)) {
+            player = new Trump(user.getName(), usa);
+        }
+        //If there are more USA members than mexicans, make a new mexican.
+        else if (usa.getTeamMembers().size() > mex.getTeamMembers().size()) {
+            Ability ability = new Crawler(0); //TODO something with abilities.
+            Point location = map.getFreePointInArea(mex.getTeamArea());
+
+            player = new Mexican(user.getName(), location, mex, ability);
+            changeTileObjectLocation((Mexican) player, location);
+        }
+        //Else make a new american.
+        else {
+            Point location = map.getFreePointInArea(usa.getTeamArea());
+
+            player = new BorderPatrol(user.getName(), location, usa);
+            changeTileObjectLocation((BorderPatrol) player, location);
+        }
+
+        //Assign the player object to the user.
+        user.setPlayer(player);
         players.add(player);
     }
 
@@ -102,20 +132,11 @@ public class Game implements GameManipulator {
 
     @Override
     public void respawnPlayer(PlayerEntity player) {
-        Rectangle area = player.getTeam().getTeamArea();
+        //Get a free point in the team area of the player.
+        Point nextLocation = map.getFreePointInArea(player.getTeam().getTeamArea());
 
-        //Generate a random point within the teams area.
-        int x = ThreadLocalRandom.current().nextInt(area.x, area.x + area.width + 1);
-        int y = ThreadLocalRandom.current().nextInt(area.y, area.y + area.height + 1);
-        Point nextLocation = new Point(x, y);
-
-        //If the tile is occupied find a new location.
-        if (map.hasTileObject(nextLocation)) {
-            respawnPlayer(player);
-        } else {
-            player.setCanMoveTicks(10); //TODO Gather the respawn time from game settings.
-            changeTileObjectLocation(player, nextLocation);
-        }
+        player.setCanMoveTicks(10); //TODO Gather the respawn time from game settings.
+        changeTileObjectLocation(player, nextLocation);
     }
 
     @Override
