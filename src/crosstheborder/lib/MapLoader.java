@@ -19,12 +19,20 @@ import java.util.List;
  */
 public class MapLoader {
     private static final String ext = ".ctbmap";
-    private static final HashMap<String, TileType> tileTypes = new HashMap<>();
-    private static final HashMap<String, ObstacleType> obstacleTypes = new HashMap<>();
+    private static final HashMap<Character, TileType> tileTypes = new HashMap<>();
+    private static final HashMap<Character, ObstacleType> obstacleTypes = new HashMap<>();
     private static MapLoader ourInstance = new MapLoader();
 
     private MapLoader() {
-        obstacleTypes.put("x", null);
+        obstacleTypes.put('x', null);
+
+        for (ObstacleType type : ObstacleType.values()) {
+            registerObstacleTypeCode(type.code, type);
+        }
+
+        for (TileType type : TileType.values()) {
+            registerTileTypeCode(type.code, type);
+        }
     }
 
     /**
@@ -42,7 +50,7 @@ public class MapLoader {
      * @param code The code that is used in the .ctbmap encoding for this TileType.
      * @param type The type that is represented by the given code.
      */
-    public void registerTileTypeCode(String code, TileType type) {
+    private void registerTileTypeCode(char code, TileType type) {
         if (!tileTypes.containsKey(code)) {
             tileTypes.put(code, type);
         }
@@ -54,12 +62,20 @@ public class MapLoader {
      * @param code The code that is used in the .ctbmap encoding for this ObstacleType.
      * @param type The type that is represented by the given code.
      */
-    public void registerObstacleTypeCode(String code, ObstacleType type) {
+    private void registerObstacleTypeCode(char code, ObstacleType type) {
         if (!obstacleTypes.containsKey(code)) {
             obstacleTypes.put(code, type);
         }
     }
 
+    /**
+     * Builds a map with the .ctbmap format from the given name.
+     * Assumes all maps are in a map called maps in the root folder of the program.
+     * Uses the name of the map as filename.
+     *
+     * @param name The name of the map.
+     * @return A map object.
+     */
     public Map buildMap(String name) {
         File file = getMapFile(name);
 
@@ -82,7 +98,7 @@ public class MapLoader {
     }
 
     private File getMapFile(String name) {
-        return new File("/maps/" + name + ".ctbmap");
+        return new File("maps/" + name + ".ctbmap");
     }
 
     private void readFile(File file, StringBuilder widthLine, StringBuilder heightLine, StringBuilder usaArea, StringBuilder mexicoArea, List<String> tiles, List<String> tileObjects) {
@@ -157,6 +173,7 @@ public class MapLoader {
 
                 if (type != null) {
                     TileObject obstacle = new Obstacle(type);
+                    obstacle.getLocation().move(i, j);
                     ret[i][j].setTileObject(obstacle);
                 }
             }

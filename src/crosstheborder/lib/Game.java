@@ -29,11 +29,11 @@ public class Game implements GameManipulator {
     /**
      * Constructor of Game class.
      */
-    public Game(){
+    public Game(String mapname) {
         players = new ArrayList<>();
 
         // For now we use 20 as width and height, this can be changed if we want to.
-        map = new Map("The Border", 40, 40); //TODO Fuck the magic numbers and implement map construction..
+        map = MapLoader.getInstance().buildMap(mapname);
         usa = new Team("USA", map.getUsaArea());
         mex = new Team("MEX", map.getMexicoArea());
     }

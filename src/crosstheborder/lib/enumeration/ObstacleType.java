@@ -1,7 +1,5 @@
 package crosstheborder.lib.enumeration;
 
-import crosstheborder.lib.MapLoader;
-
 /**
  * The ObstacleType class is an enumeration that captures all the different types of obstacles.
  * Used to determine what sprite to draw on the screen.
@@ -9,9 +7,16 @@ import crosstheborder.lib.MapLoader;
  * @author Oscar de Leeuw
  */
 public enum ObstacleType {
-    Tree("t"), Water("w"), Rock("r");
+    Tree, Water, Rock;
 
-    ObstacleType(String code) {
-        MapLoader.getInstance().registerObstacleTypeCode(code, this);
+    static {
+        Tree.code = 't';
+        Water.code = 'w';
+        Rock.code = 'r';
     }
+
+    /**
+     * The code for the obstacle type in the .ctbmap file format.
+     */
+    public char code;
 }

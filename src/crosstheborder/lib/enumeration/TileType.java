@@ -1,7 +1,5 @@
 package crosstheborder.lib.enumeration;
 
-import crosstheborder.lib.MapLoader;
-
 /**
  * The TileType enum captures what type of tile a tile is.
  * Used to determine what texture to draw for a tile.
@@ -9,9 +7,16 @@ import crosstheborder.lib.MapLoader;
  * @author Oscar de Leeuw
  */
 public enum TileType {
-    Dirt("d"), Sand("s"), Grass("g");
+    Dirt, Sand, Grass;
 
-    TileType(String code) {
-        MapLoader.getInstance().registerTileTypeCode(code, this);
+    static {
+        Dirt.code = 'd';
+        Sand.code = 's';
+        Grass.code = 'g';
     }
+
+    /**
+     * The code for this TileType in the .ctbmap format.
+     */
+    public char code;
 }
