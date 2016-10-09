@@ -146,8 +146,8 @@ public class Map {
     public Point getFreePointInArea(Rectangle area) {
 
         //Generate a random point within the given area.
-        int x = ThreadLocalRandom.current().nextInt(area.x, area.x + area.width + 1);
-        int y = ThreadLocalRandom.current().nextInt(area.y, area.y + area.height + 1);
+        int x = ThreadLocalRandom.current().nextInt(area.x, area.x + area.width);
+        int y = ThreadLocalRandom.current().nextInt(area.y, area.y + area.height);
         Point nextLocation = new Point(x, y);
 
         //If the tile is occupied find a new location.
