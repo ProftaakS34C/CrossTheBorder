@@ -1,6 +1,7 @@
 package crosstheborder.lib;
 
 import crosstheborder.lib.ability.Crawler;
+import crosstheborder.lib.enumeration.TeamName;
 import crosstheborder.lib.interfaces.GameManipulator;
 import crosstheborder.lib.interfaces.TileObject;
 import crosstheborder.lib.player.PlayerEntity;
@@ -53,6 +54,32 @@ public class Game implements GameManipulator {
      */
     public int getScoreMexico(){
         return mex.getScore();
+    }
+
+    /**
+     * Gets the map of the game.
+     *
+     * @return The map that is used by the game.
+     */
+    public Map getMap() {
+        return this.map;
+    }
+
+    /**
+     * Gets a team from the game with a given team name.
+     *
+     * @param name The name of the team.
+     * @return A team object that represents the team.
+     */
+    public Team getTeam(TeamName name) {
+        switch (name) {
+            case USA:
+                return this.usa;
+            case MEX:
+                return this.mex;
+            default:
+                return null;
+        }
     }
 
     /**
