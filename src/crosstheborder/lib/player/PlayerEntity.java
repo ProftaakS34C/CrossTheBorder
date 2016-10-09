@@ -77,7 +77,7 @@ public abstract class PlayerEntity extends Player implements TileObject {
      *
      * @param seconds The amount of seconds the player is immobile.
      */
-    public void setCanMoveTicks(int seconds) {
+    public void immobilize(int seconds) {
         canMove = false;
         canMoveTicks = SERVER_TICK_RATE * seconds;
     }
