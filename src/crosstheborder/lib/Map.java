@@ -3,6 +3,7 @@ package crosstheborder.lib;
 import crosstheborder.lib.interfaces.TileObject;
 
 import java.awt.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * The Map class represents a collection of tiles that form a map within the CrossTheBorder game.
@@ -133,6 +134,28 @@ public class Map {
      */
     public void changeTileObject(Point location, TileObject to){
         getTile(location).setTileObject(to);
+    }
+
+    /**
+     * Gets a point devoid of a TileObject in a given area.
+     * Can be an infinite loop.
+     *
+     * @param area The area out of which a point is requested.
+     * @return A point that does not contain a TileObject in a given area.
+     */
+    public Point getFreePointInArea(Rectangle area) {
+
+        //Generate a random point within the given area.
+        int x = ThreadLocalRandom.current().nextInt(area.x, area.x + area.width + 1);
+        int y = ThreadLocalRandom.current().nextInt(area.y, area.y + area.height + 1);
+        Point nextLocation = new Point(x, y);
+
+        //If the tile is occupied find a new location.
+        if (hasTileObject(nextLocation)) {
+            return getFreePointInArea(area);
+        } else {
+            return nextLocation;
+        }
     }
 
 
