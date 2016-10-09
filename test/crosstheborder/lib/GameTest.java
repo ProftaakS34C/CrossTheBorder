@@ -35,7 +35,7 @@ public class GameTest {
 
     @Before
     public void setUp() throws Exception {
-        game = new Game();
+        game = new Game("empty");
 
         game.addPlayer(user1);
         game.addPlayer(user2);

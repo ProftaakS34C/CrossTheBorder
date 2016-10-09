@@ -1,5 +1,6 @@
 package crosstheborder.lib;
 
+import crosstheborder.lib.enumeration.TileType;
 import crosstheborder.lib.interfaces.TileObject;
 
 import java.awt.*;
@@ -25,20 +26,13 @@ public class Map {
     private Rectangle usaArea;
     private Rectangle mexicoArea;
 
-    /**
-     * Constructor of Map class.
-     *
-     * @param name  The name of the map.
-     * @param width  The width of the map.
-     * @param height The height of the map.
-     */
-    public Map(String name, int width, int height) {
-        this.name = name;
-        this.width = width;
-        this.height = height;
-        this.tiles = new Tile[width][height];
-
-        generateMap();
+    private Map(Builder builder) {
+        this.width = builder.width;
+        this.height = builder.height;
+        this.usaArea = builder.usaArea;
+        this.mexicoArea = builder.mexicoArea;
+        this.name = builder.name;
+        this.tiles = builder.tiles;
     }
 
     private void generateMap() {
@@ -46,7 +40,7 @@ public class Map {
         //Temp code for generating a map.
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                this.tiles[x][y] = new Tile();
+                this.tiles[x][y] = new Tile(TileType.Dirt);
             }
         }
 
@@ -158,5 +152,92 @@ public class Map {
         }
     }
 
+    /**
+     * Builds a map class.
+     */
+    public static class Builder {
+        private String name;
+        private int width;
+        private int height;
+        private Rectangle usaArea;
+        private Rectangle mexicoArea;
+        private Tile[][] tiles;
 
+        /**
+         * Makes a map with the given name.
+         *
+         * @param name The name of the map.
+         */
+        public Builder(String name) {
+            this.name = name;
+        }
+
+        /**
+         * Sets the width of the map.
+         *
+         * @param width The width of the map.
+         * @return This builder object.
+         */
+        public Builder setWidth(int width) {
+            this.width = width;
+            return this;
+        }
+
+        /**
+         * Sets the height of the map.
+         *
+         * @param height The height of the map.
+         * @return This builder object.
+         */
+        public Builder setHeight(int height) {
+            this.height = height;
+            return this;
+        }
+
+        /**
+         * The area of the USA team.
+         *
+         * @param area The area of the USA team.
+         * @return This builder object.
+         */
+        public Builder setUsaArea(Rectangle area) {
+            this.usaArea = area;
+            return this;
+        }
+
+        /**
+         * Sets the area of the Mexico team.
+         *
+         * @param area The area of the Mexico team.
+         * @return This builder object.
+         */
+        public Builder setMexicoArea(Rectangle area) {
+            this.mexicoArea = area;
+            return this;
+        }
+
+        /**
+         * Sets the tiles of the map.
+         *
+         * @param tiles A two dimensional array of tiles.
+         * @return This builder object.
+         */
+        public Builder setTiles(Tile[][] tiles) {
+            this.tiles = tiles;
+            return this;
+        }
+
+        /**
+         * Builds the map.
+         *
+         * @return A map object.
+         */
+        public Map build() {
+            if (tiles == null || mexicoArea == null || usaArea == null || name == null || width == 0 || height == 0) {
+                throw new IllegalArgumentException("All properties of the map need to be initialized.");
+            }
+
+            return new Map(this);
+        }
+    }
 }

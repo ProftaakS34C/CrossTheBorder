@@ -96,6 +96,6 @@ public class Lobby {
      * This method is used to start the game
      */
     public void startGame() {
-        Game game = new Game();
+        Game game = new Game("empty"); //TODO change this to the mapname that is chosen in the lobby.
     }
 }

@@ -7,5 +7,16 @@ package crosstheborder.lib.enumeration;
  * @author Oscar de Leeuw
  */
 public enum ObstacleType {
-    Tree, Water, Rock
+    Tree, Water, Rock;
+
+    static {
+        Tree.code = 't';
+        Water.code = 'w';
+        Rock.code = 'r';
+    }
+
+    /**
+     * The code for the obstacle type in the .ctbmap file format.
+     */
+    public char code;
 }
