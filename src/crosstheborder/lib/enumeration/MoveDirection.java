@@ -12,8 +12,8 @@ public enum MoveDirection {
     UP, DOWN, LEFT, RIGHT, NONE;
 
     static {
-        UP.cartesianTranslation = new Point(0, 1);
-        DOWN.cartesianTranslation = new Point(0, -1);
+        UP.cartesianTranslation = new Point(0, -1);
+        DOWN.cartesianTranslation = new Point(0, 1);
         LEFT.cartesianTranslation = new Point(-1, 0);
         RIGHT.cartesianTranslation = new Point(1, 0);
         NONE.cartesianTranslation = new Point(0, 0);
