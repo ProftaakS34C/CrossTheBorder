@@ -43,6 +43,11 @@ public abstract class PlayerEntity extends Player implements TileObject {
         return this.location;
     }
 
+    /**
+     * Gets the next location this entity wants to move to.
+     *
+     * @return A point that represents the next location.
+     */
     public Point getNextMove() {
         MoveDirection moveDirection = inputBuffer.getNextInputMove();
 
@@ -54,6 +59,15 @@ public abstract class PlayerEntity extends Player implements TileObject {
         Point currentLocation = getLocation();
         Point translation = moveDirection.getTranslation();
         return new Point(currentLocation.x + translation.x, currentLocation.y + translation.y);
+    }
+
+    /**
+     * Pushes a MoveDirection to the {@link InputBuffer}.
+     *
+     * @param move The MoveDirection that should be pushed to the InputBuffer.
+     */
+    public void pushInput(MoveDirection move) {
+        inputBuffer.addToInputMoves(move);
     }
 
     /**
@@ -77,7 +91,7 @@ public abstract class PlayerEntity extends Player implements TileObject {
      *
      * @param seconds The amount of seconds the player is immobile.
      */
-    public void setCanMoveTicks(int seconds) {
+    public void immobilize(int seconds) {
         canMove = false;
         canMoveTicks = SERVER_TICK_RATE * seconds;
     }
