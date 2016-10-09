@@ -6,6 +6,8 @@ import crosstheborder.lib.interfaces.TileObject;
  *  Represents a single tile that composes the map.
  *  The tile has a certain location.
  *  Can have a {@link TileObject} that fills the tile.
+ *
+ *  @author Oscar de Leeuw
  */
 public class Tile {
     private TileObject tileObject;
@@ -24,16 +26,6 @@ public class Tile {
      */
     public boolean hasTileObject() {
         return tileObject != null;
-    }
-
-    /**
-     * Checks whether this tile is accessible or not.
-     *
-     * @return A boolean value that is true when the tile is accessible and false when it's inaccessible.
-     */
-    public boolean isAccessible() {
-        //If the tile does not have a TileObject return true otherwise check from object.isPassable().
-        return tileObject == null || tileObject.isPassable();
     }
 
     /**

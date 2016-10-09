@@ -25,7 +25,9 @@ public class ServerSettings implements InputPropertiesGetter {
 
         } catch (FileNotFoundException ex) {
             try {
-                file.createNewFile();
+                if (!file.createNewFile()) {
+                    throw new IOException();
+                }
                 ourInstance = new ServerSettings();
             } catch (IOException e) {
                 e.printStackTrace(System.err);
@@ -45,9 +47,8 @@ public class ServerSettings implements InputPropertiesGetter {
     }
 
     /**
-     * Gets the size of the input buffer.
-     *
-     * @return The size of the input buffer.
+     * {@inheritDoc}
+     * <p>If the key is not found in the properties it returns the integer value 10.</p>
      */
     @Override
     public int getInputBufferSize() {
@@ -57,5 +58,20 @@ public class ServerSettings implements InputPropertiesGetter {
             ex.printStackTrace(System.err);
         }
         return 10;
+    }
+
+    /**
+     * Gets the tick rate of the server.
+     * <p>If the key is not found in the properties it returns the integer value 0.2f.</p>
+     *
+     * @return An integer that represents the tick rate of the server.
+     */
+    public int getServerTickRate() {
+        try {
+            return Integer.parseInt(properties.getProperty("ServerTickRate"));
+        } catch (NumberFormatException ex) {
+            ex.printStackTrace(System.err);
+        }
+        return 200;
     }
 }

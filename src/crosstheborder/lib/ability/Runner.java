@@ -5,6 +5,8 @@ import crosstheborder.lib.Ability;
 /**
  * Runner ability. Can run quicker when activated.
  * Must override the {@link Ability#useAbility()} method from {@link Ability}.
+ *
+ * @author Oscar de Leeuw
  */
 public class Runner extends Ability {
 

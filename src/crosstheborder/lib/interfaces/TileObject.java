@@ -1,24 +1,23 @@
 package crosstheborder.lib.interfaces;
 
+import crosstheborder.lib.player.PlayerEntity;
+
 import java.awt.*;
 
 /**
- * Represents an object on a tile.
+ * The TileObject class is an interface for objects that can live on {@link crosstheborder.lib.Tile}s within the game.
+ *
+ * @author Oscar de Leeuw
  */
 public interface TileObject {
     /**
-     * Method for handling the interaction between two {@link TileObject}s.
+     * Method for handling the interaction between a {@link PlayerEntity} and a {@link TileObject}.
+     * Calls methods on the {@link GameManipulator} object to process interaction results.
      *
-     * @param o The TileObject that is interacting with this object.
+     * @param player The {@link PlayerEntity} that is interacting with the TileObject.
+     * @param game A {@link GameManipulator} on which interaction results can be executed.
      */
-    void interactWith(TileObject o);
-
-    /**
-     * Method for getting whether the object is passable or not.
-     *
-     * @return A boolean that determines whether the object is passable or not.
-     */
-    boolean isPassable();
+    void interactWith(PlayerEntity player, GameManipulator game);
 
     /**
      * Gets the location of the {@link TileObject}.
