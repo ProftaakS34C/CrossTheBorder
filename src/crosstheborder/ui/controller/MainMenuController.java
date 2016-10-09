@@ -1,14 +1,17 @@
 package crosstheborder.ui.controller;
 
-/**
- * @author yannic
- */
 
+
+import crosstheborder.ui.ClientMain;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 
+/**
+ * @author yannic
+ * the controller class of the main menu
+ */
 public class MainMenuController {
 
     @FXML
@@ -30,6 +33,8 @@ public class MainMenuController {
     private Label playerNameLabel;
     @FXML
     private TableView lobbyTableView;
+
+    private ClientMain instance;
 
     /**
      * sets the text of the label used for displaying the name of the current user.
@@ -62,5 +67,13 @@ public class MainMenuController {
 
     public TableView getLobbyTableView() {
         return lobbyTableView;
+    }
+
+    /**
+     * sets the main class this controller uses for functions
+     * @param instance the ClientMain class
+     */
+    public void setInstance(ClientMain instance){
+        this.instance = instance;
     }
 }

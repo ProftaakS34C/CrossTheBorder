@@ -11,19 +11,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 
+/**
+ * the controller class of the lobby menu
+ */
 public class LobbyMenuController {
-    public LobbyMenuController(){
-
-    }
     @FXML
     private void initialize(){
-
-        //fill the choiceBox with numbers
-        int maxPlayers = ClientMain.getInstance().getMaxPlayers();
-        for(int i = maxPlayers; i > 0; i--){
-            choiceBoxAmountOfPlayers.getItems().add(i);
-        }
-
+        //todo: only if the user is owner of the lobby should the start button be set visible
     }
     @FXML
     private Button startGameButton;
@@ -39,6 +33,9 @@ public class LobbyMenuController {
     private Button chatButton;
     @FXML
     private ChoiceBox choiceBoxAmountOfPlayers;
+
+    private ClientMain instance;
+    int maxPlayers;
 
     @FXML
     private void textBoxIsPrivate_OnAction(ActionEvent event){
@@ -74,6 +71,18 @@ public class LobbyMenuController {
     public TableView getPlayersTableView() {
         //playersTableView.getItems().add(new User("test"));
         return playersTableView;
+    }
+
+    /**
+     * sets the main class this controller uses for functions
+     * @param instance the ClientMain class
+     */
+    public void setInstance(ClientMain instance){
+        this.instance = instance;
+        int maxPlayers = instance.getMaxPlayers();
+        for(int i = maxPlayers; i > 0; i--){
+            choiceBoxAmountOfPlayers.getItems().add(i);
+        }
     }
 
 }

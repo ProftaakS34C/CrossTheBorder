@@ -6,6 +6,10 @@ package crosstheborder.ui;
  *
  */
 
+import crosstheborder.ui.controller.GameScreenController;
+import crosstheborder.ui.controller.LayoutController;
+import crosstheborder.ui.controller.LobbyMenuController;
+import crosstheborder.ui.controller.MainMenuController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -38,7 +42,7 @@ public class ClientMain extends Application {
     /**
      * the start method of main, loads the basic layout and shows the main menu on it.
      *
-     * @param primaryStage penis
+     * @param primaryStage the stage to load the scenes on
      */
     @Override
     public void start(Stage primaryStage) {
@@ -51,18 +55,14 @@ public class ClientMain extends Application {
     }
 
     /**
-     * used to execute methods in this class from anywhere.
-     * @return this instance of the class
-     */
-    public static ClientMain getInstance(){
-        return thisInstance;
-    }
-    /**
      * loads the layout into the stage
      */
     public void initLayout(){
         try {
-            root = FXMLLoader.load(getClass().getResource("Views/Layout.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Views/Layout.fxml"));
+            root = loader.load();
+            LayoutController controller = loader.getController();
+            controller.setInstance(this);
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
             primaryStage.show();
@@ -79,7 +79,10 @@ public class ClientMain extends Application {
     public void showMainMenu(){
         Pane menuRoot;
         try{
-            menuRoot = FXMLLoader.load(getClass().getResource("Views/MainMenu.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Views/MainMenu.fxml"));
+            menuRoot = loader.load();
+            MainMenuController controller = loader.getController();
+            controller.setInstance(this);
             root.setCenter(menuRoot);
             primaryStage.setTitle("main menu");
         }
@@ -95,7 +98,10 @@ public class ClientMain extends Application {
     public void showLobbyMenu(){
         Pane lobbyRoot;
         try{
-            lobbyRoot = FXMLLoader.load(getClass().getResource("Views/LobbyMenu.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Views/LobbyMenu.fxml"));
+            lobbyRoot = loader.load();
+            LobbyMenuController controller = loader.getController();
+            controller.setInstance(this);
             root.setCenter(lobbyRoot);
             primaryStage.setTitle("Lobby menu");
         }
@@ -107,10 +113,13 @@ public class ClientMain extends Application {
 
     public void showGameScreen(){
         //load the game fxml file.
-        Canvas lobbyRoot;
+        Canvas gameRoot;
         try{
-            lobbyRoot = FXMLLoader.load(getClass().getResource("Views/GameScreen.fxml"));
-            root.setCenter(lobbyRoot);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Views/GameScreen.fxml"));
+            gameRoot = loader.load();
+            GameScreenController controller = loader.getController();
+            controller.setInstance(this);
+            root.setCenter(gameRoot);
             primaryStage.setTitle("in game");
         }
         catch (IOException x){

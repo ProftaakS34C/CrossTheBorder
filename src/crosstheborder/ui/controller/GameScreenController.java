@@ -1,16 +1,16 @@
 package crosstheborder.ui.controller;
 
+import crosstheborder.ui.ClientMain;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
 /**
  * @author Yannic
- * this is the controller for the GameScreen fxml,
- * which is used for displaying the game to the users
+ * the controller clas for the game screen
  */
 public class GameScreenController {
-    GraphicsContext gc;
+    private GraphicsContext gc;
 
     @FXML
     private Canvas gameCanvas;
@@ -19,10 +19,19 @@ public class GameScreenController {
         gc = gameCanvas.getGraphicsContext2D();
     }
 
+    private ClientMain instance;
 
     /**
-     *
-     * @return the graphicsContext of the gameCanvas used to draw on the canvas.
+     * sets the main class this controller uses for functions
+     * @param instance the ClientMain class
+     */
+    public void setInstance(ClientMain instance) {
+        this.instance = instance;
+    }
+
+    /**
+     * Gets the graphicsContext of the gameCanvas used to draw on the canvas.
+     * @return the graphicsContext of the gameCanvas.
      */
     public GraphicsContext getGc() {
         return gc;

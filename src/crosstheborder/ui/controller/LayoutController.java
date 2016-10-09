@@ -30,24 +30,34 @@ public class LayoutController {
     @FXML
     private MenuItem testGameMenuItem;
 
+    private ClientMain instance;
+
     /**
      * Shows the lobby menu screen, see showLobbyMenu in ClientMain.
      */
     public void showLobbyScreen(){
-        ClientMain.getInstance().showLobbyMenu();
+        instance.showLobbyMenu();
     }
 
     /**
      * Shows the main screen, see showMainMenu in ClientMain.
      */
     public void showMainScreen(){
-        ClientMain.getInstance().showMainMenu();
+        instance.showMainMenu();
     }
 
     /**
      * Shows the game screen, see showGameScreen in ClientMain.
      */
     public void showGameScreen(){
-        ClientMain.getInstance().showGameScreen();
+        instance.showGameScreen();
+    }
+
+    /**
+     * sets the main class this controller uses for functions
+     * @param instance the ClientMain class
+     */
+    public void setInstance(ClientMain instance) {
+        this.instance = instance;
     }
 }
