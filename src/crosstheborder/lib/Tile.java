@@ -1,5 +1,6 @@
 package crosstheborder.lib;
 
+import crosstheborder.lib.enumeration.TileType;
 import crosstheborder.lib.interfaces.TileObject;
 
 /**
@@ -11,12 +12,15 @@ import crosstheborder.lib.interfaces.TileObject;
  */
 public class Tile {
     private TileObject tileObject;
+    private TileType type;
 
     /**
      * Creates a new tile object with the given location.
+     *
+     * @param type The type of the tile.
      */
-    public Tile() {
-
+    public Tile(TileType type) {
+        this.type = type;
     }
 
     /**
