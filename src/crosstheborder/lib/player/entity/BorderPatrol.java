@@ -18,16 +18,14 @@ public class BorderPatrol extends PlayerEntity {
 
     /**
      * This is the constructor of the {@link BorderPatrol} class.
-     * Calls the {@link PlayerEntity#PlayerEntity(String, Point, Team)} constructor.
+     * Calls the {@link PlayerEntity#PlayerEntity(String, Team)} constructor.
      * Sets isPassable to false;
      *
      * @param name The name of the player.
-     * @param location The location of the player.
      * @param team The team this BorderPatrol is part of.
      */
-    public BorderPatrol(String name, Point location, Team team) {
-        super(name, location, team);
-        isPassable = false;
+    public BorderPatrol(String name, Team team) {
+        super(name, team);
     }
 
     /**

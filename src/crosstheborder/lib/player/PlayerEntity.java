@@ -13,8 +13,7 @@ import java.awt.*;
  * @author Oscar de Leeuw
  */
 public abstract class PlayerEntity extends Player implements TileObject {
-    protected Point location;
-    protected boolean isPassable;
+    private Point location;
     private InputBuffer inputBuffer;
     private boolean canMove = true;
     //The amount of ticks till the player can move again.
@@ -25,12 +24,11 @@ public abstract class PlayerEntity extends Player implements TileObject {
      * Calls the {@link Player#Player(String, Team)} constructor.
      *
      * @param name The name of the player.
-     * @param location The location of the player.
      * @param team The team this player is part of.
      */
-    public PlayerEntity(String name, Point location, Team team) {
+    public PlayerEntity(String name, Team team) {
         super(name, team);
-        this.location = location;
+        location = new Point();
         this.inputBuffer = new InputBuffer();
     }
 

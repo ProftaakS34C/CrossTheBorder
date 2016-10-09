@@ -6,8 +6,6 @@ import crosstheborder.lib.interfaces.GameManipulator;
 import crosstheborder.lib.player.PlayerEntity;
 import crosstheborder.lib.tileobject.placeable.Wall;
 
-import java.awt.*;
-
 /**
  * This class represents the Mexican player object.
  * @author Joram
@@ -26,18 +24,16 @@ public class Mexican extends PlayerEntity {
     /**
      * This is the constructor method of the class "Mexican".
      * in the constructor the name of the Mexican is set.
-     * Calls the {@link PlayerEntity#PlayerEntity(String, Point, Team)} constructor.
+     * Calls the {@link PlayerEntity#PlayerEntity(String, Team)} constructor.
      * Sets isPassable to false;
      *
      * @param name    The name of the Mexican.
-     * @param location The location of the player.
      * @param ability The ability of the Mexican.
      * @param team The team this Mexican belongs to.
      */
-    public Mexican(String name, Point location, Team team, Ability ability) {
-        super(name, location, team);
+    public Mexican(String name, Team team, Ability ability) {
+        super(name, team);
         this.ability = ability;
-        isPassable = false;
     }
 
     /**

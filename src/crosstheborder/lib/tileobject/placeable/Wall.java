@@ -14,19 +14,14 @@ import java.awt.*;
  * @author Oscar de Leeuw
  */
 public class Wall extends Placeable {
-    private boolean isPassable;
-    private Point location;
     private int height;
 
     /**
      * Creates a new wall.
      * Sets isPassable to false.
-     *
-     * @param location The location of the wall.
      * @param height The height of the wall.
      */
-    public Wall(Point location, int height) {
-        super(location, false);
+    public Wall(int height) {
         this.height = height;
     }
 
@@ -60,8 +55,8 @@ public class Wall extends Placeable {
 
     private void throwMexicanOverWall(PlayerEntity mexican, GameManipulator game) {
         //Gets the movement vector of the mexican and multiply by 2 to place him over the wall.
-        int translationX = (mexican.getLocation().x - location.x) * 2;
-        int translationY = (mexican.getLocation().y - location.y) * 2;
+        int translationX = (mexican.getLocation().x - getLocation().x) * 2;
+        int translationY = (mexican.getLocation().y - getLocation().y) * 2;
 
         Point newLocation = new Point(mexican.getLocation().x + translationX, mexican.getLocation().y + translationY);
 

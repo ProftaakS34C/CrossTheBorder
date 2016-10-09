@@ -14,8 +14,6 @@ import java.awt.*;
  * @author Oscar de Leeuw
  */
 public class Trap extends Placeable {
-    private boolean isPassable;
-    private Point location;
     //The time the trap will immobilize a Mexican in seconds.
     private int trapTime;
 
@@ -23,11 +21,9 @@ public class Trap extends Placeable {
      * Creates a new trap object.
      * Sets isPassable to true;
      *
-     * @param location A Point that represents the location of the Trap.
      * @param trapTime An integer that represents the time this trap will trap a {@link PlayerEntity}.
      */
-    public Trap(Point location, int trapTime) {
-        super(location, true);
+    public Trap(int trapTime) {
         this.trapTime = trapTime;
     }
 
@@ -48,7 +44,7 @@ public class Trap extends Placeable {
         if (player instanceof Mexican) {
             player.immobilize(trapTime);
             //Removes the trap and relocates the player to the location of the trap.
-            game.changeTileObjectLocation(player, this.location);
+            game.changeTileObjectLocation(player, this.getLocation());
         }
 
 
