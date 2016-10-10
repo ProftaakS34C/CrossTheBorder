@@ -1,5 +1,6 @@
 package crosstheborder.lib;
 
+import crosstheborder.lib.interfaces.Camera;
 import crosstheborder.lib.interfaces.TileObject;
 
 import java.awt.*;
@@ -68,6 +69,19 @@ public class Map {
      */
     public Rectangle getMexicoArea() {
         return this.mexicoArea;
+    }
+
+    /**
+     * Gets a camera/viewport of the map.
+     *
+     * @param center       The center of the camera.
+     * @param tileWidth    The width of the tiles in the camera in pixels.
+     * @param cameraWidth  The width of the camera in pixels.
+     * @param cameraHeight The height of the camera in pixels.
+     * @return A camera object.
+     */
+    public Camera getCamera(Point center, int tileWidth, int cameraWidth, int cameraHeight) {
+        return new CameraImpl(center, tileWidth, cameraHeight, cameraWidth, tiles);
     }
 
     /**
