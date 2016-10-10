@@ -7,7 +7,7 @@ import javafx.scene.canvas.GraphicsContext;
 
 /**
  * @author Yannic
- * the controller clas for the game screen
+ * The controller clas for the game screen
  */
 public class GameScreenController {
     private GraphicsContext gc;
@@ -22,7 +22,7 @@ public class GameScreenController {
     private ClientMain instance;
 
     /**
-     * sets the main class this controller uses for functions
+     * Sets the main class this controller uses for functions
      * @param instance the ClientMain class
      */
     public void setInstance(ClientMain instance) {

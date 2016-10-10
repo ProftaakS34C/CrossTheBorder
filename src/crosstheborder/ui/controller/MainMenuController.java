@@ -10,7 +10,7 @@ import javafx.scene.control.TableView;
 
 /**
  * @author yannic
- * the controller class of the main menu
+ * The controller class of the main menu
  */
 public class MainMenuController {
 
@@ -37,7 +37,7 @@ public class MainMenuController {
     private ClientMain instance;
 
     /**
-     * sets the text of the label used for displaying the name of the current user.
+     * Sets the text of the label used for displaying the name of the current user.
      * @param name the desired name.
      */
     public void setLblPlayerName(String name){
@@ -70,7 +70,7 @@ public class MainMenuController {
     }
 
     /**
-     * sets the main class this controller uses for functions
+     * Sets the main class this controller uses for functions
      * @param instance the ClientMain class
      */
     public void setInstance(ClientMain instance){

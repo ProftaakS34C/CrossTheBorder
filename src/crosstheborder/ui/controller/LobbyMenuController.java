@@ -12,7 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 
 /**
- * the controller class of the lobby menu
+ * The controller class of the lobby menu
  */
 public class LobbyMenuController {
     @FXML
@@ -74,7 +74,7 @@ public class LobbyMenuController {
     }
 
     /**
-     * sets the main class this controller uses for functions
+     * Sets the main class this controller uses for functions
      * @param instance the ClientMain class
      */
     public void setInstance(ClientMain instance){

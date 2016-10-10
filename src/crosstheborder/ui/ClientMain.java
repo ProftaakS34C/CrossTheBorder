@@ -28,9 +28,9 @@ public class ClientMain extends Application {
 
     private Stage primaryStage;
     private BorderPane root;
-    private static ClientMain thisInstance;
+
     /**
-     * the main method for the class
+     * The main method for the class
      *
      * @param args not used.
      */
@@ -40,16 +40,16 @@ public class ClientMain extends Application {
     }
 
     /**
-     * the start method of main, loads the basic layout and shows the main menu on it.
+     * The start method of main, loads the basic layout and shows the main menu on it.
      *
      * @param primaryStage the stage to load the scenes on
      */
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
-        thisInstance = this;
+
         initLayout();
-        //show login menu?
+        //Show login menu?
         showMainMenu();
 
     }

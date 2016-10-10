@@ -54,7 +54,7 @@ public class LayoutController {
     }
 
     /**
-     * sets the main class this controller uses for functions
+     * Sets the main class this controller uses for functions
      * @param instance the ClientMain class
      */
     public void setInstance(ClientMain instance) {
