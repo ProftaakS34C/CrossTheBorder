@@ -74,8 +74,8 @@ public class CameraImpl implements Camera {
     public void draw(Painter painter) {
         Point location = new Point(0, 0); //The current pixel location at which the image should be drawn.
 
-        for (int x = center.x - xTiles / 2; x < x + xTiles; x++) {
-            for (int y = center.y - yTiles / 2; y < y + yTiles; y++) {
+        for (int x = center.x - xTiles / 2; x < x + xTiles && x < tiles.length; x++) {
+            for (int y = center.y - yTiles / 2; y < y + yTiles && y < tiles[x].length; y++) {
                 tiles[x][y].draw(painter, location, tileWidth);
                 location.translate(0, tileWidth);
             }
