@@ -6,6 +6,8 @@ import crosstheborder.lib.interfaces.Painter;
 import java.awt.*;
 
 /**
+ * Implementation of the Camera interface.
+ *
  * @author Oscar de Leeuw
  */
 public class CameraImpl implements Camera {
@@ -14,6 +16,9 @@ public class CameraImpl implements Camera {
     private int cameraWidth;
     private int cameraHeight;
     private Tile[][] tiles;
+
+    private int xTiles;
+    private int yTiles;
 
     /**
      * Creates a new camera.
@@ -30,6 +35,9 @@ public class CameraImpl implements Camera {
         this.cameraWidth = cameraWidth;
         this.cameraHeight = cameraHeight;
         this.tiles = tiles;
+
+        this.xTiles = (int) Math.ceil((double) cameraWidth / tileWidth); //The amount of tiles along the x-axis.
+        this.yTiles = (int) Math.ceil((double) cameraHeight / tileWidth); //The amount of tiles along the y-axis.
     }
 
     @Override
@@ -53,11 +61,17 @@ public class CameraImpl implements Camera {
     }
 
     @Override
+    public int getAmountOfHorizontalTiles() {
+        return this.xTiles;
+    }
+
+    @Override
+    public int getAmountOfVerticalTiles() {
+        return this.yTiles;
+    }
+
+    @Override
     public void draw(Painter painter) {
-        int xTiles = (int) Math.ceil(cameraWidth / tileWidth); //The amount of tiles along the x-axis.
-        int yTiles = (int) Math.ceil(cameraHeight / tileWidth); //The amount of tiles along the y-axis.
-        //int x = center.x - (xTiles/2); //The left-most tile that should be drawn.
-        //int y = center.y - (yTiles/2); //The upper-most tile that should be drawn.
         Point location = new Point(0, 0); //The current pixel location at which the image should be drawn.
 
         for (int x = center.x - xTiles / 2; x < x + xTiles; x++) {
