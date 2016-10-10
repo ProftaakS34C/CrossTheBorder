@@ -133,7 +133,7 @@ public class GameTest {
         assertEquals(mexican.getLocation().y, nextLocation1.y);
 
         //Set an obstacle at the location the mexican wants to move to.
-        Obstacle obstacle = new Obstacle(ObstacleType.Tree);
+        Obstacle obstacle = new Obstacle(ObstacleType.TREE);
         game.changeTileObjectLocation(obstacle, nextLocation2);
 
         assertEquals(obstacle, game.getMap().getTileObject(nextLocation2));
@@ -173,7 +173,7 @@ public class GameTest {
     @Test
     public void changeTileObjectLocation() throws Exception {
         Point location = new Point(10, 10);
-        Obstacle obstacle = new Obstacle(ObstacleType.Tree);
+        Obstacle obstacle = new Obstacle(ObstacleType.TREE);
 
         //Set a new tile object on the map.
         game.changeTileObjectLocation(obstacle, location);

@@ -1,6 +1,5 @@
 package crosstheborder.lib;
 
-import crosstheborder.lib.enumeration.TileType;
 import crosstheborder.lib.interfaces.TileObject;
 
 import java.awt.*;
@@ -33,20 +32,6 @@ public class Map {
         this.mexicoArea = builder.mexicoArea;
         this.name = builder.name;
         this.tiles = builder.tiles;
-    }
-
-    private void generateMap() {
-
-        //Temp code for generating a map.
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                this.tiles[x][y] = new Tile(TileType.Dirt);
-            }
-        }
-
-        //Temp code for generating USA and mexico code.
-        this.usaArea = new Rectangle(0, 0, width, height / 10);
-        this.mexicoArea = new Rectangle(0, height - (height / 10), width, height / 10);
     }
 
     /**
