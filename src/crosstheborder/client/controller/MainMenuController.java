@@ -14,12 +14,7 @@ import javafx.scene.control.TableView;
  */
 public class MainMenuController {
 
-    @FXML
-    private void initialize(){
-        //constructor type stuff
 
-        setLblPlayerName(instance.getUser().getName());
-    }
 
     @FXML
     private Button joinLobbyButton;
@@ -35,6 +30,19 @@ public class MainMenuController {
     private TableView lobbyTableView;
 
     private ClientMain instance;
+
+    @FXML
+    private void initialize(ClientMain instance){
+        //constructor type stuff
+
+    }
+    /**
+     * This method is used for first time setup of the controller, if the initialize method cannot be used.
+     */
+    public void setUp(){
+
+        setLblPlayerName(instance.getUser().getName());
+    }
 
     /**
      * Sets the text of the label used for displaying the name of the current user.
@@ -76,4 +84,6 @@ public class MainMenuController {
     public void setInstance(ClientMain instance){
         this.instance = instance;
     }
+
+
 }

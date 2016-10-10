@@ -14,13 +14,20 @@ public class GameScreenController {
 
     @FXML
     private Canvas gameCanvas;
+
+    private ClientMain instance;
+
     @FXML
     private void initialize(){
         gc = gameCanvas.getGraphicsContext2D();
     }
 
-    private ClientMain instance;
+    /**
+     * This method is used for first time setup of the controller, if the initialize method cannot be used.
+     */
+    public void setUp(){
 
+    }
     /**
      * Sets the main class this controller uses for functions
      * @param instance the ClientMain class

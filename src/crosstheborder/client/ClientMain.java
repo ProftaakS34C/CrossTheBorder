@@ -100,6 +100,7 @@ public class ClientMain extends Application {
             root = loader.load();
             LayoutController controller = loader.getController();
             controller.setInstance(this);
+            controller.setUp();
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
             primaryStage.show();
@@ -120,6 +121,7 @@ public class ClientMain extends Application {
             menuRoot = loader.load();
             MainMenuController controller = loader.getController();
             controller.setInstance(this);
+            controller.setUp();
             root.setCenter(menuRoot);
             primaryStage.setTitle("main menu");
         }
@@ -139,6 +141,7 @@ public class ClientMain extends Application {
             lobbyRoot = loader.load();
             LobbyMenuController controller = loader.getController();
             controller.setInstance(this);
+            controller.setUp();
             root.setCenter(lobbyRoot);
             primaryStage.setTitle("Lobby menu");
         }
@@ -159,6 +162,7 @@ public class ClientMain extends Application {
             gameRoot = loader.load();
             GameScreenController controller = loader.getController();
             controller.setInstance(this);
+            controller.setUp(); 
             root.setCenter(gameRoot);
             primaryStage.setTitle("in game");
         }

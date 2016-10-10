@@ -15,20 +15,8 @@ import javafx.scene.control.Button;
  * The controller class of the lobby menu
  */
 public class LobbyMenuController {
-    @FXML
-    private void initialize(){
-        //todo: only if the user is owner of the lobby should the start button be set visible
-        if(instance.getUser().isOwnerOfLobby()){
-            leaveLobbyButton.setVisible(false);
-        }
-        else {
-            startGameButton.setVisible(false);
-            lobbyPassInputPasswordField.setVisible(false);
-            isPrivateCheckBox.setVisible(false);
-            choiceBoxAmountOfPlayers.setVisible(false);
-        }
 
-    }
+
     @FXML
     private Button startGameButton;
     @FXML
@@ -50,6 +38,26 @@ public class LobbyMenuController {
 
     private ClientMain instance;
     int maxPlayers;
+
+    @FXML
+    private void initialize(){
+        //todo: only if the user is owner of the lobby should the start button be set visible
+    }
+
+    /**
+     * This method is used for first time setup of the controller, if the initialize method cannot be used.
+     */
+    public void setUp(){
+        if(instance.getUser().isOwnerOfLobby()){
+            leaveLobbyButton.setVisible(false);
+        }
+        else {
+            startGameButton.setVisible(false);
+            lobbyPassInputPasswordField.setVisible(false);
+            isPrivateCheckBox.setVisible(false);
+            choiceBoxAmountOfPlayers.setVisible(false);
+        }
+    }
 
     @FXML
     private void textBoxIsPrivate_OnAction(ActionEvent event){
@@ -103,10 +111,9 @@ public class LobbyMenuController {
      */
     public void setInstance(ClientMain instance){
         this.instance = instance;
-        int maxPlayers = instance.getMaxPlayers();
-        for(int i = maxPlayers; i > 0; i--){
-            choiceBoxAmountOfPlayers.getItems().add(i);
-        }
+
     }
+
+
 
 }
