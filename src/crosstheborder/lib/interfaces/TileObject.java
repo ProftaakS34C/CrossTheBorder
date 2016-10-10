@@ -9,7 +9,7 @@ import java.awt.*;
  *
  * @author Oscar de Leeuw
  */
-public interface TileObject {
+public interface TileObject extends Drawable {
     /**
      * Method for handling the interaction between a {@link PlayerEntity} and a {@link TileObject}.
      * Calls methods on the {@link GameManipulator} object to process interaction results.

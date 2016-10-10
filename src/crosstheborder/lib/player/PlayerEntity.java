@@ -1,9 +1,11 @@
 package crosstheborder.lib.player;
 
+import crosstheborder.lib.ImageFinder;
 import crosstheborder.lib.InputBuffer;
 import crosstheborder.lib.Player;
 import crosstheborder.lib.Team;
 import crosstheborder.lib.enumeration.MoveDirection;
+import crosstheborder.lib.interfaces.Painter;
 import crosstheborder.lib.interfaces.TileObject;
 
 import java.awt.*;
@@ -92,5 +94,10 @@ public abstract class PlayerEntity extends Player implements TileObject {
     public void immobilize(int seconds) {
         canMove = false;
         canMoveTicks = SERVER_TICK_RATE * seconds;
+    }
+
+    @Override
+    public void draw(Painter painter, Point location, int tileWidth) {
+        painter.drawImage(ImageFinder.getInstance().getImage(this), location, tileWidth, tileWidth);
     }
 }

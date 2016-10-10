@@ -7,16 +7,25 @@ package crosstheborder.lib.enumeration;
  * @author Oscar de Leeuw
  */
 public enum TileType {
-    Dirt, Sand, Grass;
+    DIRT, SAND, GRASS;
 
     static {
-        Dirt.code = 'd';
-        Sand.code = 's';
-        Grass.code = 'g';
+        DIRT.code = 'd';
+        SAND.code = 's';
+        GRASS.code = 'g';
     }
 
     /**
      * The code for this TileType in the .ctbmap format.
      */
-    public char code;
+    private char code;
+
+    /**
+     * The code for the tile type in the .ctbmap file format.
+     *
+     * @return The code of the tile type.
+     */
+    public char getCode() {
+        return this.code;
+    }
 }
