@@ -13,11 +13,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
+ * Singleton that contains code for loading a map.
+ *
  * @author Oscar de Leeuw
  */
 public class MapLoader {
+    private static final Logger LOGGER = Logger.getLogger(MapLoader.class.getName());
+
+    private static final String directory = "maps/";
     private static final String ext = ".ctbmap";
     private static final HashMap<Character, TileType> tileTypes = new HashMap<>();
     private static final HashMap<Character, ObstacleType> obstacleTypes = new HashMap<>();
@@ -27,11 +34,11 @@ public class MapLoader {
         obstacleTypes.put('x', null);
 
         for (ObstacleType type : ObstacleType.values()) {
-            registerObstacleTypeCode(type.code, type);
+            registerObstacleTypeCode(type.getCode(), type);
         }
 
         for (TileType type : TileType.values()) {
-            registerTileTypeCode(type.code, type);
+            registerTileTypeCode(type.getCode(), type);
         }
     }
 
@@ -98,7 +105,7 @@ public class MapLoader {
     }
 
     private File getMapFile(String name) {
-        return new File("maps/" + name + ".ctbmap");
+        return new File(directory + name + ext);
     }
 
     private void readFile(File file, StringBuilder widthLine, StringBuilder heightLine, StringBuilder usaArea, StringBuilder mexicoArea, List<String> tiles, List<String> tileObjects) {
@@ -136,12 +143,12 @@ public class MapLoader {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.toString(), e);
         }
     }
 
     private String getValue(String line) {
-        return line.substring(line.indexOf("=") + 1, line.indexOf(";"));
+        return line.substring(line.indexOf('=') + 1, line.indexOf(';'));
     }
 
     private int getIntFromLine(String line) {

@@ -18,5 +18,14 @@ public enum TileType {
     /**
      * The code for this TileType in the .ctbmap format.
      */
-    public char code;
+    private char code;
+
+    /**
+     * The code for the tile type in the .ctbmap file format.
+     *
+     * @return The code of the tile type.
+     */
+    public char getCode() {
+        return this.code;
+    }
 }
