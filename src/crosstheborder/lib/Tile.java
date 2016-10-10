@@ -1,7 +1,12 @@
 package crosstheborder.lib;
 
 import crosstheborder.lib.enumeration.TileType;
+import crosstheborder.lib.interfaces.Drawable;
+import crosstheborder.lib.interfaces.Painter;
 import crosstheborder.lib.interfaces.TileObject;
+
+import java.awt.*;
+import java.io.File;
 
 /**
  *  Represents a single tile that composes the map.
@@ -10,7 +15,7 @@ import crosstheborder.lib.interfaces.TileObject;
  *
  *  @author Oscar de Leeuw
  */
-public class Tile {
+public class Tile implements Drawable {
     private TileObject tileObject;
     private TileType type;
 
@@ -48,5 +53,15 @@ public class Tile {
      */
     public void setTileObject(TileObject tileObject) {
         this.tileObject = tileObject;
+    }
+
+    @Override
+    public void draw(Painter painter, Point location, int tileWidth) {
+        File file = ImageFinder.getInstance().getImage(type);
+        painter.drawImage(file, location, tileWidth, tileWidth);
+
+        if (hasTileObject()) {
+            tileObject.draw(painter, location, tileWidth);
+        }
     }
 }

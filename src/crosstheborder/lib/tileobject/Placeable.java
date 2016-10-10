@@ -1,6 +1,8 @@
 package crosstheborder.lib.tileobject;
 
+import crosstheborder.lib.ImageFinder;
 import crosstheborder.lib.interfaces.GameManipulator;
+import crosstheborder.lib.interfaces.Painter;
 import crosstheborder.lib.interfaces.TileObject;
 import crosstheborder.lib.player.PlayerEntity;
 
@@ -26,5 +28,10 @@ public abstract class Placeable implements TileObject {
     @Override
     public Point getLocation() {
         return this.location;
+    }
+
+    @Override
+    public void draw(Painter painter, Point location, int tileWidth) {
+        painter.drawImage(ImageFinder.getInstance().getImage(this), location, tileWidth, tileWidth);
     }
 }
