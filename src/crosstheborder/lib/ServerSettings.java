@@ -4,6 +4,8 @@ import crosstheborder.lib.interfaces.InputPropertiesGetter;
 
 import java.io.*;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Singleton that holds a properties object that can get all the server properties.
@@ -11,8 +13,9 @@ import java.util.Properties;
  * @author Oscar de Leeuw
  */
 public class ServerSettings implements InputPropertiesGetter {
+    private static final Logger LOGGER = Logger.getLogger(ServerSettings.class.getName());
+    private static final String propFileName = "serverconf.properties";
     private static ServerSettings ourInstance = new ServerSettings();
-    private final String propFileName = "serverconf.properties";
     private Properties properties;
 
     private ServerSettings() {
@@ -30,10 +33,10 @@ public class ServerSettings implements InputPropertiesGetter {
                 }
                 ourInstance = new ServerSettings();
             } catch (IOException e) {
-                e.printStackTrace(System.err);
+                LOGGER.log(Level.SEVERE, e.toString(), e);
             }
         } catch (IOException e) {
-            e.printStackTrace(System.err);
+            LOGGER.log(Level.SEVERE, e.toString(), e);
         }
     }
 
@@ -54,8 +57,8 @@ public class ServerSettings implements InputPropertiesGetter {
     public int getInputBufferSize() {
         try {
             return Integer.parseInt(properties.getProperty("InputBufferSize"));
-        } catch (NumberFormatException ex) {
-            ex.printStackTrace(System.err);
+        } catch (NumberFormatException e) {
+            LOGGER.log(Level.SEVERE, e.toString(), e);
         }
         return 10;
     }
@@ -69,8 +72,8 @@ public class ServerSettings implements InputPropertiesGetter {
     public int getServerTickRate() {
         try {
             return Integer.parseInt(properties.getProperty("ServerTickRate"));
-        } catch (NumberFormatException ex) {
-            ex.printStackTrace(System.err);
+        } catch (NumberFormatException e) {
+            LOGGER.log(Level.SEVERE, e.toString(), e);
         }
         return 200;
     }

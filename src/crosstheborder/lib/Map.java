@@ -5,6 +5,8 @@ import crosstheborder.lib.interfaces.TileObject;
 
 import java.awt.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * The Map class represents a collection of tiles that form a map within the CrossTheBorder game.
@@ -16,6 +18,8 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author Oscar de Leeuw
  */
 public class Map {
+    private static final Logger LOGGER = Logger.getLogger(Map.class.getName());
+
     private String name;
 
     private int width;
@@ -95,7 +99,7 @@ public class Map {
         try {
             return tiles[location.x][location.y];
         } catch (ArrayIndexOutOfBoundsException e) {
-            e.printStackTrace(System.err);
+            LOGGER.log(Level.SEVERE, e.toString(), e);
         }
         return null;
     }
