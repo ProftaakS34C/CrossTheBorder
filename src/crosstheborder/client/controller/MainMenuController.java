@@ -1,8 +1,8 @@
-package crosstheborder.ui.controller;
+package crosstheborder.client.controller;
 
 
 
-import crosstheborder.ui.ClientMain;
+import crosstheborder.client.ClientMain;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -18,7 +18,7 @@ public class MainMenuController {
     private void initialize(){
         //constructor type stuff
 
-        //setLblPlayerName(ClientMain.getInstance().getUser().getName());
+        setLblPlayerName(instance.getUser().getName());
     }
 
     @FXML

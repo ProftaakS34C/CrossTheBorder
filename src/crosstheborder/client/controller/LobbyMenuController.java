@@ -1,11 +1,11 @@
-package crosstheborder.ui.controller;
+package crosstheborder.client.controller;
 
 /**
  * @author Yannic
  *
  */
 
-import crosstheborder.ui.ClientMain;
+import crosstheborder.client.ClientMain;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -18,6 +18,16 @@ public class LobbyMenuController {
     @FXML
     private void initialize(){
         //todo: only if the user is owner of the lobby should the start button be set visible
+        if(instance.getUser().isOwnerOfLobby()){
+            leaveLobbyButton.setVisible(false);
+        }
+        else {
+            startGameButton.setVisible(false);
+            lobbyPassInputPasswordField.setVisible(false);
+            isPrivateCheckBox.setVisible(false);
+            choiceBoxAmountOfPlayers.setVisible(false);
+        }
+
     }
     @FXML
     private Button startGameButton;
@@ -32,7 +42,11 @@ public class LobbyMenuController {
     @FXML
     private Button chatButton;
     @FXML
+    private TextField chatInputTextField;
+    @FXML
     private ChoiceBox choiceBoxAmountOfPlayers;
+    @FXML
+    private Button leaveLobbyButton;
 
     private ClientMain instance;
     int maxPlayers;
@@ -53,6 +67,16 @@ public class LobbyMenuController {
             lobbyPassInputPasswordField.setText("");
             lobbyPassInputPasswordField.setVisible(true);
         }
+    }
+
+    @FXML
+    private void leaveLobbyButton_OnAction(){
+        //do necessary actions for leaving lobby
+        //TODO if user is owner of lobby popup a dialog and remove everyone else from the lobby.
+
+        System.out.println("leaving lobby...");
+        instance.getUser().setLobby(null);
+        instance.showMainMenu();
     }
 
     @FXML

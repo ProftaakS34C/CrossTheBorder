@@ -1,6 +1,6 @@
-package crosstheborder.ui.controller;
+package crosstheborder.client.controller;
 
-import crosstheborder.ui.ClientMain;
+import crosstheborder.client.ClientMain;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;

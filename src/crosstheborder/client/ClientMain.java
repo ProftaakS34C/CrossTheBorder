@@ -1,4 +1,4 @@
-package crosstheborder.ui;
+package crosstheborder.client;
 
 /**
  * @author Oscar
@@ -6,20 +6,23 @@ package crosstheborder.ui;
  *
  */
 
-import crosstheborder.ui.controller.GameScreenController;
-import crosstheborder.ui.controller.LayoutController;
-import crosstheborder.ui.controller.LobbyMenuController;
-import crosstheborder.ui.controller.MainMenuController;
+import crosstheborder.lib.User;
+import crosstheborder.client.controller.GameScreenController;
+import crosstheborder.client.controller.LayoutController;
+import crosstheborder.client.controller.LobbyMenuController;
+import crosstheborder.client.controller.MainMenuController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Alert;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Optional;
 
 /**
  * Main class of the application
@@ -28,6 +31,7 @@ public class ClientMain extends Application {
 
     private Stage primaryStage;
     private BorderPane root;
+    private User user;
 
     /**
      * The main method for the class
@@ -35,7 +39,6 @@ public class ClientMain extends Application {
      * @param args not used.
      */
     public static void main(String[] args) {
-
         launch(args);
     }
 
@@ -50,16 +53,50 @@ public class ClientMain extends Application {
 
         initLayout();
         //Show login menu?
-        showMainMenu();
+        String userName = askForUserName();
+        user = new User(userName);
 
+        showMainMenu();
     }
 
+    /**
+     * This method opens a dialog window asking for a string value, if nothing is entered it asks again
+     * @return A String representing the (nick)name of the user
+     */
+    private String askForUserName(){
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setContentText("Enter your nickname: ");
+        dialog.setTitle("your name please");
+        dialog.setHeaderText("");
+
+        String userName;
+        Optional<String> result = dialog.showAndWait();
+        if(result.isPresent() || result.get().trim() != ""){
+            userName = result.get();
+        }
+        else{
+            Alert popup = new Alert(Alert.AlertType.ERROR);
+            popup.setContentText("You need to enter a username to play this game");
+            popup.setHeaderText("No name found");
+            popup.setTitle("Error");
+            popup.showAndWait();
+            userName = askForUserName();
+        }
+        return userName;
+    }
+    /**
+     * This method gets the user for this client
+     * @return A User object
+     */
+    public User getUser(){
+        return user;
+    }
     /**
      * loads the layout into the stage
      */
     public void initLayout(){
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Views/Layout.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/Layout.fxml"));
             root = loader.load();
             LayoutController controller = loader.getController();
             controller.setInstance(this);
@@ -79,7 +116,7 @@ public class ClientMain extends Application {
     public void showMainMenu(){
         Pane menuRoot;
         try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Views/MainMenu.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/MainMenu.fxml"));
             menuRoot = loader.load();
             MainMenuController controller = loader.getController();
             controller.setInstance(this);
@@ -98,7 +135,7 @@ public class ClientMain extends Application {
     public void showLobbyMenu(){
         Pane lobbyRoot;
         try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Views/LobbyMenu.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/LobbyMenu.fxml"));
             lobbyRoot = loader.load();
             LobbyMenuController controller = loader.getController();
             controller.setInstance(this);
@@ -111,11 +148,14 @@ public class ClientMain extends Application {
         }
     }
 
+    /**
+     * shows the game screen
+     */
     public void showGameScreen(){
         //load the game fxml file.
         Canvas gameRoot;
         try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Views/GameScreen.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/GameScreen.fxml"));
             gameRoot = loader.load();
             GameScreenController controller = loader.getController();
             controller.setInstance(this);
