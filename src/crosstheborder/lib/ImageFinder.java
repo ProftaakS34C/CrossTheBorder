@@ -6,7 +6,6 @@ import crosstheborder.lib.player.PlayerEntity;
 import crosstheborder.lib.tileobject.Placeable;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 
 /**
@@ -35,9 +34,8 @@ public class ImageFinder {
      *
      * @param type The type of obstacle.
      * @return A file that contains the image.
-     * @throws FileNotFoundException When the file cannot be found.
      */
-    public File getImage(ObstacleType type) throws FileNotFoundException {
+    public File getImage(ObstacleType type) {
         String name = type.name().toLowerCase();
         return getImage(name);
     }
@@ -47,9 +45,8 @@ public class ImageFinder {
      *
      * @param type The type of tile.
      * @return A file that contains the image.
-     * @throws FileNotFoundException When the file cannot be found.
      */
-    public File getImage(TileType type) throws FileNotFoundException {
+    public File getImage(TileType type) {
         String name = type.name().toLowerCase();
         return getImage(name);
     }
@@ -59,9 +56,8 @@ public class ImageFinder {
      *
      * @param placeable The placeable for which to get an image.
      * @return A file that contains the image.
-     * @throws FileNotFoundException When the file cannot be found.
      */
-    public File getImage(Placeable placeable) throws FileNotFoundException {
+    public File getImage(Placeable placeable) {
         String name = placeable.getClass().getSimpleName().toLowerCase();
         return getImage(name);
     }
@@ -71,14 +67,13 @@ public class ImageFinder {
      *
      * @param entity The PlayerEntity for which to get an image.
      * @return A file that contains the image.
-     * @throws FileNotFoundException When the file cannot be found.
      */
-    public File getImage(PlayerEntity entity) throws FileNotFoundException {
+    public File getImage(PlayerEntity entity) {
         String name = entity.getClass().getSimpleName().toLowerCase();
         return getImage(name);
     }
 
-    private File getImage(String name) throws FileNotFoundException {
+    private File getImage(String name) {
         if (cache.containsKey(name)) {
             return cache.get(name);
         } else {
@@ -86,7 +81,7 @@ public class ImageFinder {
         }
     }
 
-    private File loadImage(String name) throws FileNotFoundException {
+    private File loadImage(String name) {
         File file = new File(imageDirectory + name + ext);
 
         if (file.exists()) {
