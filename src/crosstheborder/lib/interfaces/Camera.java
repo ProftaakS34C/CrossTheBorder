@@ -37,6 +37,20 @@ public interface Camera {
     int getCameraHeight();
 
     /**
+     * Gets the amount of tiles along the x-axis.
+     *
+     * @return The amount of tiles along the x-axis.
+     */
+    int getAmountOfHorizontalTiles();
+
+    /**
+     * Gets the amount of tiles along the y-axis.
+     *
+     * @return The amount of tiles along the y-axis.
+     */
+    int getAmountOfVerticalTiles();
+
+    /**
      * Draws a camera.
      *
      * @param painter The painter the camera should use to paint.
