@@ -87,9 +87,15 @@ public class Lobby {
     }
 
     /**
+     * This method is used to get all messages from this lobby.
+     * @return List of messages
+     */
+    public ArrayList<Message> getMessages(){ return this.messages; }
+
+    /**
      * This method is used to start the game
      */
     public void startGame() {
-        throw new UnsupportedOperationException();
+        Game game = new Game("empty"); //TODO change this to the mapname that is chosen in the lobby.
     }
 }

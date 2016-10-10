@@ -1,54 +1,43 @@
 package crosstheborder.lib.tileobject;
 
+import crosstheborder.lib.enumeration.ObstacleType;
+import crosstheborder.lib.interfaces.GameManipulator;
 import crosstheborder.lib.interfaces.TileObject;
+import crosstheborder.lib.player.PlayerEntity;
 
 import java.awt.*;
 
 /**
- * Represents an obstacle like a tree.
+ * The Obstacle class represents a {@link TileObject} that is static and unplaceable by a {@link crosstheborder.lib.player.Trump}.
+ * Obstacles are impassable by default.
+ *
+ * @author Oscar de Leeuw
  */
 public class Obstacle implements TileObject {
-    private boolean isPassable;
     private Point location;
+    private ObstacleType type;
 
     /**
      * Creates a new Obstacle.
      * Sets isPassable to false;
      *
-     * @param location The location of the Obstacle.
+     * @param type The {@link ObstacleType} of the Obstacle.
      */
-    public Obstacle(Point location) {
-        isPassable = false;
-        this.location = location;
+    public Obstacle(ObstacleType type) {
+        this.type = type;
+        location = new Point();
     }
 
     /**
-     * Method for handling the interaction between two {@link TileObject}s.
-     *
-     * @param o The TileObject that is interacting with this object.
-     */
-    public void interactWith(TileObject o) {
-        //Other object should be a player so have the player interact with the tileobject.
-        o.interactWith(this);
-    }
-
-    /**
-     * Method for getting whether the object is passable or not.
-     *
-     * @return A boolean that determines whether the object is passable or not.
+     * Explicitly left empty since an obstacle does not have an interaction.
+     * {@inheritDoc}
      */
     @Override
-    public boolean isPassable() {
-        return isPassable;
+    public void interactWith(PlayerEntity player, GameManipulator game) {
     }
 
-    /**
-     * Gets the location of the {@link TileObject}.
-     *
-     * @return A point that represents the location of the {@link TileObject}.
-     */
     @Override
     public Point getLocation() {
-        return location;
+        return this.location;
     }
 }

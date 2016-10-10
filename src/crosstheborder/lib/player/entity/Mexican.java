@@ -1,53 +1,39 @@
 package crosstheborder.lib.player.entity;
 
 import crosstheborder.lib.Ability;
-import crosstheborder.lib.enumeration.TileObjectType;
-import crosstheborder.lib.interfaces.TileObject;
+import crosstheborder.lib.Team;
+import crosstheborder.lib.interfaces.GameManipulator;
 import crosstheborder.lib.player.PlayerEntity;
-
-import java.awt.*;
+import crosstheborder.lib.tileobject.placeable.Wall;
 
 /**
  * This class represents the Mexican player object.
  * @author Joram
+ * @author Oscar de Leeuw
  * @version 1.0
  */
 public class Mexican extends PlayerEntity {
-    private boolean isTrapped;
+    //Indicates how many seconds it will take to climb the wall.
+    private static final float CLIMB_MODIFIER = 0.5f; //TODO Gather from GameSettings file.
+
     private Ability ability;
+
+    private int climbTicks;
+    private Wall climbingWall;
 
     /**
      * This is the constructor method of the class "Mexican".
      * in the constructor the name of the Mexican is set.
-     * Calls the {@link PlayerEntity#PlayerEntity(String, Point)} constructor.
+     * Calls the {@link PlayerEntity#PlayerEntity(String, Team)} constructor.
      * Sets isPassable to false;
      *
      * @param name    The name of the Mexican.
-     * @param location The location of the player.
      * @param ability The ability of the Mexican.
+     * @param team The team this Mexican belongs to.
      */
-    public Mexican(String name, Point location, Ability ability) {
-        super(name, location);
+    public Mexican(String name, Team team, Ability ability) {
+        super(name, team);
         this.ability = ability;
-        isPassable = false;
-    }
-
-    /**
-     * This method is used to get isTrapped.
-     *
-     * @return The boolean the value of isTrapped.
-     */
-    public boolean getIsTrapped() {
-        return isTrapped;
-    }
-
-    /**
-     * Sets the value of the isTrapped field.
-     *
-     * @param value The new boolean value.
-     */
-    public void setIsTrapped(boolean value) {
-        isTrapped = value;
     }
 
     /**
@@ -59,51 +45,48 @@ public class Mexican extends PlayerEntity {
     }
 
     /**
-     * Method for handling the interaction between two {@link TileObject}s.
+     * Climbs a wall.
      *
-     * @param o The TileObject that is interacting with this object.
+     * @param wall The wall that should be scaled.
+     * @return A boolean value that is true when the wall is successfully scaled.
      */
-    @Override
-    public void interactWith(TileObject o) {
-        if (o.isPassable()) {
-            this.location = o.getLocation();
+    public boolean climbWall(Wall wall) {
+        //If the current wall isn't being climbed, or is not the same wall, start a new climbing session.
+        if (climbingWall == null || !climbingWall.equals(wall)) {
+            climbingWall = wall;
+            //Set the abilityTime to the total time it will take to scale the wall based on server ticks.
+            climbTicks = (int) ((wall.getHeight() * CLIMB_MODIFIER * SERVER_TICK_RATE));
         }
-
-        TileObjectType type = TileObjectType.valueOf(o.getClass().getSimpleName());
-        switch (type) {
-            case BorderPatrol:
-                //TODO add mexican borderpatrol interaction.
-                break;
-            case Trap:
-                if (this.isTrapped) {
-                    //TODO increase trapped timer.
-                } else {
-                    this.isTrapped = true;
-                }
-                break;
-            case Wall:
-                //TODO add wall interaction.
-                break;
+        //If we are still climbing the same wall lower the timer.
+        else if (climbingWall.equals(wall)) {
+            //Lower amount of ticks needed by one.
+            climbTicks--;
+            //If the timer runs out reset everything and return a true.
+            if (climbTicks <= 0) {
+                climbingWall = null;
+                climbTicks = 0;
+                return true;
+            }
         }
+        return false;
     }
 
     /**
-     * Method for getting whether the object is passable or not.
-     *
-     * @return A boolean that determines whether the object is passable or not.
+     * {@inheritDoc}
+     * <p>
+     * If the other playerEntity is a {@link BorderPatrol}, respawn the mexican and raise the score of the BorderPatrol team.
+     * </p>
+     * Calls the following methods from GameManipulator:
+     * <ul>
+     * <li>Calls {@link GameManipulator#increaseScore(Team, int)} when the other entity is a BorderPatrol.</li>
+     * <li>Calls {@link GameManipulator#respawnPlayer(PlayerEntity)} with itself when the other entity is a BorderPatrol.</li>
+     * </ul>
      */
     @Override
-    public boolean isPassable() {
-        return this.isPassable;
-    }
-
-    /**
-     * Gets the location of the {@link TileObject}.
-     *
-     * @return A point that represents the location of the {@link TileObject}.
-     */
-    @Override
-    public Point getLocation() {
-        return this.location;
+    public void interactWith(PlayerEntity player, GameManipulator game) {
+        if (player instanceof BorderPatrol) {
+            game.increaseScore(player.getTeam(), 1); //TODO replace 1 with a game property.
+            game.respawnPlayer(this);
+        }
     }
 }

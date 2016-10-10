@@ -1,16 +1,25 @@
 package crosstheborder.lib;
 
-import crosstheborder.lib.enumeration.MoveDirection;
+import crosstheborder.lib.ability.Crawler;
+import crosstheborder.lib.enumeration.TeamName;
+import crosstheborder.lib.interfaces.GameManipulator;
+import crosstheborder.lib.interfaces.TileObject;
+import crosstheborder.lib.player.PlayerEntity;
+import crosstheborder.lib.player.Trump;
+import crosstheborder.lib.player.entity.BorderPatrol;
+import crosstheborder.lib.player.entity.Mexican;
+import crosstheborder.lib.tileobject.Placeable;
 
 import java.awt.*;
 import java.util.ArrayList;
 
 /**
- * This class makes an instance of Game
+ * This class makes an instance of Game.
  *
- * @author guillaime 
+ * @author guillaime
+ * @author Oscar de Leeuw
  */
-public class Game {
+public class Game implements GameManipulator {
 
     private ArrayList<Player> players;
     private Map map;
@@ -20,13 +29,13 @@ public class Game {
     /**
      * Constructor of Game class.
      */
-    public Game(){
-        usa = new Team("USA");
-        mex = new Team("MEX");
-
+    public Game(String mapname) {
         players = new ArrayList<>();
-        map = new Map("The Border", 20, 20);
 
+        // For now we use 20 as width and height, this can be changed if we want to.
+        map = MapLoader.getInstance().buildMap(mapname);
+        usa = new Team("USA", map.getUsaArea());
+        mex = new Team("MEX", map.getMexicoArea());
     }
 
     /**
@@ -48,49 +57,153 @@ public class Game {
     }
 
     /**
-     * Moves a player to certain position.
+     * Gets the map of the game.
      *
-     * @param direction Direction which the player is moving in.
-     * @param point Point where the player is at the moment.
-     * @return If player can move into this direction.
+     * @return The map that is used by the game.
      */
-    public boolean movePlayer(MoveDirection direction, Point point){
-        throw new UnsupportedOperationException();
+    public Map getMap() {
+        return this.map;
     }
 
     /**
-     * Adds an obstacle
+     * Gets a team from the game with a given team name.
      *
-     * @param location Location where the obstacle must be created.
-     * @param player Will get checked if player is authorized.
-     * @return If obstacle can e placed.
+     * @param name The name of the team.
+     * @return A team object that represents the team.
      */
-    public boolean addObstacle(Point location, Player player){
-        return checkForTrump(player);
+    public Team getTeam(TeamName name) {
+        switch (name) {
+            case USA:
+                return this.usa;
+            case MEX:
+                return this.mex;
+            default:
+                return null;
+        }
     }
 
     /**
-     * If a mexican gets into America or gets caught,
-     * they will respawn on a selected tile.
+     * Gets the Trump in the list of players.
+     * @return The Trump object.
      */
-    public void respawnMexican(){
-        throw new UnsupportedOperationException();
+    private Trump getTrump() {
+        for (Player player : players) {
+            if (player instanceof Trump) {
+                return (Trump) player;
+            }
+        }
+        return null;
     }
 
     /**
-     * Gets called after each timerTick. Updates the UI.
+     * Turns a user into a player and adds the player to the game.
+     * Will try to create a Trump if there is none.
+     * Will try to create a Mexican if there are more Americans than Mexicans.
+     * Will otherwise try to create a BorderPatrol.
+     *
+     * @param user The user that joined this game.
+     */
+    public void addPlayer(User user) {
+        Player player;
+
+        //If trump does not exist make the user a trump.
+        if (!players.stream().anyMatch(x -> x instanceof Trump)) {
+            player = new Trump(user.getName(), usa);
+        }
+        //If there are more USA members than mexicans, make a new mexican.
+        else if (usa.getTeamMembers().size() > mex.getTeamMembers().size()) {
+            Ability ability = new Crawler(0); //TODO something with abilities.
+            Point location = map.getFreePointInArea(mex.getTeamArea());
+
+            player = new Mexican(user.getName(), mex, ability);
+            changeTileObjectLocation((Mexican) player, location);
+        }
+        //Else make a new american.
+        else {
+            Point location = map.getFreePointInArea(usa.getTeamArea());
+
+            player = new BorderPatrol(user.getName(), usa);
+            changeTileObjectLocation((BorderPatrol) player, location);
+        }
+
+        //Assign the player object to the user.
+        user.setPlayer(player);
+        players.add(player);
+    }
+
+    /**
+     * Update is called every at tick of the server clock.
      */
     public void update(){
-        throw new UnsupportedOperationException();
+        //Update all the players.
+        for (Player player : players) {
+            //Update the player entities.
+            if (player instanceof PlayerEntity) {
+                PlayerEntity entity = (PlayerEntity) player;
+
+                //Move the player if there is input.
+                Point nextLocation = entity.getNextMove();
+                if (nextLocation != null) {
+                    movePlayerEntity(entity, nextLocation);
+                }
+
+                //Decrease the immobilization timer.
+                entity.decreaseMoveTimer();
+            } else if (player instanceof Trump) {
+                ((Trump) player).tickPlaceableAmount();
+            }
+        }
     }
 
     /**
-     * Checks if player is Trump
+     * Adds a new Placeable to the map.
      *
-     * @param player Gives a class that inherits player.
-     * @return returns what player it is.
+     * @param location  The location the placeable should be placed.
+     * @param placeable The placeable that should be placed on the map.
      */
-    private boolean checkForTrump(Player player){
-        return true;
+    public void addPlaceable(Point location, Placeable placeable) {
+        Trump trump = getTrump();
+
+        if (trump.canPlace(placeable) && !map.hasTileObject(location) && !map.getMexicoArea().contains(location) && !map.getUsaArea().contains(location)) {
+            //TODO add code that checks walls are not placed next to each other.
+            map.changeTileObject(location, placeable);
+            trump.decreasePlaceableAmount(placeable);
+        }
+    }
+
+    @Override
+    public void movePlayerEntity(PlayerEntity player, Point nextLocation) {
+        //Check whether there's a tileObject at the next location.
+        if (map.hasTileObject(nextLocation)) {
+            map.getTileObject(nextLocation).interactWith(player, this);
+        }
+        //If there is no tileObject move the player.
+        else {
+            changeTileObjectLocation(player, nextLocation);
+        }
+    }
+
+    @Override
+    public void respawnPlayer(PlayerEntity player) {
+        //Get a free point in the team area of the player.
+        Point nextLocation = map.getFreePointInArea(player.getTeam().getTeamArea());
+
+        player.immobilize(10); //TODO Gather the respawn time from game settings.
+        changeTileObjectLocation(player, nextLocation);
+    }
+
+    @Override
+    public void increaseScore(Team team, int amount) {
+        team.increaseScore(amount);
+    }
+
+    @Override
+    public void changeTileObjectLocation(TileObject tileObject, Point nextLocation) {
+        Point currentLocation = tileObject.getLocation();
+
+        map.changeTileObject(currentLocation, null);
+        map.changeTileObject(nextLocation, tileObject);
+        //Move the location of the entity to the next location. Saves having to recreate a new point object every time.
+        currentLocation.move(nextLocation.x, nextLocation.y);
     }
 }

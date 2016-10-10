@@ -1,25 +1,26 @@
 package crosstheborder.lib;
 
+import crosstheborder.lib.enumeration.TileType;
 import crosstheborder.lib.interfaces.TileObject;
-
-import java.awt.*;
 
 /**
  *  Represents a single tile that composes the map.
  *  The tile has a certain location.
  *  Can have a {@link TileObject} that fills the tile.
+ *
+ *  @author Oscar de Leeuw
  */
 public class Tile {
-    private Point location;
     private TileObject tileObject;
+    private TileType type;
 
     /**
      * Creates a new tile object with the given location.
      *
-     * @param location The location of the tile.
+     * @param type The type of the tile.
      */
-    public Tile(Point location) {
-        this.location = location;
+    public Tile(TileType type) {
+        this.type = type;
     }
 
     /**
@@ -28,7 +29,7 @@ public class Tile {
      * @return True if the tile has a {@link TileObject}. False if it doesn't have a {@link TileObject}.
      */
     public boolean hasTileObject() {
-        return this.tileObject != null;
+        return tileObject != null;
     }
 
     /**

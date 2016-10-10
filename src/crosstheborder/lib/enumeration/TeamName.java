@@ -1,7 +1,9 @@
 package crosstheborder.lib.enumeration;
 
 /**
- * Created by guillaime on 26-9-2016.
+ * An enum to capture the possible names of the teams.
+ *
+ * @author guillaime
  */
 public enum TeamName {
     USA, MEX

@@ -5,6 +5,8 @@ import java.time.LocalTime;
 /**
  *  Represents a single message typed in chat by an user.
  *  Logs the author, message and time.
+ *
+ *  @author Oscar de Leeuw
  */
 public class Message {
     private String author;

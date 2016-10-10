@@ -1,17 +1,22 @@
 package crosstheborder.lib;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.time.LocalTime;
 
 /**
  *
  */
 public class MessageTest {
 
+    private Message mes;
+
     @Before
     public void setUp() throws Exception {
-
+        mes = new Message("Henk", "Wat een mooi spel is dit!");
     }
 
     @After
@@ -19,8 +24,14 @@ public class MessageTest {
 
     }
 
+    /**
+     * Looks if the toString method works int he way we want it.
+     *
+     * @throws Exception
+     */
     @Test
     public void toStringTest() throws Exception {
-
+        Assert.assertEquals(LocalTime.now().getHour() + ":" + LocalTime.now().getMinute() +
+                                        " Henk: Wat een mooi spel is dit!", mes.toString());
     }
 }
