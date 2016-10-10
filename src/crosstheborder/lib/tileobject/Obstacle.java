@@ -1,7 +1,9 @@
 package crosstheborder.lib.tileobject;
 
+import crosstheborder.lib.ImageFinder;
 import crosstheborder.lib.enumeration.ObstacleType;
 import crosstheborder.lib.interfaces.GameManipulator;
+import crosstheborder.lib.interfaces.Painter;
 import crosstheborder.lib.interfaces.TileObject;
 import crosstheborder.lib.player.PlayerEntity;
 
@@ -39,5 +41,15 @@ public class Obstacle implements TileObject {
     @Override
     public Point getLocation() {
         return this.location;
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Draws an obstacle with the image of it's obstacle type.
+     */
+    @Override
+    public void draw(Painter painter, Point location, int tileWidth) {
+        painter.drawImage(ImageFinder.getInstance().getImage(type), location, tileWidth, tileWidth);
     }
 }

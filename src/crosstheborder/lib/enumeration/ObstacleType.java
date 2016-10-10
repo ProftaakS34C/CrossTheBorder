@@ -7,12 +7,12 @@ package crosstheborder.lib.enumeration;
  * @author Oscar de Leeuw
  */
 public enum ObstacleType {
-    Tree, Water, Rock;
+    TREE, WATER, ROCK;
 
     static {
-        Tree.code = 't';
-        Water.code = 'w';
-        Rock.code = 'r';
+        TREE.code = 't';
+        WATER.code = 'w';
+        ROCK.code = 'r';
     }
 
     /**
