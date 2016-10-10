@@ -90,9 +90,10 @@ public class ImageFinder {
         File file = new File(imageDirectory + name + ext);
 
         if (file.exists()) {
+            cache.put(name, file);
             return file;
         } else {
-            throw new FileNotFoundException("Cant find image file for: " + name);
+            return new File(imageDirectory + "notexture" + ext);
         }
     }
 }
