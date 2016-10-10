@@ -7,7 +7,7 @@ import java.awt.*;
  *
  * @author Oscar de Leeuw
  */
-public interface Camera extends Drawable {
+public interface Camera {
     /**
      * Gets the center of the camera.
      *
@@ -35,4 +35,11 @@ public interface Camera extends Drawable {
      * @return The height of the camera in pixels.
      */
     int getCameraHeight();
+
+    /**
+     * Draws a camera.
+     *
+     * @param painter The painter the camera should use to paint.
+     */
+    void draw(Painter painter);
 }
