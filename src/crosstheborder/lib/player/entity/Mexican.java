@@ -1,8 +1,8 @@
 package crosstheborder.lib.player.entity;
 
-import crosstheborder.lib.Ability;
 import crosstheborder.lib.Team;
 import crosstheborder.lib.interfaces.GameManipulator;
+import crosstheborder.lib.interfaces.GameSettings;
 import crosstheborder.lib.player.PlayerEntity;
 import crosstheborder.lib.tileobject.placeable.Wall;
 
@@ -14,9 +14,7 @@ import crosstheborder.lib.tileobject.placeable.Wall;
  */
 public class Mexican extends PlayerEntity {
     //Indicates how many seconds it will take to climb the wall.
-    private static final float CLIMB_MODIFIER = 0.5f; //TODO Gather from GameSettings file.
-
-    private Ability ability;
+    private final float climbModifier;
 
     private int climbTicks;
     private Wall climbingWall;
@@ -24,24 +22,15 @@ public class Mexican extends PlayerEntity {
     /**
      * This is the constructor method of the class "Mexican".
      * in the constructor the name of the Mexican is set.
-     * Calls the {@link PlayerEntity#PlayerEntity(String, Team)} constructor.
-     * Sets isPassable to false;
+     * Calls the {@link PlayerEntity#PlayerEntity(String, Team, GameSettings)} constructor.
      *
      * @param name    The name of the Mexican.
-     * @param ability The ability of the Mexican.
      * @param team The team this Mexican belongs to.
+     * @param settings The settings of the game.
      */
-    public Mexican(String name, Team team, Ability ability) {
-        super(name, team);
-        this.ability = ability;
-    }
-
-    /**
-     * This method is used when a Mexican uses his ability.
-     * the method {@link Ability#useAbility()} of {@link Ability} is called.
-     */
-    public void useAbility() {
-        ability.useAbility();
+    public Mexican(String name, Team team, GameSettings settings) {
+        super(name, team, settings);
+        climbModifier = settings.getClimbModifier();
     }
 
     /**
@@ -55,7 +44,7 @@ public class Mexican extends PlayerEntity {
         if (climbingWall == null || !climbingWall.equals(wall)) {
             climbingWall = wall;
             //Set the abilityTime to the total time it will take to scale the wall based on server ticks.
-            climbTicks = (int) ((wall.getHeight() * CLIMB_MODIFIER * SERVER_TICK_RATE));
+            climbTicks = (int) ((wall.getHeight() * climbModifier * serverTickRate));
         }
         //If we are still climbing the same wall lower the timer.
         else if (climbingWall.equals(wall)) {
