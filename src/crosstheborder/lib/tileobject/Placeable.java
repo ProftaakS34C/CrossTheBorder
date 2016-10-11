@@ -25,6 +25,17 @@ public abstract class Placeable implements TileObject {
 
     public abstract void interactWith(PlayerEntity player, GameManipulator game);
 
+    /**
+     * Checks what the placement rules are of a placeable.
+     *
+     * @param east  The object that would be to the east of the placeable.
+     * @param west  The object that would be to the west of the placeable.
+     * @param north The object that would be to the north of the placeable.
+     * @param south The object that would be to the south of the placeable.
+     * @return A boolean that indicates whether the placeable can be placed.
+     */
+    public abstract boolean canPlaceWithNeighbours(TileObject east, TileObject west, TileObject north, TileObject south);
+
     @Override
     public Point getLocation() {
         return this.location;

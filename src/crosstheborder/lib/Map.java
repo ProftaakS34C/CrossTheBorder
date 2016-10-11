@@ -2,6 +2,7 @@ package crosstheborder.lib;
 
 import crosstheborder.lib.interfaces.Camera;
 import crosstheborder.lib.interfaces.TileObject;
+import crosstheborder.lib.tileobject.Placeable;
 
 import java.awt.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -153,6 +154,19 @@ public class Map {
         } else {
             return nextLocation;
         }
+    }
+
+    public boolean canPlacePlaceable(Point location, Placeable placeable) {
+        if (!mexicoArea.contains(location) && !usaArea.contains(location) && !hasTileObject(location)) {
+            TileObject east = getTileObject(new Point(location.x + 1, location.y));
+            TileObject west = getTileObject(new Point(location.x - 1, location.y));
+            TileObject north = getTileObject(new Point(location.x, location.y - 1));
+            TileObject south = getTileObject(new Point(location.x, location.y + 1));
+
+            return placeable.canPlaceWithNeighbours(east, west, north, south);
+        }
+
+        return false;
     }
 
     /**

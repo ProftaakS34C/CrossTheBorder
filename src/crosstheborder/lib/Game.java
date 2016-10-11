@@ -164,8 +164,7 @@ public class Game implements GameManipulator {
     public void addPlaceable(Point location, Placeable placeable) {
         Trump trump = getTrump();
 
-        if (trump.canPlace(placeable) && !map.hasTileObject(location) && !map.getMexicoArea().contains(location) && !map.getUsaArea().contains(location)) {
-            //TODO add code that checks walls are not placed next to each other.
+        if (trump.canPlace(placeable) && map.canPlacePlaceable(location, placeable)) {
             map.changeTileObject(location, placeable);
             trump.decreasePlaceableAmount(placeable);
         }
