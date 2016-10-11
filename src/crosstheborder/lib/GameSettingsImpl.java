@@ -10,21 +10,21 @@ import crosstheborder.lib.interfaces.GameSettings;
 public class GameSettingsImpl implements GameSettings {
     private final int serverTickRate;
 
-    private int scoreLimit;
-    private int timeLimit;
-    private int respawnTime;
-    private int mexicanScoringModifier;
-    private int usaScoringModifier;
+    private int scoreLimit = 30;
+    private int timeLimit = 600;
+    private int respawnTime = 10;
+    private int mexicanScoringModifier = 1;
+    private int usaScoringModifier = 1;
 
-    private int secondsPerWall;
-    private int secondsPerTrap;
-    private int initialWallAmount;
-    private int initialTrapAmount;
+    private int secondsPerWall = 2;
+    private int secondsPerTrap = 4;
+    private int initialWallAmount = 10;
+    private int initialTrapAmount = 3;
 
-    private int defaultTrapTime;
-    private int defaultWallHeight;
+    private int defaultTrapTime = 4;
+    private int defaultWallHeight = 2;
 
-    private float climbModifier;
+    private float climbModifier = 1.5f;
 
 
     public GameSettingsImpl(int serverTickRate) {
@@ -33,7 +33,7 @@ public class GameSettingsImpl implements GameSettings {
 
     @Override
     public int getServerTickRate() {
-        return this.getServerTickRate();
+        return this.serverTickRate;
     }
 
     @Override
