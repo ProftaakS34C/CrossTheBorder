@@ -14,13 +14,13 @@ import java.util.Optional;
  *
  * @author yannic 11/10/2016.
  */
-public class createLobbyDialog {
+public class CreateLobbyDialog {
 
     private boolean nameOK = false;
     private boolean playerAmountOK = false;
     private Dialog<List<String>> dialog;
     private Node doneButton;
-    public createLobbyDialog(){
+    public CreateLobbyDialog(){
         dialog = new Dialog<>();
         //Set button types
         ButtonType okButton = new ButtonType("done", ButtonBar.ButtonData.OK_DONE);
@@ -46,7 +46,7 @@ public class createLobbyDialog {
 
 
         lobbyNameInput.textProperty().addListener((observable, oldValue, newValue) ->{
-            nameOK = newValue.trim().isEmpty();
+            nameOK = !newValue.trim().isEmpty();
             enableButtonIfInputOk();
         });
         playerAmountInput.textProperty().addListener((observable, oldVal, newVal) ->{
@@ -72,6 +72,9 @@ public class createLobbyDialog {
     private void enableButtonIfInputOk(){
         if(nameOK && playerAmountOK){
             doneButton.setDisable(false);
+        }
+        else {
+            doneButton.setDisable(true);
         }
     }
     /**

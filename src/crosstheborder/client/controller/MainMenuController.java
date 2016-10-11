@@ -3,10 +3,16 @@ package crosstheborder.client.controller;
 
 
 import crosstheborder.client.ClientMain;
+import crosstheborder.client.dialog.CreateLobbyDialog;
+import crosstheborder.lib.Lobby;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @author yannic
@@ -54,8 +60,19 @@ public class MainMenuController {
 
     @FXML
     private void btnCreateLobby_OnAction(){
-        //do something
-        throw new UnsupportedOperationException();
+        CreateLobbyDialog dialog = new CreateLobbyDialog();
+        dialog.setTitle("set lobby settings");
+        dialog.setHeaderText("");
+        Optional<List<String>> result = dialog.showAndWait();
+        if(result.isPresent()){
+            ArrayList<String> lobbyList = (ArrayList<String>) result.get();
+            Lobby lobby = new Lobby(instance.getUser(), lobbyList.get(0), Integer.parseInt(lobbyList.get(1)));
+            instance.getUser().setLobby(lobby);
+            instance.showLobbyMenu();
+        }
+        else {
+            return;
+        }
     }
     @FXML
     private void btnJoinLobby_OnAction(){
