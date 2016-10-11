@@ -2,7 +2,6 @@ package crosstheborder.client.controller;
 
 /**
  * @author Yannic
- *
  */
 
 import crosstheborder.client.ClientMain;
@@ -65,7 +64,8 @@ public class LobbyMenuController {
         if(isPrivateCheckBox.isSelected()){
             if(lobbyPassInputPasswordField.getText() != null){
                 lobbyPassInputPasswordField.setVisible(false);
-                //set het wachtwoord van de lobby...
+                instance.getUser().getLobby().setPassword(lobbyPassInputPasswordField.getText());
+                System.out.println("set password");
             }
             else {
                 System.out.println("please specify a password");
@@ -73,6 +73,8 @@ public class LobbyMenuController {
         }
         else {
             lobbyPassInputPasswordField.setText("");
+            instance.getUser().getLobby().setPassword("");
+            System.out.println("removed password");
             lobbyPassInputPasswordField.setVisible(true);
         }
     }

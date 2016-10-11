@@ -60,7 +60,7 @@ public class ClientMain extends Application {
     }
 
     /**
-     * This method opens a dialog window asking for a string value, if nothing is entered it asks again
+     * This method opens a dialog window asking for a string value
      * @return A String representing the (nick)name of the user
      */
     private String askForUserName(){
@@ -71,7 +71,7 @@ public class ClientMain extends Application {
 
         String userName;
         Optional<String> result = dialog.showAndWait();
-        if(result.isPresent() || result.get().trim() != ""){
+        if(result.isPresent() && !result.get().isEmpty()){
             userName = result.get();
         }
         else{
@@ -162,7 +162,7 @@ public class ClientMain extends Application {
             gameRoot = loader.load();
             GameScreenController controller = loader.getController();
             controller.setInstance(this);
-            controller.setUp(); 
+            controller.setUp();
             root.setCenter(gameRoot);
             primaryStage.setTitle("in game");
         }
@@ -174,6 +174,6 @@ public class ClientMain extends Application {
 
     public int getMaxPlayers() {
         //temp method, kan miss vervangen worden door  getGame().getMaxPlayers ofzo
-        return 8;
+        return user.getLobby().getMaxPlayers();
     }
 }
