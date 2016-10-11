@@ -85,7 +85,7 @@ public class Map {
      * @return A camera object.
      */
     public Camera getCamera(Point center, int tileWidth, int cameraWidth, int cameraHeight) {
-        return new CameraImpl(center, tileWidth, cameraHeight, cameraWidth, tiles);
+        return new CameraImpl(center, tileWidth, cameraWidth, cameraHeight, tiles);
     }
 
     /**
