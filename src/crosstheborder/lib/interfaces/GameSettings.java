@@ -18,7 +18,14 @@ public interface GameSettings {
      *
      * @return The score limit of the game.
      */
-    int getScoreLimtit();
+    int getScoreLimit();
+
+    /**
+     * Sets the score limit.
+     *
+     * @param value The value of the new score limit.
+     */
+    void setScoreLimit(int value);
 
     /**
      * Gets the time limit of the game.
@@ -173,12 +180,5 @@ public interface GameSettings {
      * @param value A float that indicates how many seconds it takes to scale one height of a wall.
      */
     void setClimbModifier(float value);
-
-    /**
-     * Sets the score limit.
-     *
-     * @param value The value of the new score limit.
-     */
-    void setScoreLimit(int value);
 
 }
