@@ -49,4 +49,14 @@ public class Trap extends Placeable {
 
 
     }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Will only return true when none of it's neighbours are traps.
+     */
+    @Override
+    public boolean canPlaceWithNeighbours(TileObject east, TileObject west, TileObject north, TileObject south) {
+        return !(east instanceof Trap || west instanceof Trap || north instanceof Trap || south instanceof Trap);
+    }
 }

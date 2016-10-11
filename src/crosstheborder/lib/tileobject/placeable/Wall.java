@@ -53,6 +53,23 @@ public class Wall extends Placeable {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Returns true with the following cases:
+     * <ul>
+     * <li>There are no walls around it.</li>
+     * <li>There is 1 wall around it.</li>
+     * <li>There is a wall to it's east and west.</li>
+     * <li>There is a wall to it's north and south.</li>
+     * </ul>
+     */
+    @Override
+    public boolean canPlaceWithNeighbours(TileObject east, TileObject west, TileObject north, TileObject south) {
+        //Boolean expression = !E*!W + !N*!S.
+        return (!(east instanceof Wall) && !(west instanceof Wall)) || (!(north instanceof Wall) && !(south instanceof Wall));
+    }
+
     private void throwMexicanOverWall(PlayerEntity mexican, GameManipulator game) {
         //Gets the movement vector of the mexican and multiply by 2 to place him over the wall.
         int translationX = (mexican.getLocation().x - getLocation().x) * 2;
