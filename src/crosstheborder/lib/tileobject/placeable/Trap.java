@@ -1,6 +1,7 @@
 package crosstheborder.lib.tileobject.placeable;
 
 import crosstheborder.lib.interfaces.GameManipulator;
+import crosstheborder.lib.interfaces.GameSettings;
 import crosstheborder.lib.interfaces.TileObject;
 import crosstheborder.lib.player.PlayerEntity;
 import crosstheborder.lib.player.entity.Mexican;
@@ -19,12 +20,11 @@ public class Trap extends Placeable {
 
     /**
      * Creates a new trap object.
-     * Sets isPassable to true;
      *
-     * @param trapTime An integer that represents the time this trap will trap a {@link PlayerEntity}.
+     * @param settings The settings of the game.
      */
-    public Trap(int trapTime) {
-        this.trapTime = trapTime;
+    public Trap(GameSettings settings) {
+        this.trapTime = settings.getDefaultTrapTime();
     }
 
     /**

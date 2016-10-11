@@ -1,6 +1,7 @@
 package crosstheborder.lib.tileobject.placeable;
 
 import crosstheborder.lib.interfaces.GameManipulator;
+import crosstheborder.lib.interfaces.GameSettings;
 import crosstheborder.lib.interfaces.TileObject;
 import crosstheborder.lib.player.PlayerEntity;
 import crosstheborder.lib.player.entity.Mexican;
@@ -18,11 +19,11 @@ public class Wall extends Placeable {
 
     /**
      * Creates a new wall.
-     * Sets isPassable to false.
-     * @param height The height of the wall.
+     *
+     * @param settings The settings of the game.
      */
-    public Wall(int height) {
-        this.height = height;
+    public Wall(GameSettings settings) {
+        this.height = settings.getDefaultWallHeight();
     }
 
     /**

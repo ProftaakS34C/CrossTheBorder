@@ -99,17 +99,43 @@ public class GameTest {
     }
 
     @Test
-    public void addObstacle() throws Exception {
+    public void addPlaceable() throws Exception {
         Point location = new Point(20, 20);
-        Wall wall = new Wall(2);
-        Trap trap = new Trap(3);
+        Point location2 = new Point(22, 20);
+        Point location3 = new Point(21, 20);
+        Point location4 = new Point(21, 21);
+
+        Wall wall = new Wall(game.getSettings());
+        Wall wall2 = new Wall(game.getSettings());
+        Wall wall3 = new Wall(game.getSettings());
+        Wall wall4 = new Wall(game.getSettings());
+        Trap trap = new Trap(game.getSettings());
         int wallCount = trump.getWallAmount();
         int trapCount = trump.getTrapAmount();
 
         //Add a placeable at a (free) location.
+        //Should succeed.
         game.addPlaceable(location, wall);
-        assertEquals(game.getMap().getTileObject(location), wall);
         assertEquals(wallCount - 1, trump.getWallAmount());
+        //Should succeed.
+        game.addPlaceable(location2, wall2);
+        assertEquals(wallCount - 2, trump.getWallAmount());
+        //Should succeed.
+        game.addPlaceable(location3, wall3);
+        assertEquals(wallCount - 3, trump.getWallAmount());
+        //Should fail.
+        game.addPlaceable(location4, wall4);
+        assertEquals(wallCount - 3, trump.getWallAmount());
+
+        assertEquals(game.getMap().getTileObject(location), wall);
+        assertEquals(game.getMap().getTileObject(location2), wall2);
+        assertEquals(game.getMap().getTileObject(location3), wall3);
+        assertNull(game.getMap().getTileObject(location4));
+
+
+        game.addPlaceable(location2, wall2);
+
+        game.addPlaceable(location3, wall3);
 
         //Try to add a placeable at the same location.
         game.addPlaceable(location, trap);

@@ -45,7 +45,7 @@ public class BorderPatrol extends PlayerEntity {
     @Override
     public void interactWith(PlayerEntity player, GameManipulator game) {
         if (player instanceof Mexican) {
-            game.increaseScore(getTeam(), 1); //TODO Gather from game properties.
+            game.increaseScore(getTeam(), 1); //TODO Let the score addition be decided by the game.
             game.respawnPlayer(player);
             game.changeTileObjectLocation(this, player.getLocation());
         }

@@ -196,7 +196,7 @@ public class Game implements GameManipulator {
         //Get a free point in the team area of the player.
         Point nextLocation = map.getFreePointInArea(player.getTeam().getTeamArea());
 
-        player.immobilize(10); //TODO Gather the respawn time from game settings.
+        player.immobilize(settings.getRespawnTime());
         changeTileObjectLocation(player, nextLocation);
     }
 
