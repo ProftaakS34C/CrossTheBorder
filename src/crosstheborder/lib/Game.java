@@ -24,7 +24,9 @@ public class Game implements GameManipulator, GameInterface {
     private static final Logger LOGGER = Logger.getLogger(Game.class.getName());
     private GameSettings settings;
 
-    private ArrayList<Player> players;
+    private Trump trump;
+    private ArrayList<PlayerEntity> players;
+
     private Map map;
     private Team usa;
     private Team mex;
@@ -86,27 +88,32 @@ public class Game implements GameManipulator, GameInterface {
         Player player;
 
         //If trump does not exist make the user a trump.
-        if (!players.stream().anyMatch(x -> x instanceof Trump)) {
-            player = new Trump(user.getName(), usa, settings);
-        }
-        //If there are more USA members than mexicans, make a new mexican.
-        else if (usa.getTeamMembers().size() > mex.getTeamMembers().size()) {
-            Point location = map.getFreePointInArea(mex.getTeamArea());
+        if (trump == null) {
+            trump = new Trump(user.getName(), usa, settings);
+            player = trump;
+        } else {
+            Team team;
+            PlayerEntity playerEntity;
+            //TODO: Make a player factory.
 
-            player = new Mexican(user.getName(), mex, settings);
-            changeTileObjectLocation((Mexican) player, location);
-        }
-        //Else make a new american.
-        else {
-            Point location = map.getFreePointInArea(usa.getTeamArea());
+            //Else make a new american.
+            if (usa.getTeamMembers().size() > mex.getTeamMembers().size()) {
+                team = mex;
+                playerEntity = new Mexican(user.getName(), team, settings);
+            }
 
-            player = new BorderPatrol(user.getName(), usa, settings);
-            changeTileObjectLocation((BorderPatrol) player, location);
+            //If there are more USA members than mexicans, make a new mexican.
+            else {
+                team = usa;
+                playerEntity = new BorderPatrol(user.getName(), team, settings);
+            }
+
+            player = playerEntity;
+            Point location = map.getFreePointInArea(team.getTeamArea());
+            changeTileObjectLocation(playerEntity, location);
         }
 
-        //Assign the player object to the user.
         user.setPlayer(player);
-        players.add(player);
     }
 
     /**
@@ -200,11 +207,10 @@ public class Game implements GameManipulator, GameInterface {
     public void addPlaceable(Point location, PlaceableType placeableType) {
         try {
             Placeable placeable = placeableType.getPlaceable(settings);
-            Trump trump = getTrump();
 
-            if (trump.canPlace(placeable) && map.canPlacePlaceable(location, placeable)) {
+            if (this.trump.canPlace(placeable) && map.canPlacePlaceable(location, placeable)) {
                 map.changeTileObject(location, placeable);
-                trump.decreasePlaceableAmount(placeable);
+                this.trump.decreasePlaceableAmount(placeable);
             }
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, ex.toString(), ex);
