@@ -2,12 +2,11 @@ package crosstheborder.lib;
 
 import crosstheborder.lib.enumeration.MoveDirection;
 import crosstheborder.lib.enumeration.ObstacleType;
-import crosstheborder.lib.enumeration.TeamName;
+import crosstheborder.lib.enumeration.PlaceableType;
 import crosstheborder.lib.player.Trump;
 import crosstheborder.lib.player.entity.BorderPatrol;
 import crosstheborder.lib.player.entity.Mexican;
 import crosstheborder.lib.tileobject.Obstacle;
-import crosstheborder.lib.tileobject.placeable.Trap;
 import crosstheborder.lib.tileobject.placeable.Wall;
 import org.junit.Before;
 import org.junit.Test;
@@ -61,9 +60,9 @@ public class GameTest {
         assertEquals(game.getMap().getTileObject(borderPatrol.getLocation()), borderPatrol);
 
         //Check whether the teams contain the correct team members.
-        assertTrue(game.getTeam(TeamName.USA).getTeamMembers().contains(borderPatrol));
-        assertTrue(game.getTeam(TeamName.USA).getTeamMembers().contains(trump));
-        assertTrue(game.getTeam(TeamName.MEX).getTeamMembers().contains(mexican));
+        assertTrue(game.getUsa().getTeamMembers().contains(borderPatrol));
+        assertTrue(game.getUsa().getTeamMembers().contains(trump));
+        assertTrue(game.getMexico().getTeamMembers().contains(mexican));
     }
 
     @Test
@@ -77,8 +76,8 @@ public class GameTest {
         //Process the amount of ticks that equals 1 second, which should allow the mexican to move again.
         for (int i = 0; i < 1 * TICK_RATE; i++) {
             //Push movement. up to mexico and down to border patrol
-            mexican.pushInput(MoveDirection.UP);
-            borderPatrol.pushInput(MoveDirection.DOWN);
+            game.sendMoveInput(MoveDirection.UP, mexican);
+            game.sendMoveInput(MoveDirection.DOWN, borderPatrol);
 
             game.update();
             assertEquals(initialMexLocation.x, mexican.getLocation().x);
@@ -90,7 +89,7 @@ public class GameTest {
         }
 
         //Push one more up movement to the mexican object.
-        mexican.pushInput(MoveDirection.UP);
+        game.sendMoveInput(MoveDirection.UP, mexican);
 
         //update one more time which should move the mexican.
         game.update();
@@ -105,41 +104,36 @@ public class GameTest {
         Point location3 = new Point(21, 20);
         Point location4 = new Point(21, 21);
 
-        Wall wall = new Wall(game.getSettings());
-        Wall wall2 = new Wall(game.getSettings());
-        Wall wall3 = new Wall(game.getSettings());
-        Wall wall4 = new Wall(game.getSettings());
-        Trap trap = new Trap(game.getSettings());
         int wallCount = trump.getWallAmount();
         int trapCount = trump.getTrapAmount();
 
         //Add a placeable at a (free) location.
         //Should succeed.
-        game.addPlaceable(location, wall);
+        game.addPlaceable(location, PlaceableType.WALL);
         assertEquals(wallCount - 1, trump.getWallAmount());
         //Should succeed.
-        game.addPlaceable(location2, wall2);
+        game.addPlaceable(location2, PlaceableType.WALL);
         assertEquals(wallCount - 2, trump.getWallAmount());
         //Should succeed.
-        game.addPlaceable(location3, wall3);
+        game.addPlaceable(location3, PlaceableType.WALL);
         assertEquals(wallCount - 3, trump.getWallAmount());
         //Should fail.
-        game.addPlaceable(location4, wall4);
+        game.addPlaceable(location4, PlaceableType.WALL);
         assertEquals(wallCount - 3, trump.getWallAmount());
 
-        assertEquals(game.getMap().getTileObject(location), wall);
-        assertEquals(game.getMap().getTileObject(location2), wall2);
-        assertEquals(game.getMap().getTileObject(location3), wall3);
+        assertTrue(game.getMap().getTileObject(location) instanceof Wall);
+        assertTrue(game.getMap().getTileObject(location2) instanceof Wall);
+        assertTrue(game.getMap().getTileObject(location3) instanceof Wall);
         assertNull(game.getMap().getTileObject(location4));
 
 
-        game.addPlaceable(location2, wall2);
+        game.addPlaceable(location2, PlaceableType.WALL);
 
-        game.addPlaceable(location3, wall3);
+        game.addPlaceable(location3, PlaceableType.WALL);
 
         //Try to add a placeable at the same location.
-        game.addPlaceable(location, trap);
-        assertEquals(game.getMap().getTileObject(location), wall);
+        game.addPlaceable(location, PlaceableType.TRAP);
+        assertTrue(game.getMap().getTileObject(location) instanceof Wall);
         assertEquals(trapCount, trump.getTrapAmount());
     }
 
@@ -184,16 +178,16 @@ public class GameTest {
 
     @Test
     public void increaseScore() throws Exception {
-        int initUsaScore = game.getScoreUSA();
-        int initMexScore = game.getScoreMexico();
+        int initUsaScore = game.getUsa().getScore();
+        int initMexScore = game.getUsa().getScore();
         int amount1 = 1;
         int amount2 = 3;
 
         game.increaseScore(borderPatrol.getTeam(), amount1);
         game.increaseScore(mexican.getTeam(), amount2);
 
-        assertEquals(initUsaScore + amount1, game.getScoreUSA());
-        assertEquals(initMexScore + amount2, game.getScoreMexico());
+        assertEquals(initUsaScore + amount1, game.getUsa().getScore());
+        assertEquals(initMexScore + amount2, game.getMexico().getScore());
     }
 
     @Test

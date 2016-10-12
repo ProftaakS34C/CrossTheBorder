@@ -109,6 +109,7 @@ public class Game implements GameManipulator, GameInterface {
             }
 
             player = playerEntity;
+            players.add(playerEntity);
             Point location = map.getFreePointInArea(team.getTeamArea());
             changeTileObjectLocation(playerEntity, location);
         }
