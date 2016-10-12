@@ -1,6 +1,7 @@
 package crosstheborder.lib.tileobject.placeable;
 
 import crosstheborder.lib.interfaces.GameManipulator;
+import crosstheborder.lib.interfaces.GameSettings;
 import crosstheborder.lib.interfaces.TileObject;
 import crosstheborder.lib.player.PlayerEntity;
 import crosstheborder.lib.player.entity.Mexican;
@@ -18,11 +19,11 @@ public class Wall extends Placeable {
 
     /**
      * Creates a new wall.
-     * Sets isPassable to false.
-     * @param height The height of the wall.
+     *
+     * @param settings The settings of the game.
      */
-    public Wall(int height) {
-        this.height = height;
+    public Wall(GameSettings settings) {
+        this.height = settings.getDefaultWallHeight();
     }
 
     /**
@@ -51,6 +52,23 @@ public class Wall extends Placeable {
                 throwMexicanOverWall(player, game);
             }
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Returns true with the following cases:
+     * <ul>
+     * <li>There are no walls around it.</li>
+     * <li>There is 1 wall around it.</li>
+     * <li>There is a wall to it's east and west.</li>
+     * <li>There is a wall to it's north and south.</li>
+     * </ul>
+     */
+    @Override
+    public boolean canPlaceWithNeighbours(TileObject east, TileObject west, TileObject north, TileObject south) {
+        //Boolean expression = !E*!W + !N*!S.
+        return (!(east instanceof Wall) && !(west instanceof Wall)) || (!(north instanceof Wall) && !(south instanceof Wall));
     }
 
     private void throwMexicanOverWall(PlayerEntity mexican, GameManipulator game) {
