@@ -19,6 +19,7 @@ public class Wall extends Placeable {
 
     /**
      * Creates a new wall.
+     * Modification of the constructor requires editing of the {@link crosstheborder.lib.enumeration.PlaceableType#getPlaceable(GameSettings)} method.
      *
      * @param settings The settings of the game.
      */
