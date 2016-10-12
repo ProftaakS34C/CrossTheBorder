@@ -40,6 +40,13 @@ public interface GameInterface {
     Team getMexico();
 
     /**
+     * Gets the remaining time remaining in seconds.
+     *
+     * @return The remaining time.
+     */
+    int getRemainingTime();
+
+    /**
      * Sends input to a specific player.
      *
      * @param md     The direction of the movement.
@@ -51,7 +58,7 @@ public interface GameInterface {
      * Adds a placeable to the specified location.
      *
      * @param location  The location the placeable should be located.
-     * @param placeable The type of placeable that should be placed.
+     * @param placeableType The type of placeable that should be placed.
      */
-    void addPlaceable(Point location, PlaceableType placeable);
+    void addPlaceable(Point location, PlaceableType placeableType);
 }
