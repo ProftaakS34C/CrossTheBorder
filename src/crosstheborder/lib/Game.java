@@ -1,8 +1,8 @@
 package crosstheborder.lib;
 
-import crosstheborder.lib.ability.Crawler;
 import crosstheborder.lib.enumeration.TeamName;
 import crosstheborder.lib.interfaces.GameManipulator;
+import crosstheborder.lib.interfaces.GameSettings;
 import crosstheborder.lib.interfaces.TileObject;
 import crosstheborder.lib.player.PlayerEntity;
 import crosstheborder.lib.player.Trump;
@@ -20,6 +20,7 @@ import java.util.ArrayList;
  * @author Oscar de Leeuw
  */
 public class Game implements GameManipulator {
+    private GameSettings settings;
 
     private ArrayList<Player> players;
     private Map map;
@@ -29,11 +30,11 @@ public class Game implements GameManipulator {
     /**
      * Constructor of Game class.
      */
-    public Game(String mapname) {
+    public Game(String mapName) {
         players = new ArrayList<>();
+        settings = new GameSettingsImpl(ServerSettings.getInstance().getServerTickRate());
 
-        // For now we use 20 as width and height, this can be changed if we want to.
-        map = MapLoader.getInstance().buildMap(mapname);
+        map = MapLoader.getInstance().buildMap(mapName);
         usa = new Team("USA", map.getUsaArea());
         mex = new Team("MEX", map.getMexicoArea());
     }
@@ -63,6 +64,15 @@ public class Game implements GameManipulator {
      */
     public Map getMap() {
         return this.map;
+    }
+
+    /**
+     * Gets the game settings for this game.
+     *
+     * @return The settings of this game.
+     */
+    public GameSettings getSettings() {
+        return this.settings;
     }
 
     /**
@@ -108,21 +118,20 @@ public class Game implements GameManipulator {
 
         //If trump does not exist make the user a trump.
         if (!players.stream().anyMatch(x -> x instanceof Trump)) {
-            player = new Trump(user.getName(), usa);
+            player = new Trump(user.getName(), usa, settings);
         }
         //If there are more USA members than mexicans, make a new mexican.
         else if (usa.getTeamMembers().size() > mex.getTeamMembers().size()) {
-            Ability ability = new Crawler(0); //TODO something with abilities.
             Point location = map.getFreePointInArea(mex.getTeamArea());
 
-            player = new Mexican(user.getName(), mex, ability);
+            player = new Mexican(user.getName(), mex, settings);
             changeTileObjectLocation((Mexican) player, location);
         }
         //Else make a new american.
         else {
             Point location = map.getFreePointInArea(usa.getTeamArea());
 
-            player = new BorderPatrol(user.getName(), usa);
+            player = new BorderPatrol(user.getName(), usa, settings);
             changeTileObjectLocation((BorderPatrol) player, location);
         }
 
@@ -132,7 +141,7 @@ public class Game implements GameManipulator {
     }
 
     /**
-     * Update is called every at tick of the server clock.
+     * Update is called at every tick of the server clock.
      */
     public void update(){
         //Update all the players.
@@ -187,7 +196,7 @@ public class Game implements GameManipulator {
         //Get a free point in the team area of the player.
         Point nextLocation = map.getFreePointInArea(player.getTeam().getTeamArea());
 
-        player.immobilize(10); //TODO Gather the respawn time from game settings.
+        player.immobilize(settings.getRespawnTime());
         changeTileObjectLocation(player, nextLocation);
     }
 

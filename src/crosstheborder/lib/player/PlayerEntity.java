@@ -5,6 +5,7 @@ import crosstheborder.lib.InputBuffer;
 import crosstheborder.lib.Player;
 import crosstheborder.lib.Team;
 import crosstheborder.lib.enumeration.MoveDirection;
+import crosstheborder.lib.interfaces.GameSettings;
 import crosstheborder.lib.interfaces.Painter;
 import crosstheborder.lib.interfaces.TileObject;
 
@@ -23,13 +24,14 @@ public abstract class PlayerEntity extends Player implements TileObject {
 
     /**
      * Abstract constructor that passes the name to the Player class.
-     * Calls the {@link Player#Player(String, Team)} constructor.
+     * Calls the {@link Player#Player(String, Team, GameSettings)} constructor.
      *
      * @param name The name of the player.
      * @param team The team this player is part of.
+     * @param settings The settings of the game.
      */
-    public PlayerEntity(String name, Team team) {
-        super(name, team);
+    public PlayerEntity(String name, Team team, GameSettings settings) {
+        super(name, team, settings);
         location = new Point();
         this.inputBuffer = new InputBuffer();
     }
@@ -93,7 +95,7 @@ public abstract class PlayerEntity extends Player implements TileObject {
      */
     public void immobilize(int seconds) {
         canMove = false;
-        canMoveTicks = SERVER_TICK_RATE * seconds;
+        canMoveTicks = serverTickRate * seconds;
     }
 
     @Override

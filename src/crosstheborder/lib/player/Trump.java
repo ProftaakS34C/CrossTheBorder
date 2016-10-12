@@ -2,6 +2,7 @@ package crosstheborder.lib.player;
 
 import crosstheborder.lib.Player;
 import crosstheborder.lib.Team;
+import crosstheborder.lib.interfaces.GameSettings;
 import crosstheborder.lib.tileobject.Placeable;
 import crosstheborder.lib.tileobject.placeable.Trap;
 import crosstheborder.lib.tileobject.placeable.Wall;
@@ -15,9 +16,9 @@ import crosstheborder.lib.tileobject.placeable.Wall;
  */
 public class Trump extends Player {
     //Determines how often Trump gets a wall in seconds.
-    private final int SECONDS_PER_WALL = 3; //TODO gather this from game settings.
+    private final int secondsPerWall;
     //Determines how often Trump gets a wall in seconds.
-    private final int SECONDS_PER_TRAP = 4; //TODO gather this from game settings.
+    private final int secondsPerTrap;
 
     private int wallAmount;
     private int trapAmount;
@@ -27,13 +28,17 @@ public class Trump extends Player {
 
     /**
      * Creates a new Trump object with the given name.
-     * Calls the {@link Player#Player(String, Team)} constructor.
+     * Calls the {@link Player#Player(String, Team, GameSettings)} constructor.
      *
      * @param name The name of the player.
      * @param team The team this player is part of.
      */
-    public Trump(String name, Team team) {
-        super(name, team);
+    public Trump(String name, Team team, GameSettings settings) {
+        super(name, team, settings);
+        secondsPerTrap = settings.getSecondsPerTrap();
+        secondsPerWall = settings.getSecondsPerWall();
+        wallAmount = settings.getInitialWallAmount();
+        trapAmount = settings.getInitialTrapAmount();
     }
 
     /**
@@ -83,12 +88,12 @@ public class Trump extends Player {
         wallTickTimer++;
         trapTickTimer++;
 
-        if (wallTickTimer >= SERVER_TICK_RATE * SECONDS_PER_WALL) {
+        if (wallTickTimer >= serverTickRate * secondsPerWall) {
             wallTickTimer = 0;
             wallAmount++;
         }
 
-        if (trapTickTimer >= SERVER_TICK_RATE * SECONDS_PER_TRAP) {
+        if (trapTickTimer >= serverTickRate * secondsPerTrap) {
             trapTickTimer = 0;
             trapAmount++;
         }
