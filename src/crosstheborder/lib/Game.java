@@ -1,9 +1,8 @@
 package crosstheborder.lib;
 
-import crosstheborder.lib.enumeration.TeamName;
-import crosstheborder.lib.interfaces.GameManipulator;
-import crosstheborder.lib.interfaces.GameSettings;
-import crosstheborder.lib.interfaces.TileObject;
+import crosstheborder.lib.enumeration.MoveDirection;
+import crosstheborder.lib.enumeration.PlaceableType;
+import crosstheborder.lib.interfaces.*;
 import crosstheborder.lib.player.PlayerEntity;
 import crosstheborder.lib.player.Trump;
 import crosstheborder.lib.player.entity.BorderPatrol;
@@ -12,6 +11,8 @@ import crosstheborder.lib.tileobject.Placeable;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This class makes an instance of Game.
@@ -19,16 +20,21 @@ import java.util.ArrayList;
  * @author guillaime
  * @author Oscar de Leeuw
  */
-public class Game implements GameManipulator {
+public class Game implements GameManipulator, GameInterface {
+    private static final Logger LOGGER = Logger.getLogger(Game.class.getName());
     private GameSettings settings;
 
-    private ArrayList<Player> players;
+    private Trump trump;
+    private ArrayList<PlayerEntity> players;
+
     private Map map;
     private Team usa;
     private Team mex;
 
     /**
      * Constructor of Game class.
+     *
+     * @param mapName The name of the map.
      */
     public Game(String mapName) {
         players = new ArrayList<>();
@@ -37,24 +43,6 @@ public class Game implements GameManipulator {
         map = MapLoader.getInstance().buildMap(mapName);
         usa = new Team("USA", map.getUsaArea());
         mex = new Team("MEX", map.getMexicoArea());
-    }
-
-    /**
-     * Get the score of USA
-     *
-     * @return score of USA
-     */
-    public int getScoreUSA(){
-        return usa.getScore();
-    }
-
-    /**
-     * Get the score of MEX
-     *
-     * @return score of MEX
-     */
-    public int getScoreMexico(){
-        return mex.getScore();
     }
 
     /**
@@ -73,23 +61,6 @@ public class Game implements GameManipulator {
      */
     public GameSettings getSettings() {
         return this.settings;
-    }
-
-    /**
-     * Gets a team from the game with a given team name.
-     *
-     * @param name The name of the team.
-     * @return A team object that represents the team.
-     */
-    public Team getTeam(TeamName name) {
-        switch (name) {
-            case USA:
-                return this.usa;
-            case MEX:
-                return this.mex;
-            default:
-                return null;
-        }
     }
 
     /**
@@ -117,27 +88,33 @@ public class Game implements GameManipulator {
         Player player;
 
         //If trump does not exist make the user a trump.
-        if (!players.stream().anyMatch(x -> x instanceof Trump)) {
-            player = new Trump(user.getName(), usa, settings);
-        }
-        //If there are more USA members than mexicans, make a new mexican.
-        else if (usa.getTeamMembers().size() > mex.getTeamMembers().size()) {
-            Point location = map.getFreePointInArea(mex.getTeamArea());
+        if (trump == null) {
+            trump = new Trump(user.getName(), usa, settings);
+            player = trump;
+        } else {
+            Team team;
+            PlayerEntity playerEntity;
+            //TODO: Make a player factory.
 
-            player = new Mexican(user.getName(), mex, settings);
-            changeTileObjectLocation((Mexican) player, location);
-        }
-        //Else make a new american.
-        else {
-            Point location = map.getFreePointInArea(usa.getTeamArea());
+            //Else make a new american.
+            if (usa.getTeamMembers().size() > mex.getTeamMembers().size()) {
+                team = mex;
+                playerEntity = new Mexican(user.getName(), team, settings);
+            }
 
-            player = new BorderPatrol(user.getName(), usa, settings);
-            changeTileObjectLocation((BorderPatrol) player, location);
+            //If there are more USA members than mexicans, make a new mexican.
+            else {
+                team = usa;
+                playerEntity = new BorderPatrol(user.getName(), team, settings);
+            }
+
+            player = playerEntity;
+            players.add(playerEntity);
+            Point location = map.getFreePointInArea(team.getTeamArea());
+            changeTileObjectLocation(playerEntity, location);
         }
 
-        //Assign the player object to the user.
         user.setPlayer(player);
-        players.add(player);
     }
 
     /**
@@ -161,21 +138,6 @@ public class Game implements GameManipulator {
             } else if (player instanceof Trump) {
                 ((Trump) player).tickPlaceableAmount();
             }
-        }
-    }
-
-    /**
-     * Adds a new Placeable to the map.
-     *
-     * @param location  The location the placeable should be placed.
-     * @param placeable The placeable that should be placed on the map.
-     */
-    public void addPlaceable(Point location, Placeable placeable) {
-        Trump trump = getTrump();
-
-        if (trump.canPlace(placeable) && map.canPlacePlaceable(location, placeable)) {
-            map.changeTileObject(location, placeable);
-            trump.decreasePlaceableAmount(placeable);
         }
     }
 
@@ -213,5 +175,46 @@ public class Game implements GameManipulator {
         map.changeTileObject(nextLocation, tileObject);
         //Move the location of the entity to the next location. Saves having to recreate a new point object every time.
         currentLocation.move(nextLocation.x, nextLocation.y);
+    }
+
+    @Override
+    public Camera getCamera(Point center, int tileWidth, int cameraWidth, int cameraHeight) {
+        return map.getCamera(center, tileWidth, cameraWidth, cameraHeight);
+    }
+
+    @Override
+    public Team getUsa() {
+        return this.usa;
+    }
+
+    @Override
+    public Team getMexico() {
+        return this.mex;
+    }
+
+    @Override
+    public int getRemainingTime() {
+        throw new UnsupportedOperationException(); //TODO add time limit to the game.
+    }
+
+    @Override
+    public void sendMoveInput(MoveDirection md, PlayerEntity player) {
+        if (players.contains(player)) {
+            player.pushInput(md);
+        }
+    }
+
+    @Override
+    public void addPlaceable(Point location, PlaceableType placeableType) {
+        try {
+            Placeable placeable = placeableType.getPlaceable(settings);
+
+            if (this.trump.canPlace(placeable) && map.canPlacePlaceable(location, placeable)) {
+                map.changeTileObject(location, placeable);
+                this.trump.decreasePlaceableAmount(placeable);
+            }
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, ex.toString(), ex);
+        }
     }
 }

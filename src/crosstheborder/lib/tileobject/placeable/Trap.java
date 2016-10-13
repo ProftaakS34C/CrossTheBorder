@@ -20,6 +20,7 @@ public class Trap extends Placeable {
 
     /**
      * Creates a new trap object.
+     * Modification of the constructor requires editing of the {@link crosstheborder.lib.enumeration.PlaceableType#getPlaceable(GameSettings)} method.
      *
      * @param settings The settings of the game.
      */
