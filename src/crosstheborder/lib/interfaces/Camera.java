@@ -16,6 +16,15 @@ public interface Camera {
     Point getCenterPoint();
 
     /**
+     * Gets the location on the map from the camera of a certain pixel.
+     *
+     * @param x The x coordinate of the pixel.
+     * @param y The y coordinate of the pixel.
+     * @return A point that represents the location on the map.
+     */
+    Point getLocationFromClick(int x, int y);
+
+    /**
      * Gets the width (and height) of a tile.
      *
      * @return The width of the tile in pixels.
