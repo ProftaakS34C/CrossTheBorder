@@ -56,8 +56,8 @@ public class GameTest {
         assertTrue(borderPatrol.getTeam().getTeamArea().contains(borderPatrol.getLocation()));
 
         //Check if the mexican and borderpatrol exist on the map.
-        assertEquals(game.getMap().getTileObject(mexican.getLocation()), mexican);
-        assertEquals(game.getMap().getTileObject(borderPatrol.getLocation()), borderPatrol);
+        assertEquals(game.getMap().getPlayerEntity(mexican.getLocation()), mexican);
+        assertEquals(game.getMap().getPlayerEntity(borderPatrol.getLocation()), borderPatrol);
 
         //Check whether the teams contain the correct team members.
         assertTrue(game.getUsa().getTeamMembers().contains(borderPatrol));
@@ -147,7 +147,7 @@ public class GameTest {
         //Move the player to an empty tile.
         game.movePlayerEntity(mexican, nextLocation1);
 
-        assertEquals(mexican, game.getMap().getTileObject(nextLocation1));
+        assertEquals(mexican, game.getMap().getPlayerEntity(nextLocation1));
         assertFalse(game.getMap().hasTileObject(oldLocation));
         assertEquals(mexican.getLocation().x, nextLocation1.x);
         assertEquals(mexican.getLocation().y, nextLocation1.y);
@@ -161,8 +161,8 @@ public class GameTest {
         game.movePlayerEntity(mexican, nextLocation2);
 
         //Mexican should not have moved.
-        assertEquals(mexican, game.getMap().getTileObject(mexican.getLocation()));
-        assertEquals(mexican, game.getMap().getTileObject(nextLocation1));
+        assertEquals(mexican, game.getMap().getPlayerEntity(mexican.getLocation()));
+        assertEquals(mexican, game.getMap().getPlayerEntity(nextLocation1));
         assertEquals(obstacle, game.getMap().getTileObject(nextLocation2));
     }
 
@@ -180,14 +180,12 @@ public class GameTest {
     public void increaseScore() throws Exception {
         int initUsaScore = game.getUsa().getScore();
         int initMexScore = game.getUsa().getScore();
-        int amount1 = 1;
-        int amount2 = 3;
 
-        game.increaseScore(borderPatrol.getTeam(), amount1);
-        game.increaseScore(mexican.getTeam(), amount2);
+        game.increaseScore(borderPatrol.getTeam());
+        game.increaseScore(mexican.getTeam());
 
-        assertEquals(initUsaScore + amount1, game.getUsa().getScore());
-        assertEquals(initMexScore + amount2, game.getMexico().getScore());
+        assertEquals(initUsaScore + 1, game.getUsa().getScore());
+        assertEquals(initMexScore + 1, game.getMexico().getScore());
     }
 
     @Test
@@ -206,9 +204,9 @@ public class GameTest {
         Point oldLocation = new Point(playerLocation.x, playerLocation.y);
         Point nextLocation = new Point(playerLocation.x + 1, playerLocation.y);
 
-        game.changeTileObjectLocation(mexican, nextLocation);
+        game.changePlayerEntityLocation(mexican, nextLocation);
 
-        assertEquals(mexican, game.getMap().getTileObject(nextLocation));
+        assertEquals(mexican, game.getMap().getPlayerEntity(nextLocation));
         assertFalse(game.getMap().hasTileObject(oldLocation));
         assertEquals(mexican.getLocation().x, nextLocation.x);
         assertEquals(mexican.getLocation().y, nextLocation.y);

@@ -16,8 +16,9 @@ public interface TileObject extends Drawable {
      *
      * @param player The {@link PlayerEntity} that is interacting with the TileObject.
      * @param game A {@link GameManipulator} on which interaction results can be executed.
+     * @return A boolean representing whether further movement/interaction should be evaluated.
      */
-    void interactWith(PlayerEntity player, GameManipulator game);
+    boolean interactWith(PlayerEntity player, GameManipulator game);
 
     /**
      * Gets the location of the {@link TileObject}.

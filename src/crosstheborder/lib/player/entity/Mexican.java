@@ -1,6 +1,7 @@
 package crosstheborder.lib.player.entity;
 
 import crosstheborder.lib.Team;
+import crosstheborder.lib.enumeration.Country;
 import crosstheborder.lib.interfaces.GameManipulator;
 import crosstheborder.lib.interfaces.GameSettings;
 import crosstheborder.lib.player.PlayerEntity;
@@ -67,15 +68,27 @@ public class Mexican extends PlayerEntity {
      * </p>
      * Calls the following methods from GameManipulator:
      * <ul>
-     * <li>Calls {@link GameManipulator#increaseScore(Team, int)} when the other entity is a BorderPatrol.</li>
+     * <li>Calls {@link GameManipulator#increaseScore(Team)} when the other entity is a BorderPatrol.</li>
      * <li>Calls {@link GameManipulator#respawnPlayer(PlayerEntity)} with itself when the other entity is a BorderPatrol.</li>
      * </ul>
      */
     @Override
-    public void interactWith(PlayerEntity player, GameManipulator game) {
+    public boolean interactWith(PlayerEntity player, GameManipulator game) {
         if (player instanceof BorderPatrol) {
-            game.increaseScore(player.getTeam(), 1); //TODO Let the game decide the amount.
+            game.increaseScore(player.getTeam());
             game.respawnPlayer(this);
         }
+        return false;
+    }
+
+    @Override
+    public boolean interactWith(Country country, GameManipulator game) {
+        switch (country) {
+            case USA:
+                game.increaseScore(this.getTeam());
+                game.respawnPlayer(this);
+                return false;
+        }
+        return true;
     }
 }
