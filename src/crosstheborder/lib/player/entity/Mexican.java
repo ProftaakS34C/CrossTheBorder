@@ -67,14 +67,14 @@ public class Mexican extends PlayerEntity {
      * </p>
      * Calls the following methods from GameManipulator:
      * <ul>
-     * <li>Calls {@link GameManipulator#increaseScore(Team, int)} when the other entity is a BorderPatrol.</li>
+     * <li>Calls {@link GameManipulator#increaseScore(Team)} when the other entity is a BorderPatrol.</li>
      * <li>Calls {@link GameManipulator#respawnPlayer(PlayerEntity)} with itself when the other entity is a BorderPatrol.</li>
      * </ul>
      */
     @Override
     public void interactWith(PlayerEntity player, GameManipulator game) {
         if (player instanceof BorderPatrol) {
-            game.increaseScore(player.getTeam(), 1); //TODO Let the game decide the amount.
+            game.increaseScore(player.getTeam());
             game.respawnPlayer(this);
         }
     }

@@ -15,6 +15,7 @@ import java.util.List;
 public class Team {
     private TeamName name;
     private int score;
+    private int scoreIncrease; //Amount of points to increase each time increaseScore is called.
     private List<Player> teamMembers = new ArrayList();
     private Rectangle teamArea;
 
@@ -22,11 +23,14 @@ public class Team {
      * Constructor of Team class.
      *
      * @param name Name of the team
+     * @param scoreIncrease The amount the score of this team is increased by after each call of increaseScore.
+     * @param teamArea The area of this team.
      */
-    public Team(String name, Rectangle teamArea) {
+    public Team(String name, Rectangle teamArea, int scoreIncrease) {
         this.name = TeamName.valueOf(name);
         this.score = 0;
         this.teamArea = teamArea;
+        this.scoreIncrease = scoreIncrease;
 
     }
 
@@ -59,11 +63,10 @@ public class Team {
     }
 
     /**
-     * Adds the given amount to the team score.
-     * @param amount The amount to increase the score with.
+     * Increases the score of this time.
      */
-    public void increaseScore(int amount) {
-        this.score += amount;
+    public void increaseScore() {
+        this.score += scoreIncrease;
     }
 
     /**

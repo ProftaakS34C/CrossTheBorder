@@ -41,8 +41,8 @@ public class Game implements GameManipulator, GameInterface {
         settings = new GameSettingsImpl(ServerSettings.getInstance().getServerTickRate());
 
         map = MapLoader.getInstance().buildMap(mapName);
-        usa = new Team("USA", map.getUsaArea());
-        mex = new Team("MEX", map.getMexicoArea());
+        usa = new Team("USA", map.getUsaArea(), settings.getUsaScoringModifier());
+        mex = new Team("MEX", map.getMexicoArea(), settings.getMexicanScoringModifier());
     }
 
     /**
@@ -171,8 +171,8 @@ public class Game implements GameManipulator, GameInterface {
     }
 
     @Override
-    public void increaseScore(Team team, int amount) {
-        team.increaseScore(amount);
+    public void increaseScore(Team team) {
+        team.increaseScore();
     }
 
     @Override

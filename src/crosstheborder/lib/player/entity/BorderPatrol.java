@@ -36,7 +36,7 @@ public class BorderPatrol extends PlayerEntity {
      * </p>
      * Calls the following methods from GameManipulator:
      * <ul>
-     * <li>{@link GameManipulator#increaseScore(Team, int)} when the other entity is a Mexican.</li>
+     * <li>{@link GameManipulator#increaseScore(Team)} when the other entity is a Mexican.</li>
      * <li>{@link GameManipulator#respawnPlayer(PlayerEntity)} with the Mexican when the other entity is a Mexican.</li>
      * <li>{@link GameManipulator#changePlayerEntityLocation(PlayerEntity, Point)} With itself to the location of the Mexican.</li>
      * </ul>
@@ -44,7 +44,7 @@ public class BorderPatrol extends PlayerEntity {
     @Override
     public void interactWith(PlayerEntity player, GameManipulator game) {
         if (player instanceof Mexican) {
-            game.increaseScore(getTeam(), 1); //TODO Let the score addition be decided by the game.
+            game.increaseScore(getTeam());
             game.respawnPlayer(player);
             game.changePlayerEntityLocation(this, player.getLocation());
         }

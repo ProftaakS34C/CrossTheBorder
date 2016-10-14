@@ -24,9 +24,8 @@ public interface GameManipulator {
      * Amount can be negative.
      *
      * @param team   The {@link Team} that should have it's score increased.
-     * @param amount The amount by which the score should be increased.
      */
-    void increaseScore(Team team, int amount);
+    void increaseScore(Team team);
 
     /**
      * Changes the location of a PlayerEntity to new location.
