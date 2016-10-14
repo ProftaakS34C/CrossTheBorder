@@ -147,6 +147,10 @@ public class Game implements GameManipulator, GameInterface {
     public void movePlayerEntity(PlayerEntity player, Point nextLocation) {
         boolean canContinue = true;
 
+        //Check whether there's a PlayerEntity at the next location.
+        if (canContinue && map.hasTileObject(nextLocation)) {
+            canContinue = map.getTileObject(nextLocation).interactWith(player, this);
+        }
         //Check whether the movement would enter a country.
         if (canContinue && map.hasCountry(nextLocation)) {
             canContinue = player.interactWith(map.getCountry(nextLocation), this);
@@ -154,10 +158,6 @@ public class Game implements GameManipulator, GameInterface {
         //Check whether there's a tileObject at the next location.
         if (canContinue && map.hasPlayerEntity(nextLocation)) {
             canContinue = map.getPlayerEntity(nextLocation).interactWith(player, this);
-        }
-        //Check whether there's a PlayerEntity at the next location.
-        if (canContinue && map.hasTileObject(nextLocation)) {
-            canContinue = map.getTileObject(nextLocation).interactWith(player, this);
         }
         //If the tile is free just move the entity.
         if (canContinue) {
