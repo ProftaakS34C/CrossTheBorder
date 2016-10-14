@@ -29,14 +29,31 @@ public interface GameManipulator {
     void increaseScore(Team team, int amount);
 
     /**
-     * Changes the location of a {@link TileObject} to new location.
+     * Changes the location of a PlayerEntity to new location.
+     * Will not execute if the location is not on the map.
+     * Will remove the PlayerEntity at the newLocation if there is one present.
+     *
+     * @param entity  The PlayerEntity that should be moved.
+     * @param newLocation The new location of the tileObject.
+     */
+    void changePlayerEntityLocation(PlayerEntity entity, Point newLocation);
+
+    /**
+     * Changes the location of a TileObject to new location.
      * Will not execute if the location is not on the map.
      * Will remove the TileObject at the newLocation if there is one present.
      *
-     * @param tileObject  The {@link TileObject} that should be moved.
+     * @param object      The TileObject that should be moved.
      * @param newLocation The new location of the tileObject.
      */
-    void changeTileObjectLocation(TileObject tileObject, Point newLocation);
+    void changeTileObjectLocation(TileObject object, Point newLocation);
+
+    /**
+     * Removes a TileObject from the game.
+     *
+     * @param tileObject The TileObject that should be removed.
+     */
+    void removeTileObject(TileObject tileObject);
 
     /**
      * Moves a player entity to the given location if possible.

@@ -4,6 +4,7 @@ import crosstheborder.lib.enumeration.TileType;
 import crosstheborder.lib.interfaces.Drawable;
 import crosstheborder.lib.interfaces.Painter;
 import crosstheborder.lib.interfaces.TileObject;
+import crosstheborder.lib.player.PlayerEntity;
 
 import java.awt.*;
 import java.io.File;
@@ -17,6 +18,7 @@ import java.io.File;
  */
 public class Tile implements Drawable {
     private TileObject tileObject;
+    private PlayerEntity playerEntity;
     private TileType type;
 
     /**
@@ -34,7 +36,7 @@ public class Tile implements Drawable {
      * @return True if the tile has a {@link TileObject}. False if it doesn't have a {@link TileObject}.
      */
     public boolean hasTileObject() {
-        return tileObject != null;
+        return this.tileObject != null;
     }
 
     /**
@@ -55,6 +57,33 @@ public class Tile implements Drawable {
         this.tileObject = tileObject;
     }
 
+    /**
+     * Returns whether this tile has a PlayerEntity.
+     *
+     * @return A boolean that indicates whether this tile has a PlayerEntity.
+     */
+    public boolean hasPlayerEntity() {
+        return this.playerEntity != null;
+    }
+
+    /**
+     * Gets the PlayerEntity that lives on this tile.
+     *
+     * @return The PlayerEntity object.
+     */
+    public PlayerEntity getPlayerEntity() {
+        return this.playerEntity;
+    }
+
+    /**
+     * Sets the PlayerEntity of this tile.
+     *
+     * @param playerEntity The PlayerEntity that should occupy this tile.
+     */
+    public void setPlayerEntity(PlayerEntity playerEntity) {
+        this.playerEntity = playerEntity;
+    }
+
     @Override
     public void draw(Painter painter, Point location, int tileWidth) {
         File file = ImageFinder.getInstance().getImage(type);
@@ -62,6 +91,9 @@ public class Tile implements Drawable {
 
         if (hasTileObject()) {
             tileObject.draw(painter, location, tileWidth);
+        }
+        if (hasPlayerEntity()) {
+            playerEntity.draw(painter, location, tileWidth);
         }
     }
 }

@@ -113,7 +113,7 @@ public class Game implements GameManipulator, GameInterface {
             player = playerEntity;
             players.add(playerEntity);
             Point location = map.getFreePointInArea(team.getTeamArea());
-            changeTileObjectLocation(playerEntity, location);
+            changePlayerEntityLocation(playerEntity, location);
         }
 
         user.setPlayer(player);
@@ -149,9 +149,15 @@ public class Game implements GameManipulator, GameInterface {
         if (map.hasTileObject(nextLocation)) {
             map.getTileObject(nextLocation).interactWith(player, this);
         }
-        //If there is no tileObject move the player.
-        else {
-            changeTileObjectLocation(player, nextLocation);
+
+        //Check whether there's a PlayerEntity at the next location.
+        if (map.hasPlayerEntity(nextLocation)) {
+            map.getPlayerEntity(nextLocation).interactWith(player, this);
+        }
+
+        //If the tile is free just move the entity.
+        if (!map.hasTileObject(nextLocation) && !map.hasPlayerEntity(nextLocation)) {
+            changePlayerEntityLocation(player, nextLocation);
         }
     }
 
@@ -161,7 +167,7 @@ public class Game implements GameManipulator, GameInterface {
         Point nextLocation = map.getFreePointInArea(player.getTeam().getTeamArea());
 
         player.immobilize(settings.getRespawnTime());
-        changeTileObjectLocation(player, nextLocation);
+        changePlayerEntityLocation(player, nextLocation);
     }
 
     @Override
@@ -170,13 +176,28 @@ public class Game implements GameManipulator, GameInterface {
     }
 
     @Override
-    public void changeTileObjectLocation(TileObject tileObject, Point nextLocation) {
-        Point currentLocation = tileObject.getLocation();
+    public void changePlayerEntityLocation(PlayerEntity entity, Point nextLocation) {
+        Point currentLocation = entity.getLocation();
 
-        map.changeTileObject(currentLocation, null);
-        map.changeTileObject(nextLocation, tileObject);
+        map.changePlayerEntity(currentLocation, null);
+        map.changePlayerEntity(nextLocation, entity);
         //Move the location of the entity to the next location. Saves having to recreate a new point object every time.
         currentLocation.move(nextLocation.x, nextLocation.y);
+    }
+
+    @Override
+    public void changeTileObjectLocation(TileObject object, Point nextLocation) {
+        Point currentLocation = object.getLocation();
+
+        map.changeTileObject(currentLocation, null);
+        map.changeTileObject(nextLocation, object);
+        //Move the location of the entity to the next location. Saves having to recreate a new point object every time.
+        currentLocation.move(nextLocation.x, nextLocation.y);
+    }
+
+    @Override
+    public void removeTileObject(TileObject tileObject) {
+        map.changeTileObject(tileObject.getLocation(), null);
     }
 
     @Override

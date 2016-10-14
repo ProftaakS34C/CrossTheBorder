@@ -17,6 +17,7 @@ import java.awt.*;
 public class Trap extends Placeable {
     //The time the trap will immobilize a Mexican in seconds.
     private int trapTime;
+    private int trapUses;
 
     /**
      * Creates a new trap object.
@@ -26,6 +27,7 @@ public class Trap extends Placeable {
      */
     public Trap(GameSettings settings) {
         this.trapTime = settings.getDefaultTrapTime();
+        this.trapUses = 1; //TODO set this in gameSettings.
     }
 
     /**
@@ -36,7 +38,8 @@ public class Trap extends Placeable {
      * </p>
      * Calls the following methods from GameManipulator:
      * <ul>
-     *     <li>Calls {@link GameManipulator#changeTileObjectLocation(TileObject, Point)} when the PlayerEntity is a Mexican.</li>
+     *     <li>Calls {@link GameManipulator#changePlayerEntityLocation(PlayerEntity, Point)} when the PlayerEntity is a Mexican.</li>
+     *     <li>Calls {@link GameManipulator#removeTileObject(TileObject)} with itself if the trap has no uses left.</li>
      * </ul>
      */
     @Override
@@ -44,11 +47,14 @@ public class Trap extends Placeable {
         //Trap the player if it is a mexican.
         if (player instanceof Mexican) {
             player.immobilize(trapTime);
-            //Removes the trap and relocates the player to the location of the trap.
-            game.changeTileObjectLocation(player, this.getLocation());
+            trapUses--;
         }
 
+        if (trapUses == 0) {
+            game.removeTileObject(this);
+        }
 
+        game.changePlayerEntityLocation(player, this.getLocation());
     }
 
     /**

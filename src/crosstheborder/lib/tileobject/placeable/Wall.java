@@ -42,7 +42,7 @@ public class Wall extends Placeable {
      * </p>
      * Calls the following methods from GameManipulator:
      * <ul>
-     *     <li>Calls {@link GameManipulator#changeTileObjectLocation(TileObject, Point)} when the PlayerEntity is a Mexican and the wall in successfully climbed.</li>
+     *     <li>Calls {@link GameManipulator#changePlayerEntityLocation(TileObject, Point)} when the PlayerEntity is a Mexican and the wall in successfully climbed.</li>
      * </ul>
      */
     @Override

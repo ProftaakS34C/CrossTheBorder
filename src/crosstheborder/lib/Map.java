@@ -2,6 +2,7 @@ package crosstheborder.lib;
 
 import crosstheborder.lib.interfaces.Camera;
 import crosstheborder.lib.interfaces.TileObject;
+import crosstheborder.lib.player.PlayerEntity;
 import crosstheborder.lib.tileobject.Placeable;
 
 import java.awt.*;
@@ -135,6 +136,37 @@ public class Map {
     }
 
     /**
+     * Checks whether a given location contains a PlayerEntity.
+     *
+     * @param location The location of the tile that will be checked.
+     * @return A boolean that represents whether a PlayerEntity is present on the tile.
+     */
+    public boolean hasPlayerEntity(Point location) {
+        return getTile(location).hasPlayerEntity();
+    }
+
+    /**
+     * Gets the PlayerEntity at a given location.
+     * Will throw a null reference exception when the tile has no PlayerEntity.
+     *
+     * @param location The location of the tile to get the PlayerEntity from.
+     * @return The PlayerEntity object that belongs to the tile.
+     */
+    public PlayerEntity getPlayerEntity(Point location) {
+        return getTile(location).getPlayerEntity();
+    }
+
+    /**
+     * Changes the PlayerEntity of the given location.
+     *
+     * @param entity   The PlayerEntity that should be placed upon the tile.
+     * @param location The location of the tile.
+     */
+    public void changePlayerEntity(Point location, PlayerEntity entity) {
+        getTile(location).setPlayerEntity(entity);
+    }
+
+    /**
      * Gets a point devoid of a TileObject in a given area.
      * Can be an infinite loop.
      *
@@ -149,7 +181,7 @@ public class Map {
         Point nextLocation = new Point(x, y);
 
         //If the tile is occupied find a new location.
-        if (hasTileObject(nextLocation)) {
+        if (hasTileObject(nextLocation) || hasPlayerEntity(nextLocation)) {
             return getFreePointInArea(area);
         } else {
             return nextLocation;

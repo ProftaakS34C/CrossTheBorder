@@ -3,7 +3,6 @@ package crosstheborder.lib.player.entity;
 import crosstheborder.lib.Team;
 import crosstheborder.lib.interfaces.GameManipulator;
 import crosstheborder.lib.interfaces.GameSettings;
-import crosstheborder.lib.interfaces.TileObject;
 import crosstheborder.lib.player.PlayerEntity;
 
 import java.awt.*;
@@ -39,7 +38,7 @@ public class BorderPatrol extends PlayerEntity {
      * <ul>
      * <li>{@link GameManipulator#increaseScore(Team, int)} when the other entity is a Mexican.</li>
      * <li>{@link GameManipulator#respawnPlayer(PlayerEntity)} with the Mexican when the other entity is a Mexican.</li>
-     * <li>{@link GameManipulator#changeTileObjectLocation(TileObject, Point)} With itself to the location of the Mexican.</li>
+     * <li>{@link GameManipulator#changePlayerEntityLocation(PlayerEntity, Point)} With itself to the location of the Mexican.</li>
      * </ul>
      */
     @Override
@@ -47,7 +46,7 @@ public class BorderPatrol extends PlayerEntity {
         if (player instanceof Mexican) {
             game.increaseScore(getTeam(), 1); //TODO Let the score addition be decided by the game.
             game.respawnPlayer(player);
-            game.changeTileObjectLocation(this, player.getLocation());
+            game.changePlayerEntityLocation(this, player.getLocation());
         }
     }
 }
