@@ -1,5 +1,6 @@
 package crosstheborder.lib;
 
+import crosstheborder.lib.enumeration.Country;
 import crosstheborder.lib.enumeration.TileType;
 import crosstheborder.lib.interfaces.Drawable;
 import crosstheborder.lib.interfaces.Painter;
@@ -20,14 +21,26 @@ public class Tile implements Drawable {
     private TileObject tileObject;
     private PlayerEntity playerEntity;
     private TileType type;
+    private Country country;
 
     /**
      * Creates a new tile object with the given location.
      *
      * @param type The type of the tile.
+     * @param country The country of this tile.
      */
-    public Tile(TileType type) {
+    public Tile(TileType type, Country country) {
         this.type = type;
+        this.country = country;
+    }
+
+    /**
+     * Gets the country that this tile belongs to.
+     *
+     * @return
+     */
+    public Country getCountry() {
+        return this.country;
     }
 
     /**
@@ -88,6 +101,8 @@ public class Tile implements Drawable {
     public void draw(Painter painter, Point location, int tileWidth) {
         File file = ImageFinder.getInstance().getImage(type);
         painter.drawImage(file, location, tileWidth, tileWidth);
+
+        country.draw(painter, location, tileWidth);
 
         if (hasTileObject()) {
             tileObject.draw(painter, location, tileWidth);

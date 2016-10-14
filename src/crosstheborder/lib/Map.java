@@ -1,5 +1,6 @@
 package crosstheborder.lib;
 
+import crosstheborder.lib.enumeration.Country;
 import crosstheborder.lib.interfaces.Camera;
 import crosstheborder.lib.interfaces.TileObject;
 import crosstheborder.lib.player.PlayerEntity;
@@ -104,6 +105,26 @@ public class Map {
             LOGGER.log(Level.SEVERE, e.toString(), e);
         }
         return null;
+    }
+
+    /**
+     * Gets whether the given location is part of a {@link Country}.
+     *
+     * @param location The location of the tile.
+     * @return A boolean that indicates whether is part of a country.
+     */
+    public boolean hasCountry(Point location) {
+        return getTile(location).getCountry() != Country.NONE;
+    }
+
+    /**
+     * Gets the country of a given location.
+     *
+     * @param location The location of the tile.
+     * @return The country of the tile.
+     */
+    public Country getCountry(Point location) {
+        return getTile(location).getCountry();
     }
 
     /**
