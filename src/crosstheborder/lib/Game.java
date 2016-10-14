@@ -153,11 +153,11 @@ public class Game implements GameManipulator, GameInterface {
         }
         //Check whether there's a tileObject at the next location.
         if (canContinue && map.hasPlayerEntity(nextLocation)) {
-            map.getPlayerEntity(nextLocation).interactWith(player, this);
+            canContinue = map.getPlayerEntity(nextLocation).interactWith(player, this);
         }
         //Check whether there's a PlayerEntity at the next location.
         if (canContinue && map.hasTileObject(nextLocation)) {
-            map.getTileObject(nextLocation).interactWith(player, this);
+            canContinue = map.getTileObject(nextLocation).interactWith(player, this);
         }
         //If the tile is free just move the entity.
         if (canContinue) {

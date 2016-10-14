@@ -43,18 +43,17 @@ public class Trap extends Placeable {
      * </ul>
      */
     @Override
-    public void interactWith(PlayerEntity player, GameManipulator game) {
+    public boolean interactWith(PlayerEntity player, GameManipulator game) {
         //Trap the player if it is a mexican.
         if (player instanceof Mexican) {
             player.immobilize(trapTime);
+
             trapUses--;
+            if (trapUses == 0) {
+                game.removeTileObject(this);
+            }
         }
-
-        if (trapUses == 0) {
-            game.removeTileObject(this);
-        }
-
-        game.changePlayerEntityLocation(player, this.getLocation());
+        return true;
     }
 
     /**

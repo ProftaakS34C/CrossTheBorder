@@ -73,11 +73,12 @@ public class Mexican extends PlayerEntity {
      * </ul>
      */
     @Override
-    public void interactWith(PlayerEntity player, GameManipulator game) {
+    public boolean interactWith(PlayerEntity player, GameManipulator game) {
         if (player instanceof BorderPatrol) {
             game.increaseScore(player.getTeam());
             game.respawnPlayer(this);
         }
+        return false;
     }
 
     @Override

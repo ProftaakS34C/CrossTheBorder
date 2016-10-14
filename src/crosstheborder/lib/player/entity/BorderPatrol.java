@@ -43,12 +43,13 @@ public class BorderPatrol extends PlayerEntity {
      * </ul>
      */
     @Override
-    public void interactWith(PlayerEntity player, GameManipulator game) {
+    public boolean interactWith(PlayerEntity player, GameManipulator game) {
         if (player instanceof Mexican) {
             game.increaseScore(getTeam());
             game.respawnPlayer(player);
             game.changePlayerEntityLocation(this, player.getLocation());
         }
+        return false;
     }
 
     @Override

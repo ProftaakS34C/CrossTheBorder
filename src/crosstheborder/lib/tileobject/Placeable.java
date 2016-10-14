@@ -23,7 +23,7 @@ public abstract class Placeable implements TileObject {
         this.location = new Point();
     }
 
-    public abstract void interactWith(PlayerEntity player, GameManipulator game);
+    public abstract boolean interactWith(PlayerEntity player, GameManipulator game);
 
     /**
      * Checks what the placement rules are of a placeable.

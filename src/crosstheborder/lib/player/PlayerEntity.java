@@ -103,8 +103,9 @@ public abstract class PlayerEntity extends Player implements Drawable {
      *
      * @param player The other PlayerEntity that is interacting with this playerEntity.
      * @param game   A {@link GameManipulator} on which interaction results can be executed.
+     * @return A boolean representing whether further movement/interaction should be evaluated.
      */
-    public abstract void interactWith(PlayerEntity player, GameManipulator game);
+    public abstract boolean interactWith(PlayerEntity player, GameManipulator game);
 
     /**
      * Method for handling the interaction between a PlayerEntity and a country.

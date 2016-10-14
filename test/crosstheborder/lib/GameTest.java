@@ -180,14 +180,12 @@ public class GameTest {
     public void increaseScore() throws Exception {
         int initUsaScore = game.getUsa().getScore();
         int initMexScore = game.getUsa().getScore();
-        int amount1 = 1;
-        int amount2 = 3;
 
-        game.increaseScore(borderPatrol.getTeam(), amount1);
-        game.increaseScore(mexican.getTeam(), amount2);
+        game.increaseScore(borderPatrol.getTeam());
+        game.increaseScore(mexican.getTeam());
 
-        assertEquals(initUsaScore + amount1, game.getUsa().getScore());
-        assertEquals(initMexScore + amount2, game.getMexico().getScore());
+        assertEquals(initUsaScore + 1, game.getUsa().getScore());
+        assertEquals(initMexScore + 1, game.getMexico().getScore());
     }
 
     @Test
