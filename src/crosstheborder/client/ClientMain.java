@@ -14,10 +14,13 @@ import crosstheborder.client.controller.GameScreenController;
 import crosstheborder.client.controller.LayoutController;
 import crosstheborder.client.controller.LobbyMenuController;
 import crosstheborder.client.controller.MainMenuController;
+import crosstheborder.lib.interfaces.Painter;
+import crosstheborder.lib.player.PlayerEntity;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
@@ -42,6 +45,7 @@ public class ClientMain extends Application {
     private BorderPane root;
     private User user;
     private Lobby lobby;
+    private Painter painter;
 
     /**
      * The main method for the class
@@ -60,6 +64,7 @@ public class ClientMain extends Application {
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
+        //todo make painter implementation
 
         initLayout();
         String userName = askForUserName();
@@ -237,5 +242,10 @@ public class ClientMain extends Application {
 
     public int getMaxPlayers() {
         return lobby.getMaxPlayers();
+    }
+
+    public void draw(GraphicsContext gc) {
+        PlayerEntity player = (PlayerEntity) user.getPlayer();
+        lobby.getGame().getMap().getCamera(player.getLocation(),20,800,600).draw(painter);
     }
 }

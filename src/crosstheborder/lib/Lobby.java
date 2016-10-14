@@ -131,6 +131,8 @@ public class Lobby {
      */
     public void startGame(String mapName) {
         Game game = new Game(mapName);
-
+        for(User u : users){
+            game.addPlayer(u);
+        }
     }
 }

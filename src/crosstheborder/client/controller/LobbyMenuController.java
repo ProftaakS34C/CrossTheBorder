@@ -95,7 +95,7 @@ public class LobbyMenuController {
         //TODO POLISH change into choicebox with all available maps
         String mapnaam = mapNameInputTextField.getText();
         instance.getLobby().startGame(mapnaam);
-        throw new UnsupportedOperationException();
+        instance.showGameScreen();
     }
     @FXML
     private void addAiButton_OnAction(){
