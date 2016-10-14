@@ -90,6 +90,8 @@ public class Game implements GameManipulator, GameInterface {
         //If trump does not exist make the user a trump.
         if (trump == null) {
             trump = new Trump(user.getName(), usa, settings);
+            //Little hackish to set the camera location somewhere in the USA area.
+            trump.getCameraLocation().setLocation(map.getFreePointInArea(usa.getTeamArea()));
             player = trump;
         } else {
             Team team;

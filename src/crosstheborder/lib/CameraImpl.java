@@ -19,6 +19,8 @@ public class CameraImpl implements Camera {
 
     private int xTiles;
     private int yTiles;
+    private int xStart;
+    private int yStart;
 
     /**
      * Creates a new camera.
@@ -38,6 +40,16 @@ public class CameraImpl implements Camera {
 
         this.xTiles = (int) Math.ceil((double) cameraWidth / tileWidth); //The amount of tiles along the x-axis.
         this.yTiles = (int) Math.ceil((double) cameraHeight / tileWidth); //The amount of tiles along the y-axis.
+        this.xStart = center.x - xTiles / 2; //The column of the left most tiles.
+        this.yStart = center.y - yTiles / 2; //The row of the top most tiles.
+    }
+
+    @Override
+    public Point getLocationFromClick(int x, int y) {
+        int xOffset = x / tileWidth;
+        int yOffset = y / tileWidth;
+
+        return new Point(xStart + xOffset, yStart + yOffset);
     }
 
     @Override
@@ -74,11 +86,14 @@ public class CameraImpl implements Camera {
     public void draw(Painter painter) {
         Point location = new Point(0, 0); //The current pixel location at which the image should be drawn.
 
-        for (int x = center.x - xTiles / 2; x < x + xTiles && x < tiles.length; x++) {
-            for (int y = center.y - yTiles / 2; y < y + yTiles && y < tiles[x].length; y++) {
+        for (int x = xStart; x < x + xTiles && x < tiles.length; x++) {
+            for (int y = yStart; y < y + yTiles && y < tiles[x].length; y++) {
+                //Draw the tile at the current location.
                 tiles[x][y].draw(painter, location, tileWidth);
+                //Move the draw location tileWidth pixels down.
                 location.translate(0, tileWidth);
             }
+            //Move the draw location back to the top and tileWidth pixels to the right.
             location.translate(tileWidth, -cameraHeight);
         }
     }

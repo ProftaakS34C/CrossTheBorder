@@ -98,6 +98,24 @@ public abstract class PlayerEntity extends Player implements TileObject {
         canMoveTicks = serverTickRate * seconds;
     }
 
+    /**
+     * {@inheritDoc}
+     * Returns a clone of the location of the object.
+     */
+    @Override
+    public Point getCameraLocation() {
+        return (Point) this.location.clone();
+    }
+
+    /**
+     * {@inheritDoc}
+     * Is intentionally left blank. Camera movement for player entities is not supported.
+     */
+    @Override
+    public void moveCameraLocation(MoveDirection md) {
+        //Intentionally left blank. Cannot support moving the camera due to the way player location is updated.
+    }
+
     @Override
     public void draw(Painter painter, Point location, int tileWidth) {
         painter.drawImage(ImageFinder.getInstance().getImage(this), location, tileWidth, tileWidth);

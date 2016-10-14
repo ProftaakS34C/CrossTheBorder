@@ -2,10 +2,13 @@ package crosstheborder.lib.player;
 
 import crosstheborder.lib.Player;
 import crosstheborder.lib.Team;
+import crosstheborder.lib.enumeration.MoveDirection;
 import crosstheborder.lib.interfaces.GameSettings;
 import crosstheborder.lib.tileobject.Placeable;
 import crosstheborder.lib.tileobject.placeable.Trap;
 import crosstheborder.lib.tileobject.placeable.Wall;
+
+import java.awt.*;
 
 /**
  *  Represents the Trump player object.
@@ -39,6 +42,26 @@ public class Trump extends Player {
         secondsPerWall = settings.getSecondsPerWall();
         wallAmount = settings.getInitialWallAmount();
         trapAmount = settings.getInitialTrapAmount();
+        cameraLocation = new Point(0, 0);
+    }
+
+    /**
+     * {@inheritDoc}
+     * Gets the cameraLocation object of Player.
+     */
+    @Override
+    public Point getCameraLocation() {
+        return this.cameraLocation;
+    }
+
+    /**
+     * {@inheritDoc}
+     * Moves the cameraLocation object in a certain direction.
+     */
+    @Override
+    public void moveCameraLocation(MoveDirection md) {
+        Point translation = md.getTranslation();
+        this.cameraLocation.translate(translation.x, translation.y);
     }
 
     /**
