@@ -1,6 +1,9 @@
 package crosstheborder.lib;
 
+import crosstheborder.lib.enumeration.MoveDirection;
 import crosstheborder.lib.interfaces.GameSettings;
+
+import java.awt.*;
 
 /**
  * Player is the super class for Trump and PlayerEntity.
@@ -9,7 +12,7 @@ import crosstheborder.lib.interfaces.GameSettings;
  */
 public abstract class Player {
     protected final int serverTickRate;
-
+    protected Point cameraLocation;
     private String name;
     private Team team;
 
@@ -25,7 +28,7 @@ public abstract class Player {
         this.team = team;
         team.addTeamMember(this);
 
-        serverTickRate = settings.getServerTickRate();
+        this.serverTickRate = settings.getServerTickRate();
     }
 
     /**
@@ -36,6 +39,21 @@ public abstract class Player {
     public Team getTeam() {
         return this.team;
     }
+
+    /**
+     * Gets the location of a camera of a player.
+     *
+     * @return The location of the camera.
+     */
+    public abstract Point getCameraLocation();
+
+    /**
+     * Moves the location of a camera.
+     * Does not work for PlayerEntities.
+     *
+     * @param md The direction the camera should move.
+     */
+    public abstract void moveCameraLocation(MoveDirection md);
 
     @Override
     public String toString(){
