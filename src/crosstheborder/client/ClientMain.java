@@ -62,7 +62,6 @@ public class ClientMain extends Application {
         this.primaryStage = primaryStage;
 
         initLayout();
-        //Show login menu?
         String userName = askForUserName();
         user = new User(userName);
 
@@ -237,7 +236,6 @@ public class ClientMain extends Application {
     }
 
     public int getMaxPlayers() {
-        //temp method, kan miss vervangen worden door  getGame().getMaxPlayers ofzo
         return lobby.getMaxPlayers();
     }
 }

@@ -17,7 +17,6 @@ import javafx.scene.control.Button;
  */
 public class LobbyMenuController {
 
-    //todo: add "addAiButton"
     @FXML
     private Button startGameButton;
     @FXML
@@ -66,7 +65,6 @@ public class LobbyMenuController {
 
     @FXML
     private void textBoxIsPrivate_OnAction(ActionEvent event){
-        //TODO POLISH
         if(isPrivateCheckBox.isSelected()){
             if(!lobbyPassInputPasswordField.getText().trim().equals("") && lobbyPassInputPasswordField.getText() != null){
                 lobbyPassInputPasswordField.setVisible(false);
@@ -108,16 +106,11 @@ public class LobbyMenuController {
 
     @FXML
     private void btnChat_OnAction(){
-        //String toSend = tfieldChatInput.getText();
-        //ClientMain.getInstance().sendChatmsg(toSend);
-        //chatListView.getItems().add(toSend);
         Message message = new Message(instance.getUser().getName(), chatInputTextField.getText());
         chatListView.getItems().add(message);
-        //throw new UnsupportedOperationException();
     }
 
     public TableView getPlayersTableView() {
-        //playersTableView.getItems().add(new User("test"));
         return playersTableView;
     }
 
