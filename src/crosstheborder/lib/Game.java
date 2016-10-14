@@ -145,18 +145,22 @@ public class Game implements GameManipulator, GameInterface {
 
     @Override
     public void movePlayerEntity(PlayerEntity player, Point nextLocation) {
-        //Check whether there's a tileObject at the next location.
-        if (map.hasTileObject(nextLocation)) {
-            map.getTileObject(nextLocation).interactWith(player, this);
-        }
+        boolean canContinue = true;
 
-        //Check whether there's a PlayerEntity at the next location.
-        if (map.hasPlayerEntity(nextLocation)) {
+        //Check whether the movement would enter a country.
+        if (canContinue && map.hasCountry(nextLocation)) {
+            canContinue = player.interactWith(map.getCountry(nextLocation), this);
+        }
+        //Check whether there's a tileObject at the next location.
+        if (canContinue && map.hasPlayerEntity(nextLocation)) {
             map.getPlayerEntity(nextLocation).interactWith(player, this);
         }
-
+        //Check whether there's a PlayerEntity at the next location.
+        if (canContinue && map.hasTileObject(nextLocation)) {
+            map.getTileObject(nextLocation).interactWith(player, this);
+        }
         //If the tile is free just move the entity.
-        if (!map.hasTileObject(nextLocation) && !map.hasPlayerEntity(nextLocation)) {
+        if (canContinue) {
             changePlayerEntityLocation(player, nextLocation);
         }
     }

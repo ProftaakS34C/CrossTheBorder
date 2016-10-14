@@ -4,6 +4,7 @@ import crosstheborder.lib.ImageFinder;
 import crosstheborder.lib.InputBuffer;
 import crosstheborder.lib.Player;
 import crosstheborder.lib.Team;
+import crosstheborder.lib.enumeration.Country;
 import crosstheborder.lib.enumeration.MoveDirection;
 import crosstheborder.lib.interfaces.*;
 
@@ -104,6 +105,15 @@ public abstract class PlayerEntity extends Player implements Drawable {
      * @param game   A {@link GameManipulator} on which interaction results can be executed.
      */
     public abstract void interactWith(PlayerEntity player, GameManipulator game);
+
+    /**
+     * Method for handling the interaction between a PlayerEntity and a country.
+     *
+     * @param country The country that is being interacted with.
+     * @param game    A GameManipulator on which interaction results can be executed.
+     * @return A boolean representing whether further movement/interaction should be evaluated.
+     */
+    public abstract boolean interactWith(Country country, GameManipulator game);
 
     /**
      * {@inheritDoc}
