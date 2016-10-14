@@ -33,12 +33,12 @@ public class MainMenuController {
     @FXML
     private Label playerNameLabel;
     @FXML
-    private TableView lobbyTableView;
+    private TableView lobbyTableView; //todo: add lobbies to tableView and the ability to join them.
 
     private ClientMain instance;
 
     @FXML
-    private void initialize(ClientMain instance){
+    private void initialize(){
         //constructor type stuff
 
     }
@@ -60,23 +60,12 @@ public class MainMenuController {
 
     @FXML
     private void btnCreateLobby_OnAction(){
-        CreateLobbyDialog dialog = new CreateLobbyDialog();
-        dialog.setTitle("set lobby settings");
-        dialog.setHeaderText("");
-        Optional<List<String>> result = dialog.showAndWait();
-        if(result.isPresent()){
-            ArrayList<String> lobbyList = (ArrayList<String>) result.get();
-            Lobby lobby = new Lobby(instance.getUser(), lobbyList.get(0), Integer.parseInt(lobbyList.get(1)));
-            instance.getUser().setLobby(lobby);
-            instance.showLobbyMenu();
-        }
-        else {
-            return;
-        }
+        instance.createLobby();
     }
     @FXML
     private void btnJoinLobby_OnAction(){
         //join a lobby
+
         throw new UnsupportedOperationException();
     }
     @FXML

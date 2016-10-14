@@ -6,6 +6,9 @@ package crosstheborder.client;
  *
  */
 
+import crosstheborder.client.dialog.CreateLobbyDialog;
+import crosstheborder.lib.Lobby;
+import crosstheborder.lib.Map;
 import crosstheborder.lib.User;
 import crosstheborder.client.controller.GameScreenController;
 import crosstheborder.client.controller.LayoutController;
@@ -22,16 +25,23 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Main class of the application
  */
 public class ClientMain extends Application {
 
+    private static final Logger LOGGER = Logger.getLogger(Map.class.getName());
+
     private Stage primaryStage;
     private BorderPane root;
     private User user;
+    private Lobby lobby;
 
     /**
      * The main method for the class
@@ -57,6 +67,29 @@ public class ClientMain extends Application {
         user = new User(userName);
 
         showMainMenu();
+    }
+    /**
+     * This method gets the user for this client
+     * @return A User object
+     */
+    public User getUser(){
+        return user;
+    }
+
+    /**
+     * Gets the lobby of this client
+     * @return a lobby object
+     */
+    public Lobby getLobby(){
+        return this.lobby;
+    }
+
+    /**
+     * Sets the lobby of this client
+     * @param lobby the lobby  object to set
+     */
+    public void setLobby(Lobby lobby) {
+        this.lobby = lobby;
     }
 
     /**
@@ -84,13 +117,7 @@ public class ClientMain extends Application {
         }
         return userName;
     }
-    /**
-     * This method gets the user for this client
-     * @return A User object
-     */
-    public User getUser(){
-        return user;
-    }
+
     /**
      * loads the layout into the stage
      */
@@ -107,7 +134,9 @@ public class ClientMain extends Application {
 
         } catch (IOException e) {
             System.err.println("could not load layout fxml");
+            LOGGER.log(Level.SEVERE, e.toString(), e);
             e.printStackTrace();
+
         }
     }
 
@@ -127,6 +156,7 @@ public class ClientMain extends Application {
         }
         catch (IOException x){
             System.err.println("could not load main menu fxml");
+            LOGGER.log(Level.SEVERE, x.toString(), x);
             x.printStackTrace();
         }
     }
@@ -147,6 +177,7 @@ public class ClientMain extends Application {
         }
         catch (IOException x){
             System.err.println("could not load lobby menu fxml");
+            LOGGER.log(Level.SEVERE, x.toString(), x);
             x.printStackTrace();
         }
     }
@@ -168,12 +199,45 @@ public class ClientMain extends Application {
         }
         catch (IOException x){
             System.err.println("could not load game screen fxml");
+            LOGGER.log(Level.SEVERE, x.toString(), x);
             x.printStackTrace();
         }
     }
 
+    /**
+     * Creates a new lobby and switches the view to the main menu
+     */
+    public void createLobby(){
+        CreateLobbyDialog dialog = new CreateLobbyDialog();
+        dialog.setTitle("set lobby settings");
+        dialog.setHeaderText("");
+        Optional<List<String>> result = dialog.showAndWait();
+        if(result.isPresent()){
+            ArrayList<String> lobbyList = (ArrayList<String>) result.get();
+            Lobby lobby = new Lobby(user, lobbyList.get(0), Integer.parseInt(lobbyList.get(1)));
+            user.setLobby(lobby);
+            setLobby(lobby);
+            showLobbyMenu();
+        }
+    }
+
+    /**
+     * Leaves lobby if currently in one, if User is owner of the lobby,
+     * every user is removed and then the whole lobby is deleted
+     */
+    public void leaveLobby(){
+//        if(user.isOwnerOfLobby()){
+//            for(User u : user.getLobby().getUsers()){
+//                u.leaveLobby();
+//            }
+//        }
+        System.out.println("leaving lobby...");
+        user.setLobby(null);
+        showMainMenu();
+    }
+
     public int getMaxPlayers() {
         //temp method, kan miss vervangen worden door  getGame().getMaxPlayers ofzo
-        return user.getLobby().getMaxPlayers();
+        return lobby.getMaxPlayers();
     }
 }
