@@ -1,7 +1,9 @@
 package crosstheborder.lib;
 
+import crosstheborder.lib.enumeration.Country;
 import crosstheborder.lib.interfaces.Camera;
 import crosstheborder.lib.interfaces.TileObject;
+import crosstheborder.lib.player.PlayerEntity;
 import crosstheborder.lib.tileobject.Placeable;
 
 import java.awt.*;
@@ -106,6 +108,26 @@ public class Map {
     }
 
     /**
+     * Gets whether the given location is part of a {@link Country}.
+     *
+     * @param location The location of the tile.
+     * @return A boolean that indicates whether is part of a country.
+     */
+    public boolean hasCountry(Point location) {
+        return getTile(location).getCountry() != Country.NONE;
+    }
+
+    /**
+     * Gets the country of a given location.
+     *
+     * @param location The location of the tile.
+     * @return The country of the tile.
+     */
+    public Country getCountry(Point location) {
+        return getTile(location).getCountry();
+    }
+
+    /**
      * Gets a {@link TileObject} from a {@link Tile} with a given location.
      *
      * @param location A point that represents the location of a tile.
@@ -135,6 +157,37 @@ public class Map {
     }
 
     /**
+     * Checks whether a given location contains a PlayerEntity.
+     *
+     * @param location The location of the tile that will be checked.
+     * @return A boolean that represents whether a PlayerEntity is present on the tile.
+     */
+    public boolean hasPlayerEntity(Point location) {
+        return getTile(location).hasPlayerEntity();
+    }
+
+    /**
+     * Gets the PlayerEntity at a given location.
+     * Will throw a null reference exception when the tile has no PlayerEntity.
+     *
+     * @param location The location of the tile to get the PlayerEntity from.
+     * @return The PlayerEntity object that belongs to the tile.
+     */
+    public PlayerEntity getPlayerEntity(Point location) {
+        return getTile(location).getPlayerEntity();
+    }
+
+    /**
+     * Changes the PlayerEntity of the given location.
+     *
+     * @param entity   The PlayerEntity that should be placed upon the tile.
+     * @param location The location of the tile.
+     */
+    public void changePlayerEntity(Point location, PlayerEntity entity) {
+        getTile(location).setPlayerEntity(entity);
+    }
+
+    /**
      * Gets a point devoid of a TileObject in a given area.
      * Can be an infinite loop.
      *
@@ -149,7 +202,7 @@ public class Map {
         Point nextLocation = new Point(x, y);
 
         //If the tile is occupied find a new location.
-        if (hasTileObject(nextLocation)) {
+        if (hasTileObject(nextLocation) || hasPlayerEntity(nextLocation)) {
             return getFreePointInArea(area);
         } else {
             return nextLocation;

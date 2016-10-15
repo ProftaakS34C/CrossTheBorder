@@ -1,9 +1,9 @@
 package crosstheborder.lib.player.entity;
 
 import crosstheborder.lib.Team;
+import crosstheborder.lib.enumeration.Country;
 import crosstheborder.lib.interfaces.GameManipulator;
 import crosstheborder.lib.interfaces.GameSettings;
-import crosstheborder.lib.interfaces.TileObject;
 import crosstheborder.lib.player.PlayerEntity;
 
 import java.awt.*;
@@ -37,17 +37,27 @@ public class BorderPatrol extends PlayerEntity {
      * </p>
      * Calls the following methods from GameManipulator:
      * <ul>
-     * <li>{@link GameManipulator#increaseScore(Team, int)} when the other entity is a Mexican.</li>
+     * <li>{@link GameManipulator#increaseScore(Team)} when the other entity is a Mexican.</li>
      * <li>{@link GameManipulator#respawnPlayer(PlayerEntity)} with the Mexican when the other entity is a Mexican.</li>
-     * <li>{@link GameManipulator#changeTileObjectLocation(TileObject, Point)} With itself to the location of the Mexican.</li>
+     * <li>{@link GameManipulator#changePlayerEntityLocation(PlayerEntity, Point)} With itself to the location of the Mexican.</li>
      * </ul>
      */
     @Override
-    public void interactWith(PlayerEntity player, GameManipulator game) {
+    public boolean interactWith(PlayerEntity player, GameManipulator game) {
         if (player instanceof Mexican) {
-            game.increaseScore(getTeam(), 1); //TODO Let the score addition be decided by the game.
+            game.increaseScore(getTeam());
             game.respawnPlayer(player);
-            game.changeTileObjectLocation(this, player.getLocation());
+            game.changePlayerEntityLocation(this, player.getLocation());
         }
+        return false;
+    }
+
+    @Override
+    public boolean interactWith(Country country, GameManipulator game) {
+        switch (country) {
+            case MEX:
+                return false;
+        }
+        return true;
     }
 }

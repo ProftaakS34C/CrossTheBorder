@@ -1,5 +1,6 @@
 package crosstheborder.lib;
 
+import crosstheborder.lib.enumeration.Country;
 import crosstheborder.lib.enumeration.ObstacleType;
 import crosstheborder.lib.enumeration.TileType;
 import crosstheborder.lib.interfaces.TileObject;
@@ -99,7 +100,7 @@ public class MapLoader {
         int height = getIntFromLine(heightLine.toString());
         Rectangle usaArea = getAreaFromLine(usaAreaLine.toString());
         Rectangle mexicoArea = getAreaFromLine(mexicoAreaLine.toString());
-        Tile[][] tiles = getTilesFromLines(tileLines, objectLines, width, height);
+        Tile[][] tiles = getTilesFromLines(tileLines, objectLines, width, height, usaArea, mexicoArea);
 
         return new Map.Builder(name).setWidth(width).setHeight(height).setMexicoArea(mexicoArea).setUsaArea(usaArea).setTiles(tiles).build();
     }
@@ -166,15 +167,24 @@ public class MapLoader {
         return new Rectangle(values[0], values[1], values[2], values[3]);
     }
 
-    private Tile[][] getTilesFromLines(List<String> tiles, List<String> objects, int width, int height) {
+    private Tile[][] getTilesFromLines(List<String> tiles, List<String> objects, int width, int height, Rectangle usa, Rectangle mexico) {
         Tile[][] ret = new Tile[width][height];
 
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 char tileCode = tiles.get(i).charAt(j);
                 char objectCode = objects.get(i).charAt(j);
+                Country country;
 
-                ret[i][j] = new Tile(tileTypes.get(tileCode));
+                if (usa.contains(i, j)) {
+                    country = Country.USA;
+                } else if (mexico.contains(i, j)) {
+                    country = Country.MEX;
+                } else {
+                    country = Country.NONE;
+                }
+
+                ret[i][j] = new Tile(tileTypes.get(tileCode), country);
 
                 ObstacleType type = obstacleTypes.get(objectCode);
 

@@ -35,7 +35,8 @@ public class Obstacle implements TileObject {
      * {@inheritDoc}
      */
     @Override
-    public void interactWith(PlayerEntity player, GameManipulator game) {
+    public boolean interactWith(PlayerEntity player, GameManipulator game) {
+        return false;
     }
 
     @Override

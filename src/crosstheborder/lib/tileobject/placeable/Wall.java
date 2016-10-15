@@ -19,6 +19,7 @@ public class Wall extends Placeable {
 
     /**
      * Creates a new wall.
+     * Modification of the constructor requires editing of the {@link crosstheborder.lib.enumeration.PlaceableType#getPlaceable(GameSettings)} method.
      *
      * @param settings The settings of the game.
      */
@@ -41,17 +42,18 @@ public class Wall extends Placeable {
      * </p>
      * Calls the following methods from GameManipulator:
      * <ul>
-     *     <li>Calls {@link GameManipulator#changeTileObjectLocation(TileObject, Point)} when the PlayerEntity is a Mexican and the wall in successfully climbed.</li>
+     *     <li>Calls {@link GameManipulator#changePlayerEntityLocation(PlayerEntity, Point)} when the PlayerEntity is a Mexican and the wall in successfully climbed.</li>
      * </ul>
      */
     @Override
-    public void interactWith(PlayerEntity player, GameManipulator game) {
+    public boolean interactWith(PlayerEntity player, GameManipulator game) {
         if (player instanceof Mexican) {
             //If the mexican can scale walls
             if (((Mexican) player).climbWall(this)) {
                 throwMexicanOverWall(player, game);
             }
         }
+        return false;
     }
 
     /**
