@@ -94,7 +94,7 @@ public class LobbyMenuController {
     private void btnStartGame_OnAction(){
         //TODO POLISH change into choicebox with all available maps
         String mapnaam = mapNameInputTextField.getText();
-        instance.getLobby().startGame(mapnaam);
+        instance.getLobby().startGame("bigtest");
         instance.showGameScreen();
     }
     @FXML

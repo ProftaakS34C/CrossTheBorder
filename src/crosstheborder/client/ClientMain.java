@@ -14,6 +14,8 @@ import crosstheborder.client.controller.GameScreenController;
 import crosstheborder.client.controller.LayoutController;
 import crosstheborder.client.controller.LobbyMenuController;
 import crosstheborder.client.controller.MainMenuController;
+import crosstheborder.lib.interfaces.Camera;
+import crosstheborder.lib.interfaces.GameSettings;
 import crosstheborder.lib.interfaces.Painter;
 import crosstheborder.lib.player.PlayerEntity;
 import javafx.application.Application;
@@ -65,6 +67,7 @@ public class ClientMain extends Application {
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
         //todo make painter implementation
+        //painter = new FXPainter();
 
         initLayout();
         String userName = askForUserName();
@@ -197,9 +200,11 @@ public class ClientMain extends Application {
             gameRoot = loader.load();
             GameScreenController controller = loader.getController();
             controller.setInstance(this);
+            painter = new FXPainter(controller.getGc());
             controller.setUp();
             root.setCenter(gameRoot);
             primaryStage.setTitle("in game");
+            draw();
         }
         catch (IOException x){
             System.err.println("could not load game screen fxml");
@@ -244,8 +249,11 @@ public class ClientMain extends Application {
         return lobby.getMaxPlayers();
     }
 
-    public void draw(GraphicsContext gc) {
-        PlayerEntity player = (PlayerEntity) user.getPlayer();
-        lobby.getGame().getMap().getCamera(player.getLocation(),20,800,600).draw(painter);
+    public void draw() {
+        //TODO POLISH get these magic numbers from somewhere else
+        
+//        Map maptest = lobby.getGame().getMap();
+        Camera cam = lobby.getGame().getMap().getCamera(user.getPlayer().getCameraLocation(), 40, 800, 600);
+        cam.draw(painter);
     }
 }

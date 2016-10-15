@@ -1,5 +1,7 @@
 package crosstheborder.lib;
 
+import crosstheborder.lib.interfaces.GameSettings;
+
 import java.util.ArrayList;
 
 /**
@@ -15,6 +17,9 @@ public class Lobby {
     private ArrayList<User> users;
     private User owner;
     private Game game;
+    private GameSettings settings;
+
+
 
     /**
      * This is the constructor method of the class "Lobby"
@@ -71,6 +76,21 @@ public class Lobby {
         password = value;
     }
 
+    /**
+     * Gets the gameSettings of this lobby
+     * @return a GameSettings object containing all settings
+     */
+    public GameSettings getSettings() {
+        return settings;
+    }
+
+    /**
+     * Sets the gameSettings of this lobby
+     * @param settings a GameSettings object containing all settings
+     */
+    public void setSettings(GameSettings settings) {
+        this.settings = settings;
+    }
     /**
      * This method gets the game of this lobby
      * @return Game, the game object of this lobby
