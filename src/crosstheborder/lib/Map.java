@@ -1,12 +1,15 @@
 package crosstheborder.lib;
 
 import crosstheborder.lib.enumeration.Country;
+import crosstheborder.lib.enumeration.Direction;
 import crosstheborder.lib.interfaces.Camera;
 import crosstheborder.lib.interfaces.TileObject;
 import crosstheborder.lib.player.PlayerEntity;
 import crosstheborder.lib.tileobject.Placeable;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -209,6 +212,34 @@ public class Map {
         }
     }
 
+    /**
+     * Gets the neighbours of a location.
+     * Only gets neighbours which do not have a TileObject nor a PlayerEntity.
+     *
+     * @param location The location of which to get the neighbours.
+     * @return A list of neighbours.
+     */
+    public List<Point> getNeighbours(Point location) {
+        List<Point> ret = new ArrayList<>();
+        //TODO make this method utilize the isAccessible for a playerEntity.
+
+        for (Direction dir : Direction.values()) {
+            Point point = new Point(location.x + dir.getCartesianRepresentation().x, location.y + dir.getCartesianRepresentation().y);
+            if (!hasTileObject(point) && !hasPlayerEntity(point)) {
+                ret.add(point);
+            }
+        }
+
+        return ret;
+    }
+
+    /**
+     * Determines whether a given Placeable can be placed on the map.
+     *
+     * @param location  The location the Placeable should be placed.
+     * @param placeable The placeable for which to run this check.
+     * @return True when the placeable can be placed at the given location.
+     */
     public boolean canPlacePlaceable(Point location, Placeable placeable) {
         if (!mexicoArea.contains(location) && !usaArea.contains(location) && !hasTileObject(location)) {
             TileObject east = getTileObject(new Point(location.x + 1, location.y));
