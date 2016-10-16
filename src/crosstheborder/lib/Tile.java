@@ -35,6 +35,7 @@ public class Tile implements Drawable {
         this.type = type;
         this.country = country;
         this.location = location;
+        this.country.setTile(this);
     }
 
     /**
