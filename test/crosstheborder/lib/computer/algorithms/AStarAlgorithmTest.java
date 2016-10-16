@@ -1,10 +1,10 @@
-package crosstheborder.lib.computer;
+package crosstheborder.lib.computer.algorithms;
 
 import crosstheborder.lib.Game;
 import crosstheborder.lib.Map;
 import crosstheborder.lib.Tile;
 import crosstheborder.lib.User;
-import crosstheborder.lib.computer.algorithms.AStarAlgorithm;
+import crosstheborder.lib.computer.PathingAlgorithm;
 import crosstheborder.lib.enumeration.ObstacleType;
 import crosstheborder.lib.interfaces.GameSettings;
 import crosstheborder.lib.player.entity.BorderPatrol;
@@ -21,7 +21,7 @@ import static org.junit.Assert.*;
 /**
  * @author Oscar de Leeuw
  */
-public class PathingAlgorithmTest {
+public class AStarAlgorithmTest {
     private Game game = new Game("empty");
     private Map map = game.getMap();
     private User trump = new User("Trump");
@@ -85,6 +85,20 @@ public class PathingAlgorithmTest {
 
             current = next;
         }
+    }
+
+    @Test
+    public void pathPerformance1() throws Exception {
+        Tile goal = map.getTile(9, 3);
+        Deque<Tile> path = algo.calculatePath(map, mex, mex.getTile(), goal);
+        assertEquals(path.peekLast(), goal);
+    }
+
+    @Test
+    public void pathPerformance2() throws Exception {
+        Tile goal = mex.getTile();
+        Deque<Tile> path = algo.calculatePath(map, bp, bp.getTile(), goal);
+        assertEquals(path.peekLast(), goal);
     }
 
 }
