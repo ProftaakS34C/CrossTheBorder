@@ -5,10 +5,17 @@ import crosstheborder.lib.Tile;
 import crosstheborder.lib.computer.algorithms.AStarAlgorithm;
 import crosstheborder.lib.enumeration.Country;
 import crosstheborder.lib.enumeration.MoveDirection;
+import crosstheborder.lib.interfaces.Interactable;
 import crosstheborder.lib.player.PlayerEntity;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+//TODO make sure computers can climb a wall. Or rather, know that a certain move is going to cost more and thus repeat the move.
 
 /**
  * @author Oscar de Leeuw
@@ -19,13 +26,16 @@ public class Computer {
 
     private PlayerEntity entity;
     private Path path;
+
     private Predicate<Tile> goalPredicate;
-    private Tile goal; //TODO Somehow track what goal we are after. In the case of the borderPatrol this needs to be mexican.
+    private Comparator<Interactable> goalHeuristic;
+
+    private List<Interactable> possibleTargets;
+    private Interactable currentTarget;
 
     public Computer(PlayerEntity entity) {
         this.entity = entity;
         this.path = new Path(new AStarAlgorithm());
-        setGoal();
     }
 
     /**
@@ -34,9 +44,15 @@ public class Computer {
      * @param map The map on which to compute a move.
      */
     public void computeMove(Map map) {
+        //If the possible targets have never been set, set them now.
+        if (possibleTargets == null) {
+            resetComputer(map);
+            computeMove(map);
+        }
+
         //Make sure that the recursive call is not called too much.
         //Also check whether the computer can actually move.
-        if (timesComputed >= 5 || !entity.canMove()) {
+        if (timesComputed >= COMPUTING_TIMEOUT || !entity.canMove()) {
             return;
         }
         timesComputed++;
@@ -44,11 +60,13 @@ public class Computer {
         //Get the next location in the path.
         Tile nextTile = path.getNextLocation();
         Tile currentTile = entity.getTile();
+        //Find the closest target.
+        Interactable closestTarget = findClosestTarget();
 
-        //If the path is empty, look for a new goal.
-        if (nextTile == null) {
-            findNewGoal(map);
-            path.calculateNewPath(currentTile, goal, map, entity);
+        //If the path is empty or there is a target closer, create a path to that.
+        if (nextTile == null || closestTarget != currentTarget) {
+            currentTarget = closestTarget;
+            path.calculateNewPath(currentTile, currentTarget.getTile(), map, entity);
             //Call this method again to calculate a move.
             computeMove(map);
         }
@@ -60,9 +78,9 @@ public class Computer {
         }
 
         //Make sure the target is still at the end of the path.
-        if (!goal.equals(path.getEndTile())) {
+        if (!checkTarget(path.getEndTile())) {
             //Recalculate the path to the goal.
-            path.extendPath(currentTile, goal, map, entity);
+            path.extendPath(currentTile, currentTarget.getTile(), map, entity);
         }
 
         //If the next location is accessible, push the input to the buffer.
@@ -74,7 +92,7 @@ public class Computer {
         }
         //Else calculate a new path.
         else {
-            path.calculateNewPath(currentTile, goal, map, entity);
+            path.calculateNewPath(currentTile, currentTarget.getTile(), map, entity);
             computeMove(map);
         }
 
@@ -83,21 +101,56 @@ public class Computer {
         path.age();
     }
 
-    //Checks whether the current path is still a good/speedy path to the goal.
-    private boolean checkCurrentPath() {
-        throw new UnsupportedOperationException(); //TODO
+    /**
+     * Checks whether the end of the path is still the same as the location of the target.
+     *
+     * @param endOfPath The end of the path.
+     * @return True when the end of the path coincides with the current target.
+     */
+    private boolean checkTarget(Tile endOfPath) {
+        if (endOfPath != currentTarget.getTile()) {
+            return false;
+        }
+        return true;
     }
 
-    private void findNewGoal(Map map) {
-        throw new UnsupportedOperationException(); //TODO
+    /**
+     * Finds the closest target to the computer as defined by the heuristic function.
+     */
+    private Interactable findClosestTarget() {
+        possibleTargets.sort(goalHeuristic);
+        return possibleTargets.get(0);
     }
 
-    private void setGoal() {
+    /**
+     * Resets all the possible targets of the computer.
+     * Requires the map of the game in order to acquire targets.
+     *
+     * @param map The map of the game.
+     */
+    public void resetComputer(Map map) {
+        List<Tile> possibleGoals;
+        possibleTargets = new ArrayList<>();
+        Point currentLoc = entity.getLocation();
+
         if (entity.getTeam().getCountry() == Country.MEX) {
             goalPredicate = (tile -> tile.getCountry() == Country.USA && tile.isAccessible(entity));
+            goalHeuristic = ((x, y) -> ((Double) (currentLoc.distance(x.getTile().getLocation()))).compareTo(currentLoc.distance(y.getTile().getLocation())));
+
+            //Get all the tiles that satisfy the predicate.
+            possibleGoals = map.getTiles(goalPredicate);
+            possibleTargets.addAll(possibleGoals.stream().map(Tile::getCountry).collect(Collectors.toList()));
+
         } else if (entity.getTeam().getCountry() == Country.USA) {
             goalPredicate = (tile -> tile.getPlayerEntity().getTeam().getCountry() == Country.MEX && tile.isAccessible(entity));
+            goalHeuristic = ((x, y) -> ((Double) (currentLoc.distance(x.getTile().getLocation()))).compareTo(currentLoc.distance(y.getTile().getLocation())));
+
+            //Get all the tiles that satisfy the predicate.
+            possibleGoals = map.getTiles(goalPredicate);
+            possibleTargets.addAll(possibleGoals.stream().map(Tile::getPlayerEntity).collect(Collectors.toList()));
         }
+
+        currentTarget = findClosestTarget();
     }
 
 }
