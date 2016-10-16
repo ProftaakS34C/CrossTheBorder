@@ -11,6 +11,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Predicate;
 import java.util.logging.Logger;
 
 /**
@@ -153,6 +154,27 @@ public class Map {
      */
     public Tile getTileInArea(Rectangle area) {
         return getFreeTileInArea(area, null);
+    }
+
+    /**
+     * Gets all the tiles that satisfy a given predicate.
+     *
+     * @param predicate The predicate to test the tile for.
+     * @return A list of all the tiles that satisfy the predicate.
+     */
+    public List<Tile> getTiles(Predicate<? super Tile> predicate) {
+        List<Tile> ret = new ArrayList<>();
+
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles[i].length; j++) {
+                Tile current = tiles[i][j];
+                if (predicate.test(current)) {
+                    ret.add(current);
+                }
+            }
+        }
+
+        return ret;
     }
 
     /**
