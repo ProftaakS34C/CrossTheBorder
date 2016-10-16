@@ -224,8 +224,7 @@ public class Map {
     }
 
     /**
-     * Gets the neighbours of a location.
-     * Only gets the neighbours when they are accessible to the entity.
+     * Gets the neighbours of a location that are accessible to the given entity.
      *
      * @param location The location of which to get the neighbours.
      * @param entity The entity for which to check the accessibility.

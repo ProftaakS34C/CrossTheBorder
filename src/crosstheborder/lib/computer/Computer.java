@@ -5,6 +5,7 @@ import crosstheborder.lib.Tile;
 import crosstheborder.lib.computer.algorithms.AStarAlgorithm;
 import crosstheborder.lib.enumeration.Country;
 import crosstheborder.lib.enumeration.MoveDirection;
+import crosstheborder.lib.enumeration.TeamName;
 import crosstheborder.lib.player.PlayerEntity;
 import crosstheborder.lib.player.entity.BorderPatrol;
 import crosstheborder.lib.player.entity.Mexican;
@@ -66,7 +67,7 @@ public class Computer {
         }
 
         //If the next location is accessible, push the input to the buffer.
-        if (map.isAccessible(nextLocation, entity)) { //TODO make an isAccessible method.
+        if (map.isAccessible(nextLocation, entity)) {
             //Since nextLocation is not used again, use nextLocation to determine the movement direction.
             nextLocation.translate(-currentLocation.x, -currentLocation.y);
             MoveDirection md = MoveDirection.getMoveDirectionFromPoint(nextLocation);
@@ -91,9 +92,9 @@ public class Computer {
 
     private void setGoal() {
         if (entity instanceof Mexican) {
-            goalPredicate = (tile -> tile.getCountry() == Country.USA); //TODO check whether the tile can be accessed.
+            goalPredicate = (tile -> tile.getCountry() == Country.USA && tile.isAccessible(entity));
         } else if (entity instanceof BorderPatrol) {
-            goalPredicate = (tile -> tile.getPlayerEntity() instanceof Mexican && tile.getCountry() != Country.USA); //TODO make a general isAccessible check.
+            goalPredicate = (tile -> tile.getPlayerEntity().getTeam().getName() == TeamName.MEX && tile.isAccessible(entity));
         }
     }
 
