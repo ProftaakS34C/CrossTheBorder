@@ -225,18 +225,18 @@ public class Map {
 
     /**
      * Gets the neighbours of a location.
-     * Only gets neighbours which do not have a TileObject nor a PlayerEntity.
+     * Only gets the neighbours when they are accessible to the entity.
      *
      * @param location The location of which to get the neighbours.
+     * @param entity The entity for which to check the accessibility.
      * @return A list of neighbours.
      */
-    public List<Point> getNeighbours(Point location) {
+    public List<Point> getNeighbours(Point location, PlayerEntity entity) {
         List<Point> ret = new ArrayList<>();
-        //TODO make this method utilize the isAccessible for a playerEntity.
 
         for (Direction dir : Direction.values()) {
             Point point = new Point(location.x + dir.getCartesianRepresentation().x, location.y + dir.getCartesianRepresentation().y);
-            if (!hasTileObject(point) && !hasPlayerEntity(point)) {
+            if (isAccessible(point, entity)) {
                 ret.add(point);
             }
         }
