@@ -184,7 +184,7 @@ public class MapLoader {
                     country = Country.NONE;
                 }
 
-                ret[i][j] = new Tile(tileTypes.get(tileCode), country);
+                ret[i][j] = new Tile(tileTypes.get(tileCode), country, new Point(i, j));
 
                 ObstacleType type = obstacleTypes.get(objectCode);
 

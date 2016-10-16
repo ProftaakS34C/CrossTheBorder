@@ -22,30 +22,28 @@ public class Tile implements Drawable {
     private PlayerEntity playerEntity;
     private TileType type;
     private Country country;
+    private Point location;
 
     /**
-     * Creates a new tile object with the given location.
+     * Creates a new tile object with the given location, country and type.
      *
      * @param type The type of the tile.
      * @param country The country of this tile.
+     * @param location The location of the tile.
      */
-    public Tile(TileType type, Country country) {
+    public Tile(TileType type, Country country, Point location) {
         this.type = type;
         this.country = country;
+        this.location = location;
     }
 
     /**
-     * Gets whether the given entity can access this tile.
+     * Gets the location of this tile.
      *
-     * @param entity The entity for which to check the accessibility.
-     * @return True when the entity can enter the tile.
+     * @return A point that represents the location of this tile.
      */
-    public boolean isAccessible(PlayerEntity entity) {
-        boolean tileObjectAccess = tileObject != null ? tileObject.isAccessible(entity) : true;
-        boolean playerEntityAccess = playerEntity != null ? playerEntity.isAccessible(entity) : true;
-        boolean countryAccess = country.isAccessible(entity);
-
-        return countryAccess && tileObjectAccess && playerEntityAccess;
+    public Point getLocation() {
+        return this.location;
     }
 
     /**
@@ -58,12 +56,21 @@ public class Tile implements Drawable {
     }
 
     /**
-     * Returns whether the tile has a {@link TileObject} or not.
+     * Gets the PlayerEntity that lives on this tile.
      *
-     * @return True if the tile has a {@link TileObject}. False if it doesn't have a {@link TileObject}.
+     * @return The PlayerEntity object.
      */
-    public boolean hasTileObject() {
-        return this.tileObject != null;
+    public PlayerEntity getPlayerEntity() {
+        return this.playerEntity;
+    }
+
+    /**
+     * Sets the PlayerEntity of this tile.
+     *
+     * @param playerEntity The PlayerEntity that should occupy this tile.
+     */
+    public void setPlayerEntity(PlayerEntity playerEntity) {
+        this.playerEntity = playerEntity;
     }
 
     /**
@@ -85,6 +92,15 @@ public class Tile implements Drawable {
     }
 
     /**
+     * Returns whether the tile has a {@link TileObject} or not.
+     *
+     * @return True if the tile has a {@link TileObject}. False if it doesn't have a {@link TileObject}.
+     */
+    public boolean hasTileObject() {
+        return this.tileObject != null;
+    }
+
+    /**
      * Returns whether this tile has a PlayerEntity.
      *
      * @return A boolean that indicates whether this tile has a PlayerEntity.
@@ -94,21 +110,17 @@ public class Tile implements Drawable {
     }
 
     /**
-     * Gets the PlayerEntity that lives on this tile.
+     * Gets whether the given entity can access this tile.
      *
-     * @return The PlayerEntity object.
+     * @param entity The entity for which to check the accessibility.
+     * @return True when the entity can enter the tile.
      */
-    public PlayerEntity getPlayerEntity() {
-        return this.playerEntity;
-    }
+    public boolean isAccessible(PlayerEntity entity) {
+        boolean tileObjectAccess = tileObject != null ? tileObject.isAccessible(entity) : true;
+        boolean playerEntityAccess = playerEntity != null ? playerEntity.isAccessible(entity) : true;
+        boolean countryAccess = country.isAccessible(entity);
 
-    /**
-     * Sets the PlayerEntity of this tile.
-     *
-     * @param playerEntity The PlayerEntity that should occupy this tile.
-     */
-    public void setPlayerEntity(PlayerEntity playerEntity) {
-        this.playerEntity = playerEntity;
+        return countryAccess && tileObjectAccess && playerEntityAccess;
     }
 
     @Override
