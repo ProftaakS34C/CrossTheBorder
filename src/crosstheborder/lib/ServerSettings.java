@@ -65,7 +65,7 @@ public class ServerSettings implements InputPropertiesGetter {
 
     /**
      * Gets the tick rate of the server.
-     * <p>If the key is not found in the properties it returns the integer value 0.2f.</p>
+     * <p>If the key is not found in the properties it returns the integer value 5.</p>
      *
      * @return An integer that represents the tick rate of the server.
      */
@@ -75,6 +75,6 @@ public class ServerSettings implements InputPropertiesGetter {
         } catch (NumberFormatException e) {
             LOGGER.log(Level.SEVERE, e.toString(), e);
         }
-        return 200;
+        return 5;
     }
 }
