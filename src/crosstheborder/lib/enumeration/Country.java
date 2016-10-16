@@ -83,6 +83,16 @@ public enum Country implements Drawable, Interactable {
     }
 
     @Override
+    public int getCost(PlayerEntity entity) {
+        if (!isAccessible(entity)) {
+            return -1;
+        }
+
+        return 0;
+    }
+
+
+    @Override
     public void draw(Painter painter, Point location, int tileWidth) {
         //TODO Add a draw method for painter.
     }

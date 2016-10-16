@@ -37,7 +37,12 @@ public class AStarAlgorithm implements PathingAlgorithm {
     @Override
     public Deque<Tile> calculatePath(Map map, PlayerEntity entity, Tile start, Tile end) {
         //Perform the algorithm.
-        performAStar(map, entity, start, end);
+        try {
+            performAStar(map, entity, start, end);
+        } catch (Exception e) {
+            //TODO Think of something to do when we encounter such an exception.
+        }
+
 
         //Use a Deque as a stack.
         Deque<Tile> ret = new ArrayDeque<>();
@@ -75,8 +80,9 @@ public class AStarAlgorithm implements PathingAlgorithm {
      * @param entity The entity for which to perform the A* search.
      * @param start The starting location of the algorithm.
      * @param end   The goal of the algorithm.
+     * @throws Exception When the algorithm encounters an illegal cost.
      */
-    private void performAStar(Map map, PlayerEntity entity, Tile start, Tile end) {
+    private void performAStar(Map map, PlayerEntity entity, Tile start, Tile end) throws Exception {
         //Create a frontier and push the start to the frontier.
         Frontier<Tile> frontier = new Frontier<>();
         frontier.enqueue(start, 0);

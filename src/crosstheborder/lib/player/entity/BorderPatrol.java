@@ -52,4 +52,12 @@ public class BorderPatrol extends PlayerEntity {
     public boolean isAccessible(PlayerEntity entity) {
         return false;
     }
+
+    @Override
+    public int getCost(PlayerEntity entity) {
+        if (!isAccessible(entity)) {
+            return -1;
+        }
+        return 0;
+    }
 }

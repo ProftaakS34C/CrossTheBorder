@@ -62,6 +62,16 @@ public class Mexican extends PlayerEntity {
     }
 
     /**
+     * Gets the total amount of ticks it takes before a wall should be climbed.
+     *
+     * @param wall The wall that is going to be climbed.
+     * @return The amount of ticks it takes to climb the wall.
+     */
+    public int getTotalClimbTime(Wall wall) {
+        return (int) (wall.getHeight() * climbModifier * serverTickRate);
+    }
+
+    /**
      * {@inheritDoc}
      * <p>
      * If the other playerEntity is a {@link BorderPatrol}, respawn the mexican and raise the score of the BorderPatrol team.
@@ -88,5 +98,14 @@ public class Mexican extends PlayerEntity {
         }
 
         return false;
+    }
+
+    @Override
+    public int getCost(PlayerEntity entity) {
+        if (!isAccessible(entity)) {
+            return -1;
+        }
+
+        return 0;
     }
 }

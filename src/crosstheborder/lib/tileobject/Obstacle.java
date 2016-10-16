@@ -59,6 +59,14 @@ public class Obstacle implements TileObject {
         return false;
     }
 
+    @Override
+    public int getCost(PlayerEntity entity) {
+        if (!isAccessible(entity)) {
+            return -1;
+        }
+        return 0;
+    }
+
     /**
      * {@inheritDoc}
      * <p>

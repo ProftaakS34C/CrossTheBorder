@@ -28,6 +28,15 @@ public interface Interactable {
     boolean isAccessible(PlayerEntity entity);
 
     /**
+     * Gets the cost for interacting with this interactable.
+     * Should return 0 when there is no additional cost.
+     *
+     * @param entity The entity that is going to be interacting with the interactable.
+     * @return The cost of the interaction in server ticks.
+     */
+    int getCost(PlayerEntity entity);
+
+    /**
      * Gets the tile on which the interactable lives.
      *
      * @return The tile the interactable lives on.
