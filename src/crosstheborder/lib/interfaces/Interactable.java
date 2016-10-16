@@ -16,7 +16,7 @@ public interface Interactable {
      * @param game   A GameManipulator on which interaction results can be executed.
      * @return True when further movement/interaction should be evaluated.
      */
-    boolean interactWith(PlayerEntity entity, GameManipulator game); //TODO make this code depend on the Country of the team.
+    boolean interactWith(PlayerEntity entity, GameManipulator game);
 
     /**
      * Gets whether the given entity can move on top of this Interactable.
@@ -24,5 +24,5 @@ public interface Interactable {
      * @param entity The entity for which to check the accessibility.
      * @return True when the entity can enter the tile of the Interactable.
      */
-    boolean isAccessible(PlayerEntity entity); //TODO make this code depend on the Country of the team.
+    boolean isAccessible(PlayerEntity entity);
 }

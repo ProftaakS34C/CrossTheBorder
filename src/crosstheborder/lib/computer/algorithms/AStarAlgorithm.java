@@ -2,6 +2,7 @@ package crosstheborder.lib.computer.algorithms;
 
 import crosstheborder.lib.Map;
 import crosstheborder.lib.computer.PathingAlgorithm;
+import crosstheborder.lib.player.PlayerEntity;
 
 import java.awt.*;
 import java.util.*;
@@ -35,9 +36,9 @@ public class AStarAlgorithm implements PathingAlgorithm {
     }
 
     @Override
-    public Deque<Point> calculatePath(Map map, Point start, Point end) {
+    public Deque<Point> calculatePath(Map map, PlayerEntity entity, Point start, Point end) {
         //Perform the algorithm.
-        performAStar(map, start, end);
+        performAStar(map, entity, start, end);
 
         //Use a Deque as a stack.
         Deque<Point> ret = new ArrayDeque<>();
@@ -71,10 +72,11 @@ public class AStarAlgorithm implements PathingAlgorithm {
      * Performs the A* algorithm.
      *
      * @param map   The map that the algorithm should be used upon.
+     * @param entity The entity for which to perform the A* search.
      * @param start The starting location of the algorithm.
      * @param end   The goal of the algorithm.
      */
-    private void performAStar(Map map, Point start, Point end) {
+    private void performAStar(Map map, PlayerEntity entity, Point start, Point end) {
         //Create a frontier and push the start to the frontier.
         Frontier<Point> frontier = new Frontier<>();
         frontier.enqueue(start, 0);
@@ -97,7 +99,7 @@ public class AStarAlgorithm implements PathingAlgorithm {
             }
 
             //Foreach neighbour of the current location perform the following.
-            for (Point next : map.getNeighbours(current)) {
+            for (Point next : map.getNeighbours(current, entity)) {
                 //Calculate the cost of moving to the next location.
                 //Currently 1 since the map will only return tiles which can be freely moved to.
                 double newCost = costSoFar.get(current) + 1;
@@ -133,7 +135,6 @@ public class AStarAlgorithm implements PathingAlgorithm {
      */
     private class Frontier<T> {
         private final List<Tuple<T, Double>> elements = new ArrayList();
-        ;
 
         /**
          * Gets the size of the frontier.

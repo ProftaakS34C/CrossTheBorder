@@ -6,8 +6,6 @@ import crosstheborder.lib.computer.algorithms.AStarAlgorithm;
 import crosstheborder.lib.enumeration.Country;
 import crosstheborder.lib.enumeration.MoveDirection;
 import crosstheborder.lib.player.PlayerEntity;
-import crosstheborder.lib.player.entity.BorderPatrol;
-import crosstheborder.lib.player.entity.Mexican;
 
 import java.awt.*;
 import java.util.function.Predicate;
@@ -33,7 +31,7 @@ public class Computer {
     /**
      * Computes a move for this computer.
      *
-     * @param map
+     * @param map The map on which to compute a move.
      */
     public void computeMove(Map map) {
         //Make sure that the recursive call is not called too much.
@@ -48,21 +46,21 @@ public class Computer {
 
         //If the path is empty, look for a new goal.
         if (nextLocation == null) {
-            path.calculateNewPath(currentLocation, goal, map);
+            path.calculateNewPath(currentLocation, goal, map, entity);
             //Call this method again to calculate a move.
             computeMove(map);
         }
 
         //If the next location is not accessible then try to move around it.
         if (!map.isAccessible(nextLocation, entity)) {
-            path.precedePath(currentLocation, map);
+            path.precedePath(currentLocation, map, entity);
             computeMove(map);
         }
 
         //Make sure the target is still at the end of the path.
         if (!goal.equals(path.getEndPoint())) {
             //Recalculate the path to the goal.
-            path.extendPath(goal, map);
+            path.extendPath(goal, map, entity);
         }
 
         //If the next location is accessible, push the input to the buffer.
@@ -74,7 +72,8 @@ public class Computer {
         }
         //Else calculate a new path.
         else {
-            path.calculateNewPath(currentLocation, goal, map);
+            path.calculateNewPath(currentLocation, goal, map, entity);
+            computeMove(map);
         }
 
         timesComputed = 0;
@@ -90,9 +89,9 @@ public class Computer {
     }
 
     private void setGoal() {
-        if (entity instanceof Mexican) {
+        if (entity.getTeam().getCountry() == Country.MEX) {
             goalPredicate = (tile -> tile.getCountry() == Country.USA && tile.isAccessible(entity));
-        } else if (entity instanceof BorderPatrol) {
+        } else if (entity.getTeam().getCountry() == Country.USA) {
             goalPredicate = (tile -> tile.getPlayerEntity().getTeam().getCountry() == Country.MEX && tile.isAccessible(entity));
         }
     }

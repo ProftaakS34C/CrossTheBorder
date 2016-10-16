@@ -1,6 +1,7 @@
 package crosstheborder.lib.computer;
 
 import crosstheborder.lib.Map;
+import crosstheborder.lib.player.PlayerEntity;
 
 import java.awt.*;
 import java.util.Deque;
@@ -60,9 +61,10 @@ public class Path {
      * @param start The starting location of the path. Generally the current location of the entity.
      * @param goal  The end of the path. Generally the goal of the entity.
      * @param map   The map on which the path should be calculated.
+     * @param entity The entity for which to calculate a path.
      */
-    public void calculateNewPath(Point start, Point goal, Map map) {
-        this.path = algorithm.calculatePath(map, start, goal);
+    public void calculateNewPath(Point start, Point goal, Map map, PlayerEntity entity) {
+        this.path = algorithm.calculatePath(map, entity, start, goal);
         age = 0;
     }
 
@@ -72,12 +74,13 @@ public class Path {
      *
      * @param start The new start of the path.
      * @param map   The map on which the path should be calculated.
+     * @param entity The entity for which to calculate a path.
      */
-    public void precedePath(Point start, Map map) {
+    public void precedePath(Point start, Map map, PlayerEntity entity) {
         //Must poll since the goal is going to be added to the map again.
         Point goal = path.pollFirst();
         //Calculate a new path.
-        Deque<Point> extraPath = algorithm.calculatePath(map, start, goal);
+        Deque<Point> extraPath = algorithm.calculatePath(map, entity, start, goal);
 
         //Adds the extraPath in correct order on top of the path.
         for (int i = 0; i < extraPath.size(); i++) {
@@ -94,13 +97,14 @@ public class Path {
      *
      * @param goal The goal of the extension.
      * @param map  The map on which the path should be calculated.
+     * @param entity The entity for which to calculate a path.
      */
-    public void extendPath(Point goal, Map map) {
+    public void extendPath(Point goal, Map map, PlayerEntity entity) {
         for (int i = 0; i < age; i++) {
             path.pollLast();
         }
         Point start = path.peekLast();
-        Deque<Point> extraPath = algorithm.calculatePath(map, start, goal);
+        Deque<Point> extraPath = algorithm.calculatePath(map, entity, start, goal);
 
         //Adds the extraPath in correct order at the bottom of the path.
         for (int i = 0; i < extraPath.size(); i++) {
