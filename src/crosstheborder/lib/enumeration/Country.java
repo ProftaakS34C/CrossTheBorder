@@ -1,6 +1,7 @@
 package crosstheborder.lib.enumeration;
 
 import crosstheborder.lib.Team;
+import crosstheborder.lib.Tile;
 import crosstheborder.lib.interfaces.Drawable;
 import crosstheborder.lib.interfaces.GameManipulator;
 import crosstheborder.lib.interfaces.Interactable;
@@ -17,6 +18,18 @@ import java.awt.*;
 public enum Country implements Drawable, Interactable {
     USA, MEX, NONE;
 
+    private Tile tile;
+
+    @Override
+    public Tile getTile() {
+        return this.tile;
+    }
+
+    @Override
+    public void setTile(Tile tile) {
+        this.tile = tile;
+    }
+
     /**
      * {@inheritDoc}
      * <p>
@@ -30,6 +43,7 @@ public enum Country implements Drawable, Interactable {
      * </p>
      * Will return false when a Mexican has scored.
      */
+    @Override
     public boolean interactWith(PlayerEntity entity, GameManipulator game) {
         switch (this) {
             case USA:
@@ -59,7 +73,6 @@ public enum Country implements Drawable, Interactable {
 
         return true;
     }
-
 
     @Override
     public void draw(Painter painter, Point location, int tileWidth) {

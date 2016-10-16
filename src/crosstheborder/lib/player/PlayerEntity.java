@@ -1,9 +1,6 @@
 package crosstheborder.lib.player;
 
-import crosstheborder.lib.ImageFinder;
-import crosstheborder.lib.InputBuffer;
-import crosstheborder.lib.Player;
-import crosstheborder.lib.Team;
+import crosstheborder.lib.*;
 import crosstheborder.lib.enumeration.MoveDirection;
 import crosstheborder.lib.interfaces.*;
 
@@ -14,7 +11,7 @@ import java.awt.*;
  * @author Oscar de Leeuw
  */
 public abstract class PlayerEntity extends Player implements Drawable, Interactable {
-    private Point location;
+    private Tile tile;
     private InputBuffer inputBuffer;
     private boolean canMove = true;
     //The amount of ticks till the player can move again.
@@ -30,7 +27,6 @@ public abstract class PlayerEntity extends Player implements Drawable, Interacta
      */
     public PlayerEntity(String name, Team team, GameSettings settings) {
         super(name, team, settings);
-        location = new Point();
         this.inputBuffer = new InputBuffer();
     }
 
@@ -40,7 +36,17 @@ public abstract class PlayerEntity extends Player implements Drawable, Interacta
      * @return A point that represents the location of the {@link TileObject}.
      */
     public Point getLocation() {
-        return this.location;
+        return this.tile.getLocation();
+    }
+
+    @Override
+    public Tile getTile() {
+        return this.tile;
+    }
+
+    @Override
+    public void setTile(Tile tile) {
+        this.tile = tile;
     }
 
     /**
@@ -102,7 +108,7 @@ public abstract class PlayerEntity extends Player implements Drawable, Interacta
      */
     @Override
     public Point getCameraLocation() {
-        return (Point) this.location.clone();
+        return (Point) this.tile.getLocation().clone();
     }
 
     /**

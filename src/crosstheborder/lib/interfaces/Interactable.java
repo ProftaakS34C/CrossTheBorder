@@ -1,5 +1,6 @@
 package crosstheborder.lib.interfaces;
 
+import crosstheborder.lib.Tile;
 import crosstheborder.lib.player.PlayerEntity;
 
 /**
@@ -25,4 +26,18 @@ public interface Interactable {
      * @return True when the entity can enter the tile of the Interactable.
      */
     boolean isAccessible(PlayerEntity entity);
+
+    /**
+     * Gets the tile on which the interactable lives.
+     *
+     * @return The tile the interactable lives on.
+     */
+    Tile getTile();
+
+    /**
+     * Sets the tile that the interactable lives on.
+     *
+     * @param tile The new tile the interactable lives on.
+     */
+    void setTile(Tile tile);
 }

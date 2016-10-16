@@ -1,6 +1,7 @@
 package crosstheborder.lib.tileobject;
 
 import crosstheborder.lib.ImageFinder;
+import crosstheborder.lib.Tile;
 import crosstheborder.lib.enumeration.ObstacleType;
 import crosstheborder.lib.interfaces.GameManipulator;
 import crosstheborder.lib.interfaces.Painter;
@@ -16,7 +17,7 @@ import java.awt.*;
  * @author Oscar de Leeuw
  */
 public class Obstacle implements TileObject {
-    private Point location;
+    private Tile tile;
     private ObstacleType type;
 
     /**
@@ -27,7 +28,21 @@ public class Obstacle implements TileObject {
      */
     public Obstacle(ObstacleType type) {
         this.type = type;
-        location = new Point();
+    }
+
+    @Override
+    public Point getLocation() {
+        return this.tile.getLocation();
+    }
+
+    @Override
+    public Tile getTile() {
+        return this.tile;
+    }
+
+    @Override
+    public void setTile(Tile tile) {
+        this.tile = tile;
     }
 
     /**
@@ -42,11 +57,6 @@ public class Obstacle implements TileObject {
     @Override
     public boolean isAccessible(PlayerEntity entity) {
         return false;
-    }
-
-    @Override
-    public Point getLocation() {
-        return this.location;
     }
 
     /**

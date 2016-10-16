@@ -71,6 +71,7 @@ public class Tile implements Drawable {
      */
     public void setPlayerEntity(PlayerEntity playerEntity) {
         this.playerEntity = playerEntity;
+        playerEntity.setTile(this);
     }
 
     /**
@@ -89,6 +90,7 @@ public class Tile implements Drawable {
      */
     public void setTileObject(TileObject tileObject) {
         this.tileObject = tileObject;
+        tileObject.setTile(this);
     }
 
     /**
