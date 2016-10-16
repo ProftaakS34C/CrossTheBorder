@@ -121,27 +121,22 @@ public class Game implements GameManipulator, GameInterface {
     }
 
     /**
-     * Update is called at every tick of the server clock.
+     * Update is called at every tick of the game timer.
      */
     public void update(){
-        //Update all the players.
-        for (Player player : players) {
-            //Update the player entities.
-            if (player instanceof PlayerEntity) {
-                PlayerEntity entity = (PlayerEntity) player;
-
-                //Move the player if there is input.
-                Point nextLocation = entity.getNextMove();
-                if (nextLocation != null) {
-                    movePlayerEntity(entity, nextLocation);
-                }
-
-                //Decrease the immobilization timer.
-                entity.decreaseMoveTimer();
-            } else if (player instanceof Trump) {
-                ((Trump) player).tickPlaceableAmount();
+        //Update all the player entities.
+        for (PlayerEntity player : players) {
+            //Move the player if there is input.
+            Point nextLocation = player.getNextMove();
+            if (nextLocation != null) {
+                movePlayerEntity(player, nextLocation);
             }
+            //Decrease the immobilization timer.
+            player.decreaseMoveTimer();
         }
+
+        //Tick the placeables for Trump.
+        trump.tickPlaceableAmount();
     }
 
     @Override
