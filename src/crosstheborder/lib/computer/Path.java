@@ -43,6 +43,15 @@ class Path {
     }
 
     /**
+     * Gets the size of the path.
+     *
+     * @return The amount of tiles in the path.
+     */
+    int size() {
+        return this.path.size();
+    }
+
+    /**
      * Returns the age of the path.
      *
      * @return The age of the path in server ticks.
@@ -96,9 +105,12 @@ class Path {
         Tile goal = path.pollFirst();
         //Calculate a new path.
         Deque<Tile> extraPath = algorithm.calculatePath(map, entity, start, goal);
+        age += extraPath.size();
 
+        //ExtraPath will be reduced in size every iteration.
+        int size = extraPath.size();
         //Adds the extraPath in correct order on top of the path.
-        for (int i = 0; i < extraPath.size(); i++) {
+        for (int i = 0; i < size; i++) {
             //Get the last point in the extra path.
             Tile point = extraPath.pollLast();
             //Push it to the top of the current path.
@@ -110,25 +122,32 @@ class Path {
      * Extends the path to a new goal.
      * Will remove an amount of tiles equal to the age of the path before recalculating the path in order to guaranteed the best path.
      *
+     * @param start The current location of the entity, might be needed if the path is too old.
      * @param goal The goal of the extension.
      * @param map  The map on which the path should be calculated.
      * @param entity The entity for which to calculate a path.
      */
-    void extendPath(Tile goal, Map map, PlayerEntity entity) {
+    void extendPath(Tile start, Tile goal, Map map, PlayerEntity entity) {
+        //If the path is too old anyway calculate a new path.
+        if (age >= path.size()) {
+            calculateNewPath(start, goal, map, entity);
+            return;
+        }
+
         for (int i = 0; i < age; i++) {
             path.pollLast();
         }
-        Tile start = path.peekLast();
-        Deque<Tile> extraPath = algorithm.calculatePath(map, entity, start, goal);
+        Tile endOfOldPath = path.peekLast();
+        Deque<Tile> extraPath = algorithm.calculatePath(map, entity, endOfOldPath, goal);
 
+        //ExtraPath will be reduced in size every iteration.
+        int size = extraPath.size();
         //Adds the extraPath in correct order at the bottom of the path.
-        for (int i = 0; i < extraPath.size(); i++) {
+        for (int i = 0; i < size; i++) {
             //Get the first point in the extra path.
             Tile point = extraPath.pollFirst();
             //Push it to the end of the path.
             path.offerLast(point);
         }
-
-        age = 0;
     }
 }

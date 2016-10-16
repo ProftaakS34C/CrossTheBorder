@@ -11,7 +11,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -117,7 +116,8 @@ public class Map {
         try {
             return tiles[x][y];
         } catch (ArrayIndexOutOfBoundsException e) {
-            LOGGER.log(Level.SEVERE, e.toString(), e);
+            //LOGGER.log(Level.OFF, e.toString(), e);
+            //Intentionally caught and disregarded.
         }
         return null;
     }

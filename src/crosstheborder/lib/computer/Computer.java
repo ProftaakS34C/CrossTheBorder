@@ -62,7 +62,7 @@ public class Computer {
         //Make sure the target is still at the end of the path.
         if (!goal.equals(path.getEndTile())) {
             //Recalculate the path to the goal.
-            path.extendPath(goal, map, entity);
+            path.extendPath(currentTile, goal, map, entity);
         }
 
         //If the next location is accessible, push the input to the buffer.
