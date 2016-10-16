@@ -1,5 +1,6 @@
 package crosstheborder.lib.tileobject.placeable;
 
+import crosstheborder.lib.Tile;
 import crosstheborder.lib.interfaces.GameManipulator;
 import crosstheborder.lib.interfaces.GameSettings;
 import crosstheborder.lib.interfaces.TileObject;
@@ -23,7 +24,8 @@ public class Wall extends Placeable {
      *
      * @param settings The settings of the game.
      */
-    public Wall(GameSettings settings) {
+    public Wall(GameSettings settings, Tile tile) {
+        super(tile);
         this.height = settings.getDefaultWallHeight();
     }
 

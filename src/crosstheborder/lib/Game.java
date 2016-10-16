@@ -125,13 +125,29 @@ public class Game implements GameManipulator, GameInterface {
             //Else make a new american.
             if (usa.getTeamMembers().size() > mex.getTeamMembers().size()) {
                 team = mex;
-                playerEntity = new Mexican(user.getName(), team, settings);
+                Tile tile = null;
+                for(Tile[] ts : map.getTiles()){
+                    for(Tile t : ts){
+                        if(!tile.hasPlayerEntity() && String.valueOf(t.getCountry()).toLowerCase()==String.valueOf(team).toLowerCase()){
+                            tile = t;
+                        }
+                    }
+                }
+                playerEntity = new Mexican(user.getName(), team, settings, tile);
             }
 
             //If there are more USA members than mexicans, make a new mexican.
             else {
                 team = usa;
-                playerEntity = new BorderPatrol(user.getName(), team, settings);
+                Tile tile = null;
+                for(Tile[] ts : map.getTiles()){
+                    for(Tile t : ts){
+                        if(!tile.hasPlayerEntity() && String.valueOf(t.getCountry()).toLowerCase()==String.valueOf(team).toLowerCase()){
+                            tile = t;
+                        }
+                    }
+                }
+                playerEntity = new BorderPatrol(user.getName(), team, settings, tile);
             }
 
             player = playerEntity;

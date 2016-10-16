@@ -7,6 +7,9 @@ import crosstheborder.lib.player.PlayerEntity;
 import crosstheborder.lib.tileobject.Placeable;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -78,6 +81,8 @@ public class Map {
         return this.mexicoArea;
     }
 
+
+    public Tile[][] getTiles(){return tiles;}
     /**
      * Gets a camera/viewport of the map.
      *
