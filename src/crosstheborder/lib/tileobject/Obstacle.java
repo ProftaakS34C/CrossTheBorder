@@ -40,6 +40,11 @@ public class Obstacle implements TileObject {
     }
 
     @Override
+    public boolean isAccessible(PlayerEntity entity) {
+        return false;
+    }
+
+    @Override
     public Point getLocation() {
         return this.location;
     }

@@ -1,6 +1,7 @@
 package crosstheborder.lib.player.entity;
 
 import crosstheborder.lib.Team;
+import crosstheborder.lib.enumeration.TeamName;
 import crosstheborder.lib.interfaces.GameManipulator;
 import crosstheborder.lib.interfaces.GameSettings;
 import crosstheborder.lib.player.PlayerEntity;
@@ -77,6 +78,15 @@ public class Mexican extends PlayerEntity {
             game.increaseScore(player.getTeam());
             game.respawnPlayer(this);
         }
+        return false;
+    }
+
+    @Override
+    public boolean isAccessible(PlayerEntity entity) {
+        if (entity.getTeam().getName() == TeamName.USA) {
+            return true;
+        }
+
         return false;
     }
 }

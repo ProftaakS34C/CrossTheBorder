@@ -1,5 +1,6 @@
 package crosstheborder.lib.tileobject.placeable;
 
+import crosstheborder.lib.enumeration.TeamName;
 import crosstheborder.lib.interfaces.GameManipulator;
 import crosstheborder.lib.interfaces.GameSettings;
 import crosstheborder.lib.interfaces.TileObject;
@@ -54,6 +55,19 @@ public class Trap extends Placeable {
             }
         }
         return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Returns true when the team of the entity is the USA.
+     */
+    @Override
+    public boolean isAccessible(PlayerEntity entity) {
+        if (entity.getTeam().getName() == TeamName.USA) {
+            return true;
+        }
+        return false;
     }
 
     /**

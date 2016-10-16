@@ -1,5 +1,6 @@
 package crosstheborder.lib.tileobject.placeable;
 
+import crosstheborder.lib.enumeration.TeamName;
 import crosstheborder.lib.interfaces.GameManipulator;
 import crosstheborder.lib.interfaces.GameSettings;
 import crosstheborder.lib.interfaces.TileObject;
@@ -53,6 +54,20 @@ public class Wall extends Placeable {
                 throwMexicanOverWall(player, game);
             }
         }
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Returns true when the team of the entity is Mexico.
+     */
+    @Override
+    public boolean isAccessible(PlayerEntity entity) {
+        if (entity.getTeam().getName() == TeamName.MEX) {
+            return true;
+        }
+
         return false;
     }
 

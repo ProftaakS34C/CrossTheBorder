@@ -97,16 +97,6 @@ public abstract class PlayerEntity extends Player implements Drawable, Interacta
     }
 
     /**
-     * Method for handling the interaction between two PlayerEntities.
-     * Calls methods on the {@link GameManipulator} object to process interaction results.
-     *
-     * @param player The other PlayerEntity that is interacting with this playerEntity.
-     * @param game   A {@link GameManipulator} on which interaction results can be executed.
-     * @return A boolean representing whether further movement/interaction should be evaluated.
-     */
-    public abstract boolean interactWith(PlayerEntity player, GameManipulator game);
-
-    /**
      * {@inheritDoc}
      * Returns a clone of the location of the object.
      */

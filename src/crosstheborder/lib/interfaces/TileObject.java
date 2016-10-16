@@ -1,7 +1,5 @@
 package crosstheborder.lib.interfaces;
 
-import crosstheborder.lib.player.PlayerEntity;
-
 import java.awt.*;
 
 /**
@@ -10,14 +8,6 @@ import java.awt.*;
  * @author Oscar de Leeuw
  */
 public interface TileObject extends Drawable, Interactable {
-    /**
-     * {@inheritDoc}
-     *
-     * Method for handling the interaction between a {@link PlayerEntity} and a {@link TileObject}.
-     * Calls methods on the {@link GameManipulator} object to process interaction results.
-     */
-    boolean interactWith(PlayerEntity player, GameManipulator game);
-
     /**
      * Gets the location of the {@link TileObject}.
      *

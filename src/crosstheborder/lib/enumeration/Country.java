@@ -41,6 +41,24 @@ public enum Country implements Drawable, Interactable {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Will only return false when an USA entity tries to enter MEX.
+     */
+    @Override
+    public boolean isAccessible(PlayerEntity entity) {
+        switch (this) {
+            case MEX:
+                if (entity.getTeam().getName() == TeamName.USA) {
+                    return false;
+                }
+        }
+
+        return true;
+    }
+
+
     @Override
     public void draw(Painter painter, Point location, int tileWidth) {
         //TODO Add a draw method for painter.
