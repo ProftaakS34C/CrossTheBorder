@@ -9,14 +9,12 @@ import java.awt.*;
  *
  * @author Oscar de Leeuw
  */
-public interface TileObject extends Drawable {
+public interface TileObject extends Drawable, Interactable {
     /**
+     * {@inheritDoc}
+     *
      * Method for handling the interaction between a {@link PlayerEntity} and a {@link TileObject}.
      * Calls methods on the {@link GameManipulator} object to process interaction results.
-     *
-     * @param player The {@link PlayerEntity} that is interacting with the TileObject.
-     * @param game A {@link GameManipulator} on which interaction results can be executed.
-     * @return A boolean representing whether further movement/interaction should be evaluated.
      */
     boolean interactWith(PlayerEntity player, GameManipulator game);
 

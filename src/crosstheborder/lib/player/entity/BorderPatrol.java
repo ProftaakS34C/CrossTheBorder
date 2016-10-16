@@ -1,7 +1,6 @@
 package crosstheborder.lib.player.entity;
 
 import crosstheborder.lib.Team;
-import crosstheborder.lib.enumeration.Country;
 import crosstheborder.lib.interfaces.GameManipulator;
 import crosstheborder.lib.interfaces.GameSettings;
 import crosstheborder.lib.player.PlayerEntity;
@@ -50,14 +49,5 @@ public class BorderPatrol extends PlayerEntity {
             game.changePlayerEntityLocation(this, player.getLocation());
         }
         return false;
-    }
-
-    @Override
-    public boolean interactWith(Country country, GameManipulator game) {
-        switch (country) {
-            case MEX:
-                return false;
-        }
-        return true;
     }
 }

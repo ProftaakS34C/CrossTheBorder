@@ -1,7 +1,6 @@
 package crosstheborder.lib.player.entity;
 
 import crosstheborder.lib.Team;
-import crosstheborder.lib.enumeration.Country;
 import crosstheborder.lib.interfaces.GameManipulator;
 import crosstheborder.lib.interfaces.GameSettings;
 import crosstheborder.lib.player.PlayerEntity;
@@ -79,16 +78,5 @@ public class Mexican extends PlayerEntity {
             game.respawnPlayer(this);
         }
         return false;
-    }
-
-    @Override
-    public boolean interactWith(Country country, GameManipulator game) {
-        switch (country) {
-            case USA:
-                game.increaseScore(this.getTeam());
-                game.respawnPlayer(this);
-                return false;
-        }
-        return true;
     }
 }

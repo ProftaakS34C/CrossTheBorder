@@ -4,7 +4,6 @@ import crosstheborder.lib.ImageFinder;
 import crosstheborder.lib.InputBuffer;
 import crosstheborder.lib.Player;
 import crosstheborder.lib.Team;
-import crosstheborder.lib.enumeration.Country;
 import crosstheborder.lib.enumeration.MoveDirection;
 import crosstheborder.lib.interfaces.*;
 
@@ -14,7 +13,7 @@ import java.awt.*;
  *
  * @author Oscar de Leeuw
  */
-public abstract class PlayerEntity extends Player implements Drawable {
+public abstract class PlayerEntity extends Player implements Drawable, Interactable {
     private Point location;
     private InputBuffer inputBuffer;
     private boolean canMove = true;
@@ -106,15 +105,6 @@ public abstract class PlayerEntity extends Player implements Drawable {
      * @return A boolean representing whether further movement/interaction should be evaluated.
      */
     public abstract boolean interactWith(PlayerEntity player, GameManipulator game);
-
-    /**
-     * Method for handling the interaction between a PlayerEntity and a country.
-     *
-     * @param country The country that is being interacted with.
-     * @param game    A GameManipulator on which interaction results can be executed.
-     * @return A boolean representing whether further movement/interaction should be evaluated.
-     */
-    public abstract boolean interactWith(Country country, GameManipulator game);
 
     /**
      * {@inheritDoc}
