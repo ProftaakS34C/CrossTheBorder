@@ -3,6 +3,7 @@ package crosstheborder.lib;
 import crosstheborder.lib.enumeration.MoveDirection;
 import crosstheborder.lib.enumeration.ObstacleType;
 import crosstheborder.lib.enumeration.PlaceableType;
+import crosstheborder.lib.interfaces.GameSettings;
 import crosstheborder.lib.player.Trump;
 import crosstheborder.lib.player.entity.BorderPatrol;
 import crosstheborder.lib.player.entity.Mexican;
@@ -22,6 +23,7 @@ public class GameTest {
     private static final int TICK_RATE = ServerSettings.getInstance().getServerTickRate();
 
     private Game game;
+    private GameSettings settings;
 
     private User user1 = new User("Trump");
     private User user2 = new User("Juan");
@@ -35,6 +37,7 @@ public class GameTest {
     @Before
     public void setUp() throws Exception {
         game = new Game("empty");
+        settings = game.getSettings();
 
         game.addPlayer(user1);
         game.addPlayer(user2);
@@ -43,6 +46,11 @@ public class GameTest {
         trump = (Trump) user1.getPlayer();
         mexican = (Mexican) user2.getPlayer();
         borderPatrol = (BorderPatrol) user3.getPlayer();
+
+        //Remove the respawn immobilization.
+        for (int i = 0; i < settings.getServerTickRate() * settings.getRespawnTime(); i++) {
+            game.update();
+        }
     }
 
     @Test
@@ -56,8 +64,8 @@ public class GameTest {
         assertTrue(borderPatrol.getTeam().getTeamArea().contains(borderPatrol.getLocation()));
 
         //Check if the mexican and borderpatrol exist on the map.
-        assertEquals(game.getMap().getPlayerEntity(mexican.getLocation()), mexican);
-        assertEquals(game.getMap().getPlayerEntity(borderPatrol.getLocation()), borderPatrol);
+        assertEquals(game.getMap().getTile(mexican.getLocation()).getPlayerEntity(), mexican);
+        assertEquals(game.getMap().getTile(borderPatrol.getLocation()).getPlayerEntity(), borderPatrol);
 
         //Check whether the teams contain the correct team members.
         assertTrue(game.getUsa().getTeamMembers().contains(borderPatrol));
@@ -75,7 +83,7 @@ public class GameTest {
 
         //Process the amount of ticks that equals 1 second, which should allow the mexican to move again.
         for (int i = 0; i < 1 * TICK_RATE; i++) {
-            //Push movement. up to mexico and down to border patrol
+            //Push movement. up to mexican and down to border patrol
             game.sendMoveInput(MoveDirection.UP, mexican);
             game.sendMoveInput(MoveDirection.DOWN, borderPatrol);
 
@@ -121,10 +129,10 @@ public class GameTest {
         game.addPlaceable(location4, PlaceableType.WALL);
         assertEquals(wallCount - 3, trump.getWallAmount());
 
-        assertTrue(game.getMap().getTileObject(location) instanceof Wall);
-        assertTrue(game.getMap().getTileObject(location2) instanceof Wall);
-        assertTrue(game.getMap().getTileObject(location3) instanceof Wall);
-        assertNull(game.getMap().getTileObject(location4));
+        assertTrue(game.getMap().getTile(location).getTileObject() instanceof Wall);
+        assertTrue(game.getMap().getTile(location2).getTileObject() instanceof Wall);
+        assertTrue(game.getMap().getTile(location3).getTileObject() instanceof Wall);
+        assertNull(game.getMap().getTile(location4).getTileObject());
 
 
         game.addPlaceable(location2, PlaceableType.WALL);
@@ -133,7 +141,7 @@ public class GameTest {
 
         //Try to add a placeable at the same location.
         game.addPlaceable(location, PlaceableType.TRAP);
-        assertTrue(game.getMap().getTileObject(location) instanceof Wall);
+        assertTrue(game.getMap().getTile(location).getTileObject() instanceof Wall);
         assertEquals(trapCount, trump.getTrapAmount());
     }
 
@@ -142,13 +150,13 @@ public class GameTest {
         Point playerLocation = mexican.getLocation();
         Point oldLocation = new Point(playerLocation.x, playerLocation.y);
         Point nextLocation1 = new Point(playerLocation.x + 1, playerLocation.y);
-        Point nextLocation2 = new Point(playerLocation.x + 1, playerLocation.y - 1);
+        Tile nextLocation2 = game.getMap().getTile(playerLocation.x + 1, playerLocation.y - 1);
 
         //Move the player to an empty tile.
         game.movePlayerEntity(mexican, nextLocation1);
 
-        assertEquals(mexican, game.getMap().getPlayerEntity(nextLocation1));
-        assertFalse(game.getMap().hasTileObject(oldLocation));
+        assertEquals(mexican, game.getMap().getTile(nextLocation1).getPlayerEntity());
+        assertFalse(game.getMap().getTile(oldLocation).hasTileObject());
         assertEquals(mexican.getLocation().x, nextLocation1.x);
         assertEquals(mexican.getLocation().y, nextLocation1.y);
 
@@ -156,14 +164,14 @@ public class GameTest {
         Obstacle obstacle = new Obstacle(ObstacleType.TREE);
         game.changeTileObjectLocation(obstacle, nextLocation2);
 
-        assertEquals(obstacle, game.getMap().getTileObject(nextLocation2));
+        assertEquals(obstacle, nextLocation2.getTileObject());
 
-        game.movePlayerEntity(mexican, nextLocation2);
+        game.movePlayerEntity(mexican, nextLocation2.getLocation());
 
         //Mexican should not have moved.
-        assertEquals(mexican, game.getMap().getPlayerEntity(mexican.getLocation()));
-        assertEquals(mexican, game.getMap().getPlayerEntity(nextLocation1));
-        assertEquals(obstacle, game.getMap().getTileObject(nextLocation2));
+        assertEquals(mexican, game.getMap().getTile(mexican.getLocation()).getPlayerEntity());
+        assertEquals(mexican, game.getMap().getTile(nextLocation1).getPlayerEntity());
+        assertEquals(obstacle, nextLocation2.getTileObject());
     }
 
     @Test
@@ -172,7 +180,7 @@ public class GameTest {
 
         game.respawnPlayer(mexican);
 
-        assertFalse(game.getMap().hasTileObject(oldLocation));
+        assertFalse(game.getMap().getTile(oldLocation).hasTileObject());
         assertTrue(mexican.getTeam().getTeamArea().contains(mexican.getLocation()));
     }
 
@@ -190,26 +198,26 @@ public class GameTest {
 
     @Test
     public void changeTileObjectLocation() throws Exception {
-        Point location = new Point(10, 10);
+        Tile tile = game.getMap().getTile(10, 10);
         Obstacle obstacle = new Obstacle(ObstacleType.TREE);
 
         //Set a new tile object on the map.
-        game.changeTileObjectLocation(obstacle, location);
-        assertEquals(obstacle, game.getMap().getTileObject(location));
-        assertEquals(obstacle.getLocation().x, location.x);
-        assertEquals(obstacle.getLocation().y, location.y);
+        game.changeTileObjectLocation(obstacle, tile);
+        assertEquals(obstacle, tile.getTileObject());
+        assertEquals(obstacle.getLocation().x, tile.getLocation().x);
+        assertEquals(obstacle.getLocation().y, tile.getLocation().y);
 
         //Move a tile object.
         Point playerLocation = mexican.getLocation();
         Point oldLocation = new Point(playerLocation.x, playerLocation.y);
-        Point nextLocation = new Point(playerLocation.x + 1, playerLocation.y);
+        Tile nextTile = game.getMap().getTile(playerLocation.x + 1, playerLocation.y);
 
-        game.changePlayerEntityLocation(mexican, nextLocation);
+        game.changePlayerEntityLocation(mexican, nextTile);
 
-        assertEquals(mexican, game.getMap().getPlayerEntity(nextLocation));
-        assertFalse(game.getMap().hasTileObject(oldLocation));
-        assertEquals(mexican.getLocation().x, nextLocation.x);
-        assertEquals(mexican.getLocation().y, nextLocation.y);
+        assertEquals(mexican, nextTile.getPlayerEntity());
+        assertFalse(game.getMap().getTile(oldLocation).hasTileObject());
+        assertEquals(mexican.getLocation().x, nextTile.getLocation().x);
+        assertEquals(mexican.getLocation().y, nextTile.getLocation().y);
 
     }
 

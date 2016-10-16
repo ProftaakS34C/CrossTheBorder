@@ -1,6 +1,7 @@
 package crosstheborder.lib.tileobject;
 
 import crosstheborder.lib.ImageFinder;
+import crosstheborder.lib.Tile;
 import crosstheborder.lib.interfaces.GameManipulator;
 import crosstheborder.lib.interfaces.Painter;
 import crosstheborder.lib.interfaces.TileObject;
@@ -14,13 +15,27 @@ import java.awt.*;
  * @author Oscar de Leeuw
  */
 public abstract class Placeable implements TileObject {
-    private Point location;
+    private Tile tile;
 
     /**
-     * Creates a new placeable with the given location and isPassable status.
+     * Creates a new placeable.
      */
     protected Placeable() {
-        this.location = new Point();
+    }
+
+    @Override
+    public Point getLocation() {
+        return this.tile.getLocation();
+    }
+
+    @Override
+    public Tile getTile() {
+        return this.tile;
+    }
+
+    @Override
+    public void setTile(Tile tile) {
+        this.tile = tile;
     }
 
     public abstract boolean interactWith(PlayerEntity player, GameManipulator game);
@@ -36,10 +51,6 @@ public abstract class Placeable implements TileObject {
      */
     public abstract boolean canPlaceWithNeighbours(TileObject east, TileObject west, TileObject north, TileObject south);
 
-    @Override
-    public Point getLocation() {
-        return this.location;
-    }
 
     @Override
     public void draw(Painter painter, Point location, int tileWidth) {

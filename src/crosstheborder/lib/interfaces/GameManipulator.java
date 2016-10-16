@@ -1,6 +1,7 @@
 package crosstheborder.lib.interfaces;
 
 import crosstheborder.lib.Team;
+import crosstheborder.lib.Tile;
 import crosstheborder.lib.player.PlayerEntity;
 
 import java.awt.*;
@@ -35,7 +36,7 @@ public interface GameManipulator {
      * @param entity  The PlayerEntity that should be moved.
      * @param newLocation The new location of the tileObject.
      */
-    void changePlayerEntityLocation(PlayerEntity entity, Point newLocation);
+    void changePlayerEntityLocation(PlayerEntity entity, Tile newLocation);
 
     /**
      * Changes the location of a TileObject to new location.
@@ -45,7 +46,7 @@ public interface GameManipulator {
      * @param object      The TileObject that should be moved.
      * @param newLocation The new location of the tileObject.
      */
-    void changeTileObjectLocation(TileObject object, Point newLocation);
+    void changeTileObjectLocation(TileObject object, Tile newLocation);
 
     /**
      * Removes a TileObject from the game.

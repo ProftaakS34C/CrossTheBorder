@@ -184,13 +184,12 @@ public class MapLoader {
                     country = Country.NONE;
                 }
 
-                ret[i][j] = new Tile(tileTypes.get(tileCode), country);
+                ret[i][j] = new Tile(tileTypes.get(tileCode), country, new Point(i, j));
 
                 ObstacleType type = obstacleTypes.get(objectCode);
 
                 if (type != null) {
                     TileObject obstacle = new Obstacle(type);
-                    obstacle.getLocation().move(i, j);
                     ret[i][j].setTileObject(obstacle);
                 }
             }

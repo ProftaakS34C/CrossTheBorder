@@ -1,14 +1,17 @@
 package crosstheborder.lib;
 
 import crosstheborder.lib.enumeration.Country;
+import crosstheborder.lib.enumeration.Direction;
 import crosstheborder.lib.interfaces.Camera;
 import crosstheborder.lib.interfaces.TileObject;
 import crosstheborder.lib.player.PlayerEntity;
 import crosstheborder.lib.tileobject.Placeable;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.logging.Level;
+import java.util.function.Predicate;
 import java.util.logging.Logger;
 
 /**
@@ -98,127 +101,118 @@ public class Map {
      * @param location The location of the requested tile.
      * @return The tile at the given location. Returns null when the given location is out of bounds.
      */
-    private Tile getTile(Point location) {
+    public Tile getTile(Point location) {
+        return getTile(location.x, location.y);
+    }
+
+    /**
+     * Gets the tile from a given location.
+     * Returns null when an {@link ArrayIndexOutOfBoundsException} happens.
+     *
+     * @param x The x-coordinate of the Tile
+     * @param y The y-coordinate of the Tile.
+     * @return The tile at the given location. Returns null when the given location is out of bounds.
+     */
+    public Tile getTile(int x, int y) {
         try {
-            return tiles[location.x][location.y];
+            return tiles[x][y];
         } catch (ArrayIndexOutOfBoundsException e) {
-            LOGGER.log(Level.SEVERE, e.toString(), e);
+            //LOGGER.log(Level.OFF, e.toString(), e);
+            //Intentionally caught and disregarded.
         }
         return null;
     }
 
     /**
-     * Gets whether the given location is part of a {@link Country}.
-     *
-     * @param location The location of the tile.
-     * @return A boolean that indicates whether is part of a country.
-     */
-    public boolean hasCountry(Point location) {
-        return getTile(location).getCountry() != Country.NONE;
-    }
-
-    /**
-     * Gets the country of a given location.
-     *
-     * @param location The location of the tile.
-     * @return The country of the tile.
-     */
-    public Country getCountry(Point location) {
-        return getTile(location).getCountry();
-    }
-
-    /**
-     * Gets a {@link TileObject} from a {@link Tile} with a given location.
-     *
-     * @param location A point that represents the location of a tile.
-     * @return The TileObject at the given location. Returns null when there is no tileObject.
-     */
-    public TileObject getTileObject(Point location) {
-        return getTile(location).getTileObject();
-    }
-
-    /**
-     * Checks whether a given position has a tile object.
-     *
-     * @param location The location of the tile that will be checked.
-     */
-    public boolean hasTileObject(Point location) {
-        return getTile(location).hasTileObject();
-    }
-
-    /**
-     * Changes a {@link Tile}'s {@link TileObject} to the given {@link TileObject}.
-     *
-     * @param location The location of the tile that has to be changed.
-     * @param to The kind of tile that the tile has to become.
-     */
-    public void changeTileObject(Point location, TileObject to){
-        getTile(location).setTileObject(to);
-    }
-
-    /**
-     * Checks whether a given location contains a PlayerEntity.
-     *
-     * @param location The location of the tile that will be checked.
-     * @return A boolean that represents whether a PlayerEntity is present on the tile.
-     */
-    public boolean hasPlayerEntity(Point location) {
-        return getTile(location).hasPlayerEntity();
-    }
-
-    /**
-     * Gets the PlayerEntity at a given location.
-     * Will throw a null reference exception when the tile has no PlayerEntity.
-     *
-     * @param location The location of the tile to get the PlayerEntity from.
-     * @return The PlayerEntity object that belongs to the tile.
-     */
-    public PlayerEntity getPlayerEntity(Point location) {
-        return getTile(location).getPlayerEntity();
-    }
-
-    /**
-     * Changes the PlayerEntity of the given location.
-     *
-     * @param entity   The PlayerEntity that should be placed upon the tile.
-     * @param location The location of the tile.
-     */
-    public void changePlayerEntity(Point location, PlayerEntity entity) {
-        getTile(location).setPlayerEntity(entity);
-    }
-
-    /**
-     * Gets a point devoid of a TileObject in a given area.
+     * Gets a Tile inside an given area that is accessible to the given entity.
      * Can be an infinite loop.
      *
      * @param area The area out of which a point is requested.
-     * @return A point that does not contain a TileObject in a given area.
+     * @param entity The entity for which the tile should be accessible.
+     * @return A tile that is free.
      */
-    public Point getFreePointInArea(Rectangle area) {
+    public Tile getFreeTileInArea(Rectangle area, PlayerEntity entity) {
 
         //Generate a random point within the given area.
         int x = ThreadLocalRandom.current().nextInt(area.x, area.x + area.width);
         int y = ThreadLocalRandom.current().nextInt(area.y, area.y + area.height);
-        Point nextLocation = new Point(x, y);
+        Tile nextLocation = getTile(x, y);
 
         //If the tile is occupied find a new location.
-        if (hasTileObject(nextLocation) || hasPlayerEntity(nextLocation)) {
-            return getFreePointInArea(area);
-        } else {
+        if (entity == null || nextLocation.isAccessible(entity)) {
             return nextLocation;
+        } else {
+            return getFreeTileInArea(area, entity);
         }
     }
 
-    public boolean canPlacePlaceable(Point location, Placeable placeable) {
-        if (!mexicoArea.contains(location) && !usaArea.contains(location) && !hasTileObject(location)) {
-            TileObject east = getTileObject(new Point(location.x + 1, location.y));
-            TileObject west = getTileObject(new Point(location.x - 1, location.y));
-            TileObject north = getTileObject(new Point(location.x, location.y - 1));
-            TileObject south = getTileObject(new Point(location.x, location.y + 1));
+    /**
+     * Gets a random tile in the given area.
+     *
+     * @param area The area out of which you want a tile.
+     * @return A tile in the area.
+     */
+    public Tile getTileInArea(Rectangle area) {
+        return getFreeTileInArea(area, null);
+    }
+
+    /**
+     * Gets all the tiles that satisfy a given predicate.
+     *
+     * @param predicate The predicate to test the tile for.
+     * @return A list of all the tiles that satisfy the predicate.
+     */
+    public List<Tile> getTiles(Predicate<? super Tile> predicate) {
+        List<Tile> ret = new ArrayList<>();
+
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles[i].length; j++) {
+                Tile current = tiles[i][j];
+                if (predicate.test(current)) {
+                    ret.add(current);
+                }
+            }
+        }
+
+        return ret;
+    }
+
+    /**
+     * Gets the neighbours of a Tile.
+     *
+     * @param tile The location of which to get the neighbours.
+     * @return A list of neighbours.
+     */
+    public List<Tile> getNeighbours(Tile tile) {
+        List<Tile> ret = new ArrayList<>();
+
+        for (Direction dir : Direction.values()) {
+            Tile neighbour = getTile(tile.getLocation().x + dir.getCartesianRepresentation().x, tile.getLocation().y + dir.getCartesianRepresentation().y);
+            if (neighbour != null) {
+                ret.add(neighbour);
+            }
+        }
+
+        return ret;
+    }
+
+    /**
+     * Determines whether a given Placeable can be placed on the map.
+     *
+     * @param tile  The tile the Placeable should be placed.
+     * @param placeable The placeable for which to run this check.
+     * @return True when the placeable can be placed at the given location.
+     */
+    public boolean canPlacePlaceable(Tile tile, Placeable placeable) {
+        if (tile.getCountry() == Country.NONE && !tile.hasTileObject()) { //TODO Make a upgrade logic at some point.
+            Point location = tile.getLocation(); //TODO Set this shit in a getNeighbours method.
+            TileObject east = getTile(location.x + 1, location.y).getTileObject();
+            TileObject west = getTile(location.x - 1, location.y).getTileObject();
+            TileObject north = getTile(location.x, location.y - 1).getTileObject();
+            TileObject south = getTile(location.x, location.y + 1).getTileObject();
 
             return placeable.canPlaceWithNeighbours(east, west, north, south);
         }
-
         return false;
     }
 

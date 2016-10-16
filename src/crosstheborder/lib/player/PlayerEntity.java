@@ -1,12 +1,11 @@
 package crosstheborder.lib.player;
 
-import crosstheborder.lib.ImageFinder;
-import crosstheborder.lib.InputBuffer;
-import crosstheborder.lib.Player;
-import crosstheborder.lib.Team;
-import crosstheborder.lib.enumeration.Country;
+import crosstheborder.lib.*;
 import crosstheborder.lib.enumeration.MoveDirection;
-import crosstheborder.lib.interfaces.*;
+import crosstheborder.lib.interfaces.Drawable;
+import crosstheborder.lib.interfaces.GameSettings;
+import crosstheborder.lib.interfaces.Interactable;
+import crosstheborder.lib.interfaces.Painter;
 
 import java.awt.*;
 /**
@@ -14,8 +13,8 @@ import java.awt.*;
  *
  * @author Oscar de Leeuw
  */
-public abstract class PlayerEntity extends Player implements Drawable {
-    private Point location;
+public abstract class PlayerEntity extends Player implements Drawable, Interactable {
+    private Tile tile;
     private InputBuffer inputBuffer;
     private boolean canMove = true;
     //The amount of ticks till the player can move again.
@@ -31,17 +30,36 @@ public abstract class PlayerEntity extends Player implements Drawable {
      */
     public PlayerEntity(String name, Team team, GameSettings settings) {
         super(name, team, settings);
-        location = new Point();
         this.inputBuffer = new InputBuffer();
     }
 
     /**
-     * Gets the location of the {@link TileObject}.
+     * Gets the location of the PlayerEntity.
+     * Will return the location of the tile this PlayerEntity belongs to.
      *
-     * @return A point that represents the location of the {@link TileObject}.
+     * @return A point that represents the location of the PlayerEntity.
      */
     public Point getLocation() {
-        return this.location;
+        return this.tile.getLocation();
+    }
+
+    /**
+     * Gets whether this entity can move.
+     *
+     * @return True when the entity can move.
+     */
+    public boolean canMove() {
+        return this.canMove; //TODO make the update method in game use this method.
+    }
+
+    @Override
+    public Tile getTile() {
+        return this.tile;
+    }
+
+    @Override
+    public void setTile(Tile tile) {
+        this.tile = tile;
     }
 
     /**
@@ -98,31 +116,12 @@ public abstract class PlayerEntity extends Player implements Drawable {
     }
 
     /**
-     * Method for handling the interaction between two PlayerEntities.
-     * Calls methods on the {@link GameManipulator} object to process interaction results.
-     *
-     * @param player The other PlayerEntity that is interacting with this playerEntity.
-     * @param game   A {@link GameManipulator} on which interaction results can be executed.
-     * @return A boolean representing whether further movement/interaction should be evaluated.
-     */
-    public abstract boolean interactWith(PlayerEntity player, GameManipulator game);
-
-    /**
-     * Method for handling the interaction between a PlayerEntity and a country.
-     *
-     * @param country The country that is being interacted with.
-     * @param game    A GameManipulator on which interaction results can be executed.
-     * @return A boolean representing whether further movement/interaction should be evaluated.
-     */
-    public abstract boolean interactWith(Country country, GameManipulator game);
-
-    /**
      * {@inheritDoc}
      * Returns a clone of the location of the object.
      */
     @Override
     public Point getCameraLocation() {
-        return (Point) this.location.clone();
+        return (Point) this.tile.getLocation().clone();
     }
 
     /**
