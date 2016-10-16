@@ -1,5 +1,6 @@
 package crosstheborder.lib.enumeration;
 
+import crosstheborder.lib.Team;
 import crosstheborder.lib.interfaces.Drawable;
 import crosstheborder.lib.interfaces.GameManipulator;
 import crosstheborder.lib.interfaces.Interactable;
@@ -20,25 +21,26 @@ public enum Country implements Drawable, Interactable {
      * {@inheritDoc}
      * <p>
      * Handles the interaction between a country and an entity.
+     * <p>
+     *     Calls the follow methods on GameManipulator:
+     *     <ul>
+     *         <li>Calls: {@link GameManipulator#increaseScore(Team)} when a MEX enters the USA.</li>
+     *         <li>Calls: {@link GameManipulator#respawnPlayer(PlayerEntity)} when a MEX enters the USA.</li>
+     *     </ul>
+     * </p>
+     * Will return false when a Mexican has scored.
      */
     public boolean interactWith(PlayerEntity entity, GameManipulator game) {
         switch (this) {
             case USA:
-                if (entity.getTeam().getName() == TeamName.USA) {
-                    return true;
-                } else if (entity.getTeam().getName() == TeamName.MEX) {
+                if (entity.getTeam().getCountry() == MEX) {
                     game.increaseScore(entity.getTeam());
                     game.respawnPlayer(entity);
                     return false;
                 }
-            case MEX:
-                if (entity.getTeam().getName() == TeamName.USA) {
-                    return false;
-                }
-            case NONE:
-            default:
-                return true;
         }
+
+        return true;
     }
 
     /**
@@ -50,7 +52,7 @@ public enum Country implements Drawable, Interactable {
     public boolean isAccessible(PlayerEntity entity) {
         switch (this) {
             case MEX:
-                if (entity.getTeam().getName() == TeamName.USA) {
+                if (entity.getTeam().getCountry() == USA) {
                     return false;
                 }
         }

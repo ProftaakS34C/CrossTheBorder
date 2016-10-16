@@ -1,5 +1,6 @@
 package crosstheborder.lib;
 
+import crosstheborder.lib.enumeration.Country;
 import crosstheborder.lib.enumeration.MoveDirection;
 import crosstheborder.lib.enumeration.PlaceableType;
 import crosstheborder.lib.interfaces.*;
@@ -41,8 +42,8 @@ public class Game implements GameManipulator, GameInterface {
         settings = new GameSettingsImpl(ServerSettings.getInstance().getServerTickRate());
 
         map = MapLoader.getInstance().buildMap(mapName);
-        usa = new Team("USA", map.getUsaArea(), settings.getUsaScoringModifier());
-        mex = new Team("MEX", map.getMexicoArea(), settings.getMexicanScoringModifier());
+        usa = new Team(Country.USA, map.getUsaArea(), settings.getUsaScoringModifier());
+        mex = new Team(Country.MEX, map.getMexicoArea(), settings.getMexicanScoringModifier());
     }
 
     /**

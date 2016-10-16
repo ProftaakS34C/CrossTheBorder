@@ -5,7 +5,6 @@ import crosstheborder.lib.Tile;
 import crosstheborder.lib.computer.algorithms.AStarAlgorithm;
 import crosstheborder.lib.enumeration.Country;
 import crosstheborder.lib.enumeration.MoveDirection;
-import crosstheborder.lib.enumeration.TeamName;
 import crosstheborder.lib.player.PlayerEntity;
 import crosstheborder.lib.player.entity.BorderPatrol;
 import crosstheborder.lib.player.entity.Mexican;
@@ -94,7 +93,7 @@ public class Computer {
         if (entity instanceof Mexican) {
             goalPredicate = (tile -> tile.getCountry() == Country.USA && tile.isAccessible(entity));
         } else if (entity instanceof BorderPatrol) {
-            goalPredicate = (tile -> tile.getPlayerEntity().getTeam().getName() == TeamName.MEX && tile.isAccessible(entity));
+            goalPredicate = (tile -> tile.getPlayerEntity().getTeam().getCountry() == Country.MEX && tile.isAccessible(entity));
         }
     }
 
