@@ -1,12 +1,11 @@
 package crosstheborder.lib.computer.algorithms;
 
 import crosstheborder.lib.Map;
+import crosstheborder.lib.Tile;
 import crosstheborder.lib.computer.PathingAlgorithm;
 import crosstheborder.lib.player.PlayerEntity;
 
-import java.awt.*;
 import java.util.*;
-import java.util.List;
 
 /**
  * Credit goes to http://www.redblobgames.com/pathfinding/a-star/implementation.html
@@ -14,8 +13,8 @@ import java.util.List;
  * @author Oscar de Leeuw
  */
 public class AStarAlgorithm implements PathingAlgorithm {
-    private HashMap<Point, Point> cameFrom;
-    private HashMap<Point, Double> costSoFar;
+    private HashMap<Tile, Tile> cameFrom;
+    private HashMap<Tile, Double> costSoFar;
 
     /**
      * Creates a new AStarAlgorithm with a given HashMap size.
@@ -23,7 +22,7 @@ public class AStarAlgorithm implements PathingAlgorithm {
      * @param expectedPathSize The expected size of the path.
      *                         Can increase performance on larger paths but consumes more memory.
      */
-    public AStarAlgorithm(int expectedPathSize) {
+    AStarAlgorithm(int expectedPathSize) {
         cameFrom = new HashMap<>(expectedPathSize);
         costSoFar = new HashMap<>(expectedPathSize);
     }
@@ -36,20 +35,20 @@ public class AStarAlgorithm implements PathingAlgorithm {
     }
 
     @Override
-    public Deque<Point> calculatePath(Map map, PlayerEntity entity, Point start, Point end) {
+    public Deque<Tile> calculatePath(Map map, PlayerEntity entity, Tile start, Tile end) {
         //Perform the algorithm.
         performAStar(map, entity, start, end);
 
         //Use a Deque as a stack.
-        Deque<Point> ret = new ArrayDeque<>();
+        Deque<Tile> ret = new ArrayDeque<>();
         //Push the end to the stack.
         ret.offerFirst(end);
 
         //Construct from the end to the start and set them in reverse order into the Deque.
-        Point previousPoint = cameFrom.get(end);
-        while (previousPoint != start) {
+        Tile previousTile = cameFrom.get(end);
+        while (previousTile != start) {
             //Push the point to the stack.
-            ret.offerFirst(previousPoint);
+            ret.offerFirst(previousTile);
         }
 
         cameFrom.clear();
@@ -59,13 +58,14 @@ public class AStarAlgorithm implements PathingAlgorithm {
 
     /**
      * Gets the outcome of the heuristic function for the A* algorithm.
-     * The heuristic function is defined as the straight line (as the crow flies) distance between the given point and the goal.
+     * The heuristic function is defined as the straight line (as the crow flies) distance between the two given tiles.
      *
-     * @param location The current location for which the heuristic function should be evaluated.
+     * @param current The current tile for which the heuristic function should be evaluated.
+     * @param goal The goal of the pathing algorithm.
      * @return The outcome of the heuristic function.
      */
-    private double heuristic(Point location, Point goal) {
-        return location.distance(goal);
+    private double heuristic(Tile current, Tile goal) {
+        return current.getLocation().distance(goal.getLocation());
     }
 
     /**
@@ -76,9 +76,9 @@ public class AStarAlgorithm implements PathingAlgorithm {
      * @param start The starting location of the algorithm.
      * @param end   The goal of the algorithm.
      */
-    private void performAStar(Map map, PlayerEntity entity, Point start, Point end) {
+    private void performAStar(Map map, PlayerEntity entity, Tile start, Tile end) {
         //Create a frontier and push the start to the frontier.
-        Frontier<Point> frontier = new Frontier<>();
+        Frontier<Tile> frontier = new Frontier<>();
         frontier.enqueue(start, 0);
 
         //Initialize cameFrom and costSoFar.
@@ -88,31 +88,31 @@ public class AStarAlgorithm implements PathingAlgorithm {
         //While there is still a frontier and the goal hasn't been found.
         while (frontier.size() > 0) {
             //Get the highest priority point.
-            Point current = frontier.dequeue();
+            Tile current = frontier.dequeue();
 
             //If the location of the current point corresponds to the end end the search.
-            if (current.x == end.x && current.y == end.y) {
-                //Little hack to make sure the end is present in the cameFrom HashMap.
-                Point previous = cameFrom.get(current);
-                cameFrom.put(end, previous);
+            if (current == end) {
                 break;
             }
 
             //Foreach neighbour of the current location perform the following.
-            for (Point next : map.getNeighbours(current, entity)) {
-                //Calculate the cost of moving to the next location.
-                //Currently 1 since the map will only return tiles which can be freely moved to.
-                double newCost = costSoFar.get(current) + 1;
-                //If the next location has not been evaluated or the newCost is lower than previously evaluated.
-                if (!costSoFar.containsKey(next) || newCost < costSoFar.get(next)) {
-                    //Add the location to the costSoFar HashMap.
-                    costSoFar.put(next, newCost);
-                    //Calculate the priority for evaluating this location.
-                    double priority = newCost + heuristic(next, end);
-                    //Add the location to the frontier.
-                    frontier.enqueue(next, priority);
-                    //Register that the next location was reached through the current location.
-                    cameFrom.put(next, current);
+            for (Tile next : map.getNeighbours(current)) {
+                //Check whether the tile can be accessed.
+                if (current.isAccessible(entity)) {
+                    //Calculate the cost of moving to the next location.
+                    //Currently 1 since the map will only return tiles which can be freely moved to.
+                    double newCost = costSoFar.get(current) + next.getCost(entity);
+                    //If the next location has not been evaluated or the newCost is lower than previously evaluated.
+                    if (!costSoFar.containsKey(next) || newCost < costSoFar.get(next)) {
+                        //Add the location to the costSoFar HashMap.
+                        costSoFar.put(next, newCost);
+                        //Calculate the priority for evaluating this location.
+                        double priority = newCost + heuristic(next, end);
+                        //Add the location to the frontier.
+                        frontier.enqueue(next, priority);
+                        //Register that the next location was reached through the current location.
+                        cameFrom.put(next, current);
+                    }
                 }
             }
         }
@@ -134,14 +134,14 @@ public class AStarAlgorithm implements PathingAlgorithm {
      * @param <T> The type you want a frontier of.
      */
     private class Frontier<T> {
-        private final List<Tuple<T, Double>> elements = new ArrayList();
+        private final List<FrontierItem<T>> elements = new ArrayList<>();
 
         /**
          * Gets the size of the frontier.
          *
          * @return An integer that represents the size of the frontier.
          */
-        public int size() {
+        int size() {
             return elements.size();
         }
 
@@ -151,8 +151,8 @@ public class AStarAlgorithm implements PathingAlgorithm {
          * @param t        The item that should be added to the frontier.
          * @param priority The priority of the item.
          */
-        public void enqueue(T t, double priority) {
-            elements.add(new Tuple<>(t, priority));
+        void enqueue(T t, double priority) {
+            elements.add(new FrontierItem<>(t, priority));
         }
 
         /**
@@ -161,33 +161,32 @@ public class AStarAlgorithm implements PathingAlgorithm {
          *
          * @return The item with the lowest priority.
          */
-        public T dequeue() {
+        T dequeue() {
             int bestIndex = 0;
 
             for (int i = 0; i < elements.size(); i++) {
-                if (elements.get(i).item2 < elements.get(bestIndex).item2) {
+                if (elements.get(i).priority < elements.get(bestIndex).priority) {
                     bestIndex = i;
                 }
             }
 
-            T bestItem = elements.get(bestIndex).item1;
+            T bestItem = elements.get(bestIndex).item;
             elements.remove(bestIndex);
             return bestItem;
         }
 
         /**
-         * General class for coupling two objects together.
+         * Class to capture a single item for the frontier.
          *
-         * @param <X> The first object.
-         * @param <Y> The second object.
+         * @param <X> The object of the frontier consists off.
          */
-        private class Tuple<X, Y> {
-            public final X item1;
-            public final Y item2;
+        private class FrontierItem<X> {
+            final X item;
+            final double priority;
 
-            public Tuple(X item1, Y item2) {
-                this.item1 = item1;
-                this.item2 = item2;
+            FrontierItem(X item, double priority) {
+                this.item = item;
+                this.priority = priority;
             }
         }
     }

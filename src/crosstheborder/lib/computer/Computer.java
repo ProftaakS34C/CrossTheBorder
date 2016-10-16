@@ -20,7 +20,7 @@ public class Computer {
     private PlayerEntity entity;
     private Path path;
     private Predicate<Tile> goalPredicate;
-    private Point goal; //TODO Somehow track what goal we are after. In the case of the borderPatrol this needs to be mexican.
+    private Tile goal; //TODO Somehow track what goal we are after. In the case of the borderPatrol this needs to be mexican.
 
     public Computer(PlayerEntity entity) {
         this.entity = entity;
@@ -41,38 +41,39 @@ public class Computer {
         timesComputed++;
 
         //Get the next location in the path.
-        Point nextLocation = path.getNextLocation();
-        Point currentLocation = entity.getLocation();
+        Tile nextTile = path.getNextLocation();
+        Tile currentTile = entity.getTile();
 
         //If the path is empty, look for a new goal.
-        if (nextLocation == null) {
-            path.calculateNewPath(currentLocation, goal, map, entity);
+        if (nextTile == null) {
+            findNewGoal(map);
+            path.calculateNewPath(currentTile, goal, map, entity);
             //Call this method again to calculate a move.
             computeMove(map);
         }
 
         //If the next location is not accessible then try to move around it.
-        if (!map.isAccessible(nextLocation, entity)) {
-            path.precedePath(currentLocation, map, entity);
+        if (nextTile.isAccessible(entity)) {
+            path.precedePath(currentTile, map, entity);
             computeMove(map);
         }
 
         //Make sure the target is still at the end of the path.
-        if (!goal.equals(path.getEndPoint())) {
+        if (!goal.equals(path.getEndTile())) {
             //Recalculate the path to the goal.
             path.extendPath(goal, map, entity);
         }
 
         //If the next location is accessible, push the input to the buffer.
-        if (map.isAccessible(nextLocation, entity)) {
+        if (nextTile.isAccessible(entity)) {
             //Since nextLocation is not used again, use nextLocation to determine the movement direction.
-            nextLocation.translate(-currentLocation.x, -currentLocation.y);
+            Point nextLocation = new Point(nextTile.getLocation().x - currentTile.getLocation().x, nextTile.getLocation().x - currentTile.getLocation().y);
             MoveDirection md = MoveDirection.getMoveDirectionFromPoint(nextLocation);
             entity.pushInput(md);
         }
         //Else calculate a new path.
         else {
-            path.calculateNewPath(currentLocation, goal, map, entity);
+            path.calculateNewPath(currentTile, goal, map, entity);
             computeMove(map);
         }
 
@@ -84,7 +85,7 @@ public class Computer {
         throw new UnsupportedOperationException(); //TODO
     }
 
-    private Point findNewGoal(Map map) {
+    private void findNewGoal(Map map) {
         throw new UnsupportedOperationException(); //TODO
     }
 
