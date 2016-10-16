@@ -122,16 +122,6 @@ public class Map {
     }
 
     /**
-     * Gets whether the given location is part of a {@link Country}.
-     *
-     * @param location The location of the tile.
-     * @return A boolean that indicates whether is part of a country.
-     */
-    public boolean hasCountry(Point location) {
-        return getTile(location).getCountry() != Country.NONE;
-    } //TODO remove this method.
-
-    /**
      * Gets the country of a given location.
      *
      * @param location The location of the tile.
