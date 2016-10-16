@@ -1,6 +1,7 @@
 package crosstheborder.lib.player.entity;
 
 import crosstheborder.lib.Team;
+import crosstheborder.lib.Tile;
 import crosstheborder.lib.enumeration.Country;
 import crosstheborder.lib.interfaces.GameManipulator;
 import crosstheborder.lib.interfaces.GameSettings;
@@ -23,14 +24,14 @@ public class Mexican extends PlayerEntity {
     /**
      * This is the constructor method of the class "Mexican".
      * in the constructor the name of the Mexican is set.
-     * Calls the {@link PlayerEntity#PlayerEntity(String, Team, GameSettings)} constructor.
+     * Calls the {@link PlayerEntity#PlayerEntity(String, Team, GameSettings, Tile)} constructor.
      *
      * @param name    The name of the Mexican.
      * @param team The team this Mexican belongs to.
      * @param settings The settings of the game.
      */
-    public Mexican(String name, Team team, GameSettings settings) {
-        super(name, team, settings);
+    public Mexican(String name, Team team, GameSettings settings, Tile tile) {
+        super(name, team, settings, tile);
         climbModifier = settings.getClimbModifier();
     }
 

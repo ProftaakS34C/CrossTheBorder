@@ -1,9 +1,6 @@
 package crosstheborder.lib.player;
 
-import crosstheborder.lib.ImageFinder;
-import crosstheborder.lib.InputBuffer;
-import crosstheborder.lib.Player;
-import crosstheborder.lib.Team;
+import crosstheborder.lib.*;
 import crosstheborder.lib.enumeration.Country;
 import crosstheborder.lib.enumeration.MoveDirection;
 import crosstheborder.lib.interfaces.*;
@@ -18,6 +15,7 @@ public abstract class PlayerEntity extends Player implements Drawable {
     private Point location;
     private InputBuffer inputBuffer;
     private boolean canMove = true;
+    private Tile tile;
     //The amount of ticks till the player can move again.
     private int canMoveTicks;
 
@@ -29,10 +27,11 @@ public abstract class PlayerEntity extends Player implements Drawable {
      * @param team The team this player is part of.
      * @param settings The settings of the game.
      */
-    public PlayerEntity(String name, Team team, GameSettings settings) {
+    public PlayerEntity(String name, Team team, GameSettings settings, Tile tile) {
         super(name, team, settings);
         location = new Point();
         this.inputBuffer = new InputBuffer();
+        this.tile = tile;
     }
 
     /**

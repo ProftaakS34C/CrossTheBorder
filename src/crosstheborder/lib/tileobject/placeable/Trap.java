@@ -1,5 +1,6 @@
 package crosstheborder.lib.tileobject.placeable;
 
+import crosstheborder.lib.Tile;
 import crosstheborder.lib.interfaces.GameManipulator;
 import crosstheborder.lib.interfaces.GameSettings;
 import crosstheborder.lib.interfaces.TileObject;
@@ -25,7 +26,8 @@ public class Trap extends Placeable {
      *
      * @param settings The settings of the game.
      */
-    public Trap(GameSettings settings) {
+    public Trap(GameSettings settings, Tile tile) {
+        super(tile);
         this.trapTime = settings.getDefaultTrapTime();
         this.trapUses = 1; //TODO set this in gameSettings.
     }

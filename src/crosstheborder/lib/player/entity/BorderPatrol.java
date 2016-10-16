@@ -1,6 +1,7 @@
 package crosstheborder.lib.player.entity;
 
 import crosstheborder.lib.Team;
+import crosstheborder.lib.Tile;
 import crosstheborder.lib.enumeration.Country;
 import crosstheborder.lib.interfaces.GameManipulator;
 import crosstheborder.lib.interfaces.GameSettings;
@@ -19,15 +20,15 @@ public class BorderPatrol extends PlayerEntity {
 
     /**
      * This is the constructor of the {@link BorderPatrol} class.
-     * Calls the {@link PlayerEntity#PlayerEntity(String, Team, GameSettings)} constructor.
+     * Calls the {@link PlayerEntity#PlayerEntity(String, Team, GameSettings, Tile)} constructor.
      * Sets isPassable to false;
      *
      * @param name The name of the player.
      * @param team The team this BorderPatrol is part of.
      * @param settings The settings of the game.
      */
-    public BorderPatrol(String name, Team team, GameSettings settings) {
-        super(name, team, settings);
+    public BorderPatrol(String name, Team team, GameSettings settings, Tile tile) {
+        super(name, team, settings, tile);
     }
 
     /**

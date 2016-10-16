@@ -22,6 +22,7 @@ public class Tile implements Drawable {
     private PlayerEntity playerEntity;
     private TileType type;
     private Country country;
+    private Point location;
 
     /**
      * Creates a new tile object with the given location.
@@ -29,10 +30,17 @@ public class Tile implements Drawable {
      * @param type The type of the tile.
      * @param country The country of this tile.
      */
-    public Tile(TileType type, Country country) {
+    public Tile(TileType type, Country country, Point location) {
         this.type = type;
         this.country = country;
+        this.location = location;
     }
+
+    /**
+     * Gets the point of this tile object
+     * @return
+     */
+    public Point getLocation(){return this.location;}
 
     /**
      * Gets the country that this tile belongs to.
