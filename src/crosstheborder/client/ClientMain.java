@@ -225,7 +225,7 @@ public class ClientMain extends Application {
             ArrayList<String> lobbyList = (ArrayList<String>) result.get();
             Lobby lobby = new Lobby(user, lobbyList.get(0), Integer.parseInt(lobbyList.get(1)));
             user.setLobby(lobby);
-            setLobby(lobby);
+            joinLobby(lobby);
             showLobbyMenu();
         }
     }
@@ -241,8 +241,17 @@ public class ClientMain extends Application {
 //            }
 //        }
         System.out.println("leaving lobby...");
+        user.getLobby().removeUser(user);
         user.setLobby(null);
         showMainMenu();
+    }
+
+
+    public void joinLobby(Lobby toJoin){
+
+        if(toJoin.addUser(user)){
+            setLobby(toJoin);
+        }
     }
 
     public int getMaxPlayers() {
@@ -251,7 +260,7 @@ public class ClientMain extends Application {
 
     public void draw() {
         //TODO POLISH get these magic numbers from somewhere else
-        
+
 //        Map maptest = lobby.getGame().getMap();
         Camera cam = lobby.getGame().getMap().getCamera(user.getPlayer().getCameraLocation(), 40, 800, 600);
         cam.draw(painter);

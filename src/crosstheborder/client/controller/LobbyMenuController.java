@@ -93,14 +93,16 @@ public class LobbyMenuController {
     @FXML
     private void btnStartGame_OnAction(){
         //TODO POLISH change into choicebox with all available maps
-        String mapnaam = mapNameInputTextField.getText();
-        instance.getLobby().startGame("bigtest");
+        String mapName = mapNameInputTextField.getText();
+
+        instance.getLobby().startGame(mapName);
         instance.showGameScreen();
     }
     @FXML
     private void addAiButton_OnAction(){
         //instance.getLobby().addAi
         //todo: implement adding of AI
+        instance.getLobby().addUser(new User("fakeAI"));
         throw new UnsupportedOperationException();
     }
 
