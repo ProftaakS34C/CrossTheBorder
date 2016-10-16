@@ -12,6 +12,8 @@ import crosstheborder.lib.tileobject.Placeable;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,7 +25,13 @@ import java.util.logging.Logger;
  */
 public class Game implements GameManipulator, GameInterface {
     private static final Logger LOGGER = Logger.getLogger(Game.class.getName());
+    private static final int SERVER_TICK_RATE = ServerSettings.getInstance().getServerTickRate();
     private GameSettings settings;
+    private Timer timer;
+    private boolean inProgress;
+
+    private int scoreLimit;
+    private int timeLimit;
 
     private Trump trump;
     private ArrayList<PlayerEntity> players;
@@ -38,10 +46,12 @@ public class Game implements GameManipulator, GameInterface {
      * @param mapName The name of the map.
      */
     public Game(String mapName) {
-        players = new ArrayList<>();
-        settings = new GameSettingsImpl(ServerSettings.getInstance().getServerTickRate());
-
-        map = MapLoader.getInstance().buildMap(mapName);
+        this.settings = new GameSettingsImpl(SERVER_TICK_RATE);
+        this.timer = new Timer();
+        this.scoreLimit = settings.getScoreLimit();
+        this.timeLimit = settings.getTimeLimit() * SERVER_TICK_RATE;
+        this.players = new ArrayList<>();
+        this.map = MapLoader.getInstance().buildMap(mapName);
         usa = new Team(Country.USA, map.getUsaArea(), settings.getUsaScoringModifier());
         mex = new Team(Country.MEX, map.getMexicoArea(), settings.getMexicanScoringModifier());
     }
@@ -75,6 +85,20 @@ public class Game implements GameManipulator, GameInterface {
             }
         }
         return null;
+    }
+
+    /**
+     * Starts the game.
+     */
+    public void startGame() {
+        this.inProgress = true;
+
+        this.timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                update();
+            }
+        }, 0, 1000 / SERVER_TICK_RATE);
     }
 
     /**
@@ -137,6 +161,36 @@ public class Game implements GameManipulator, GameInterface {
 
         //Tick the placeables for Trump.
         trump.tickPlaceableAmount();
+
+        //Check whether time has expired.
+        timeLimit--;
+        checkTime();
+    }
+
+    /**
+     * Checks whether the score limit has been reached.
+     */
+    private void checkScore() {
+        if (mex.getScore() >= scoreLimit || usa.getScore() >= scoreLimit) {
+            stop();
+        }
+    }
+
+    /**
+     * Checks whether the time limit has been reached.
+     */
+    private void checkTime() {
+        if (timeLimit <= 0) {
+            stop();
+        }
+    }
+
+    /**
+     * Stops the game.
+     */
+    public void stop() {
+        timer.cancel();
+        this.inProgress = false;
     }
 
     @Override
@@ -183,6 +237,9 @@ public class Game implements GameManipulator, GameInterface {
     @Override
     public void increaseScore(Team team) {
         team.increaseScore();
+
+        //Check whether the score limit has been reached.
+        checkScore();
     }
 
     @Override

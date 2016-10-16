@@ -172,8 +172,8 @@ public class MapLoader {
 
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                char tileCode = tiles.get(i).charAt(j);
-                char objectCode = objects.get(i).charAt(j);
+                char tileCode = tiles.get(j).charAt(i);
+                char objectCode = objects.get(j).charAt(i);
                 Country country;
 
                 if (usa.contains(i, j)) {
