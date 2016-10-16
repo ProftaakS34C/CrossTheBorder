@@ -35,6 +35,20 @@ public class Tile implements Drawable {
     }
 
     /**
+     * Gets whether the given entity can access this tile.
+     *
+     * @param entity The entity for which to check the accessibility.
+     * @return True when the entity can enter the tile.
+     */
+    public boolean isAccessible(PlayerEntity entity) {
+        boolean tileObjectAccess = tileObject != null ? tileObject.isAccessible(entity) : true;
+        boolean playerEntityAccess = playerEntity != null ? playerEntity.isAccessible(entity) : true;
+        boolean countryAccess = country.isAccessible(entity);
+
+        return countryAccess && tileObjectAccess && playerEntityAccess;
+    }
+
+    /**
      * Gets the country that this tile belongs to.
      *
      * @return

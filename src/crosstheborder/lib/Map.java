@@ -111,6 +111,17 @@ public class Map {
     }
 
     /**
+     * Gets whether the given location is accessible for the given entity.
+     *
+     * @param location The location to check for accessibility.
+     * @param entity The entity for which to check the accessibility.
+     * @return True when the entity can enter the location.
+     */
+    public boolean isAccessible(Point location, PlayerEntity entity) {
+        return getTile(location).isAccessible(entity);
+    }
+
+    /**
      * Gets whether the given location is part of a {@link Country}.
      *
      * @param location The location of the tile.
@@ -118,7 +129,7 @@ public class Map {
      */
     public boolean hasCountry(Point location) {
         return getTile(location).getCountry() != Country.NONE;
-    }
+    } //TODO remove this method.
 
     /**
      * Gets the country of a given location.
