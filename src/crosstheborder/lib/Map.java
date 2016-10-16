@@ -123,17 +123,6 @@ public class Map {
     }
 
     /**
-     * Gets whether the given location is accessible for the given entity.
-     *
-     * @param location The location to check for accessibility.
-     * @param entity The entity for which to check the accessibility.
-     * @return True when the entity can enter the location.
-     */
-    public boolean isAccessible(Point location, PlayerEntity entity) {
-        return getTile(location).isAccessible(entity);
-    }
-
-    /**
      * Gets a Tile inside an given area that is accessible to the given entity.
      * Can be an infinite loop.
      *
@@ -167,20 +156,16 @@ public class Map {
     }
 
     /**
-     * Gets the neighbours of a location that are accessible to the given entity.
+     * Gets the neighbours of a Tile.
      *
-     * @param location The location of which to get the neighbours.
-     * @param entity The entity for which to check the accessibility.
+     * @param tile The location of which to get the neighbours.
      * @return A list of neighbours.
      */
-    public List<Point> getNeighbours(Point location, PlayerEntity entity) {
-        List<Point> ret = new ArrayList<>();
+    public List<Tile> getNeighbours(Tile tile) {
+        List<Tile> ret = new ArrayList<>();
 
         for (Direction dir : Direction.values()) {
-            Point point = new Point(location.x + dir.getCartesianRepresentation().x, location.y + dir.getCartesianRepresentation().y);
-            if (isAccessible(point, entity)) {
-                ret.add(point);
-            }
+            ret.add(getTile(tile.getLocation().x + dir.getCartesianRepresentation().x, tile.getLocation().y + dir.getCartesianRepresentation().y));
         }
 
         return ret;
