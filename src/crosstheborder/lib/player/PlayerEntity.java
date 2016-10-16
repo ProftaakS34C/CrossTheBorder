@@ -2,7 +2,10 @@ package crosstheborder.lib.player;
 
 import crosstheborder.lib.*;
 import crosstheborder.lib.enumeration.MoveDirection;
-import crosstheborder.lib.interfaces.*;
+import crosstheborder.lib.interfaces.Drawable;
+import crosstheborder.lib.interfaces.GameSettings;
+import crosstheborder.lib.interfaces.Interactable;
+import crosstheborder.lib.interfaces.Painter;
 
 import java.awt.*;
 /**
@@ -31,9 +34,10 @@ public abstract class PlayerEntity extends Player implements Drawable, Interacta
     }
 
     /**
-     * Gets the location of the {@link TileObject}.
+     * Gets the location of the PlayerEntity.
+     * Will return the location of the tile this PlayerEntity belongs to.
      *
-     * @return A point that represents the location of the {@link TileObject}.
+     * @return A point that represents the location of the PlayerEntity.
      */
     public Point getLocation() {
         return this.tile.getLocation();

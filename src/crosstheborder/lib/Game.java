@@ -92,7 +92,8 @@ public class Game implements GameManipulator, GameInterface {
         if (trump == null) {
             trump = new Trump(user.getName(), usa, settings);
             //Little hackish to set the camera location somewhere in the USA area.
-            trump.getCameraLocation().setLocation(map.getFreePointInArea(usa.getTeamArea()));
+            Point initCameraLoc = (Point) map.getTileInArea(usa.getTeamArea()).getLocation().clone();
+            trump.getCameraLocation().setLocation(initCameraLoc);
             player = trump;
         } else {
             Team team;
@@ -113,8 +114,7 @@ public class Game implements GameManipulator, GameInterface {
 
             player = playerEntity;
             players.add(playerEntity);
-            Point location = map.getFreePointInArea(team.getTeamArea());
-            changePlayerEntityLocation(playerEntity, location);
+            respawnPlayer(playerEntity);
         }
 
         user.setPlayer(player);
@@ -141,31 +141,32 @@ public class Game implements GameManipulator, GameInterface {
 
     @Override
     public void movePlayerEntity(PlayerEntity player, Point nextLocation) {
+        Tile nextTile = map.getTile(nextLocation);
 
         //If the tile is accessible try to move to it.
-        if (map.isAccessible(nextLocation, player)) {
+        if (nextTile.isAccessible(player)) {
 
             //Boolean to store whether further evaluation of interaction/movement is needed.
             boolean shouldMove = true;
 
-            //Check whether there's a tileObject at the next location.
-            if (map.hasPlayerEntity(nextLocation)) {
-                shouldMove = map.getPlayerEntity(nextLocation).interactWith(player, this);
+            //Check whether there's a PlayerEntity at the next location.
+            if (nextTile.hasPlayerEntity()) {
+                shouldMove = nextTile.getPlayerEntity().interactWith(player, this);
             }
 
-            //Check whether there's a PlayerEntity at the next location.
-            if (map.hasTileObject(nextLocation) && shouldMove) {
-                shouldMove = map.getTileObject(nextLocation).interactWith(player, this);
+            //Check whether there's a TileObject at the next location.
+            if (shouldMove && nextTile.hasTileObject()) {
+                shouldMove = nextTile.getTileObject().interactWith(player, this);
             }
 
             //Interact with the country of the next location.
             if (shouldMove) {
-                shouldMove = map.getCountry(nextLocation).interactWith(player, this);
+                shouldMove = nextTile.getCountry().interactWith(player, this);
             }
 
             //If the movement should be executed, move the player.
             if (shouldMove) {
-                changePlayerEntityLocation(player, nextLocation);
+                changePlayerEntityLocation(player, nextTile);
             }
         }
     }
@@ -173,10 +174,10 @@ public class Game implements GameManipulator, GameInterface {
     @Override
     public void respawnPlayer(PlayerEntity player) {
         //Get a free point in the team area of the player.
-        Point nextLocation = map.getFreePointInArea(player.getTeam().getTeamArea());
+        Tile nextLocation = map.getFreeTileInArea(player.getTeam().getTeamArea(), player);
 
         player.immobilize(settings.getRespawnTime());
-        changePlayerEntityLocation(player, nextLocation);
+        nextLocation.setPlayerEntity(player);
     }
 
     @Override
@@ -185,28 +186,28 @@ public class Game implements GameManipulator, GameInterface {
     }
 
     @Override
-    public void changePlayerEntityLocation(PlayerEntity entity, Point nextLocation) {
-        Point currentLocation = entity.getLocation();
+    public void changePlayerEntityLocation(PlayerEntity entity, Tile nextLocation) {
+        Tile currentLocation = entity.getTile();
 
-        map.changePlayerEntity(currentLocation, null);
-        map.changePlayerEntity(nextLocation, entity);
-        //Move the location of the entity to the next location. Saves having to recreate a new point object every time.
-        currentLocation.move(nextLocation.x, nextLocation.y);
+        if (currentLocation != null) {
+            currentLocation.setPlayerEntity(null);
+        }
+        nextLocation.setPlayerEntity(entity);
     }
 
     @Override
-    public void changeTileObjectLocation(TileObject object, Point nextLocation) {
-        Point currentLocation = object.getLocation();
+    public void changeTileObjectLocation(TileObject object, Tile nextLocation) {
+        Tile currentLocation = object.getTile();
 
-        map.changeTileObject(currentLocation, null);
-        map.changeTileObject(nextLocation, object);
-        //Move the location of the entity to the next location. Saves having to recreate a new point object every time.
-        currentLocation.move(nextLocation.x, nextLocation.y);
+        if (currentLocation != null) {
+            currentLocation.setTileObject(null);
+        }
+        nextLocation.setTileObject(object);
     }
 
     @Override
     public void removeTileObject(TileObject tileObject) {
-        map.changeTileObject(tileObject.getLocation(), null);
+        tileObject.getTile().setTileObject(null);
     }
 
     @Override
@@ -239,11 +240,12 @@ public class Game implements GameManipulator, GameInterface {
     @Override
     public void addPlaceable(Point location, PlaceableType placeableType) {
         try {
+            Tile tile = map.getTile(location);
             Placeable placeable = placeableType.getPlaceable(settings);
 
-            if (this.trump.canPlace(placeable) && map.canPlacePlaceable(location, placeable)) {
-                map.changeTileObject(location, placeable);
-                this.trump.decreasePlaceableAmount(placeable);
+            if (trump.canPlace(placeable) && map.canPlacePlaceable(tile, placeable)) {
+                changeTileObjectLocation(placeable, tile);
+                trump.decreasePlaceableAmount(placeable);
             }
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, ex.toString(), ex);

@@ -70,8 +70,10 @@ public class Tile implements Drawable {
      * @param playerEntity The PlayerEntity that should occupy this tile.
      */
     public void setPlayerEntity(PlayerEntity playerEntity) {
+        if (playerEntity != null) {
+            playerEntity.setTile(this);
+        }
         this.playerEntity = playerEntity;
-        playerEntity.setTile(this);
     }
 
     /**
@@ -89,8 +91,10 @@ public class Tile implements Drawable {
      * @param tileObject The object that fills the tile.
      */
     public void setTileObject(TileObject tileObject) {
+        if (tileObject != null) {
+            tileObject.setTile(this);
+        }
         this.tileObject = tileObject;
-        tileObject.setTile(this);
     }
 
     /**
@@ -118,8 +122,8 @@ public class Tile implements Drawable {
      * @return True when the entity can enter the tile.
      */
     public boolean isAccessible(PlayerEntity entity) {
-        boolean tileObjectAccess = tileObject != null ? tileObject.isAccessible(entity) : true;
-        boolean playerEntityAccess = playerEntity != null ? playerEntity.isAccessible(entity) : true;
+        boolean tileObjectAccess = tileObject == null || tileObject.isAccessible(entity);
+        boolean playerEntityAccess = playerEntity == null || playerEntity.isAccessible(entity);
         boolean countryAccess = country.isAccessible(entity);
 
         return countryAccess && tileObjectAccess && playerEntityAccess;

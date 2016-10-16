@@ -20,11 +20,19 @@ public enum Country implements Drawable, Interactable {
 
     private Tile tile;
 
+    /**
+     * {@inheritDoc}
+     * This should never be called. Currently not implemented.
+     */
     @Override
     public Tile getTile() {
         return this.tile;
     }
 
+    /**
+     * {@inheritDoc}
+     * This should never be called. Currently not implemented.
+     */
     @Override
     public void setTile(Tile tile) {
         this.tile = tile;

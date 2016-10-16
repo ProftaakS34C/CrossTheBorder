@@ -10,6 +10,7 @@ import java.awt.*;
 public interface TileObject extends Drawable, Interactable {
     /**
      * Gets the location of the {@link TileObject}.
+     * Will return the location of the tile this object belongs to.
      *
      * @return A point that represents the location of the {@link TileObject}.
      */

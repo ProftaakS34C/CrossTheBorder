@@ -190,7 +190,6 @@ public class MapLoader {
 
                 if (type != null) {
                     TileObject obstacle = new Obstacle(type);
-                    obstacle.getLocation().move(i, j);
                     ret[i][j].setTileObject(obstacle);
                 }
             }
