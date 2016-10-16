@@ -54,6 +54,7 @@ public class AStarAlgorithm implements PathingAlgorithm {
         while (previousTile != start) {
             //Push the point to the stack.
             ret.offerFirst(previousTile);
+            previousTile = cameFrom.get(previousTile);
         }
 
         cameFrom.clear();
@@ -104,7 +105,7 @@ public class AStarAlgorithm implements PathingAlgorithm {
             //Foreach neighbour of the current location perform the following.
             for (Tile next : map.getNeighbours(current)) {
                 //Check whether the tile can be accessed.
-                if (current.isAccessible(entity)) {
+                if (next.isAccessible(entity)) {
                     //Calculate the cost of moving to the next location.
                     //Currently 1 since the map will only return tiles which can be freely moved to.
                     double newCost = costSoFar.get(current) + next.getCost(entity);

@@ -165,7 +165,10 @@ public class Map {
         List<Tile> ret = new ArrayList<>();
 
         for (Direction dir : Direction.values()) {
-            ret.add(getTile(tile.getLocation().x + dir.getCartesianRepresentation().x, tile.getLocation().y + dir.getCartesianRepresentation().y));
+            Tile neighbour = getTile(tile.getLocation().x + dir.getCartesianRepresentation().x, tile.getLocation().y + dir.getCartesianRepresentation().y);
+            if (neighbour != null) {
+                ret.add(neighbour);
+            }
         }
 
         return ret;
@@ -179,7 +182,7 @@ public class Map {
      * @return True when the placeable can be placed at the given location.
      */
     public boolean canPlacePlaceable(Tile tile, Placeable placeable) {
-        if (tile.getCountry() == Country.NONE && tile.hasTileObject()) {
+        if (tile.getCountry() == Country.NONE && !tile.hasTileObject()) { //TODO Make a upgrade logic at some point.
             Point location = tile.getLocation(); //TODO Set this shit in a getNeighbours method.
             TileObject east = getTile(location.x + 1, location.y).getTileObject();
             TileObject west = getTile(location.x - 1, location.y).getTileObject();
