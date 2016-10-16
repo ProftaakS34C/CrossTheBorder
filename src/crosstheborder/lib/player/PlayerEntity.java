@@ -43,6 +43,15 @@ public abstract class PlayerEntity extends Player implements Drawable, Interacta
         return this.tile.getLocation();
     }
 
+    /**
+     * Gets whether this entity can move.
+     *
+     * @return True when the entity can move.
+     */
+    public boolean canMove() {
+        return this.canMove; //TODO make the update method in game use this method.
+    }
+
     @Override
     public Tile getTile() {
         return this.tile;

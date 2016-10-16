@@ -35,7 +35,8 @@ public class Computer {
      */
     public void computeMove(Map map) {
         //Make sure that the recursive call is not called too much.
-        if (timesComputed >= 5) {
+        //Also check whether the computer can actually move.
+        if (timesComputed >= 5 || !entity.canMove()) {
             return;
         }
         timesComputed++;
@@ -78,6 +79,7 @@ public class Computer {
         }
 
         timesComputed = 0;
+
     }
 
     //Checks whether the current path is still a good/speedy path to the goal.
