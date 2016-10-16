@@ -30,7 +30,6 @@ class Path {
      * @return The next tile in the path.
      */
     Tile getNextLocation() {
-        age++;
         return path != null ? path.pollFirst() : null;
     }
 
@@ -41,6 +40,22 @@ class Path {
      */
     Tile getEndTile() {
         return path != null ? path.peekLast() : null;
+    }
+
+    /**
+     * Returns the age of the path.
+     *
+     * @return The age of the path in server ticks.
+     */
+    int getAge() {
+        return this.age;
+    }
+
+    /**
+     * Increases the age of the tile.
+     */
+    void age() {
+        this.age++;
     }
 
     /**

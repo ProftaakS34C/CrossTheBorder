@@ -79,7 +79,8 @@ public class Computer {
         }
 
         timesComputed = 0;
-
+        //Age the path so are aware of the age of the path.
+        path.age();
     }
 
     //Checks whether the current path is still a good/speedy path to the goal.
