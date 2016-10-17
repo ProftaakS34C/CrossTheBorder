@@ -2,16 +2,21 @@ package crosstheborder.client.controller;
 
 import crosstheborder.client.ClientMain;
 import crosstheborder.client.FXPainter;
+import crosstheborder.client.InputConverter;
 import crosstheborder.lib.Player;
+import crosstheborder.lib.enumeration.MoveDirection;
 import crosstheborder.lib.interfaces.Camera;
 import crosstheborder.lib.interfaces.GameInterface;
 import crosstheborder.lib.interfaces.Painter;
+import crosstheborder.lib.player.PlayerEntity;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.util.Duration;
 
 /**
@@ -25,6 +30,7 @@ public class GameScreenController {
     private GraphicsContext gc;
     private Painter painter;
     private ClientMain main;
+    private InputConverter inputConverter;
 
     private GameInterface game;
     private Player player;
@@ -38,6 +44,15 @@ public class GameScreenController {
     private void initialize(){
         this.gc = gameCanvas.getGraphicsContext2D();
         this.painter = new FXPainter(gc);
+        this.inputConverter = new InputConverter();
+    }
+
+    @FXML
+    private void handleKeyPress(KeyEvent event) {
+        System.out.println("Ik handel shit");
+        KeyCode code = event.getCode();
+        MoveDirection move = inputConverter.getMoveDirectionFromKey(code);
+        game.sendMoveInput(move, (PlayerEntity) player); //TODO FIX THIS SHIIIT
     }
 
     /**

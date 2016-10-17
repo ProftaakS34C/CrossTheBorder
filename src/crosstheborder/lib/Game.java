@@ -231,7 +231,7 @@ public class Game implements GameManipulator, GameInterface {
         Tile nextLocation = map.getFreeTileInArea(player.getTeam().getTeamArea(), player);
 
         player.immobilize(settings.getRespawnTime());
-        nextLocation.setPlayerEntity(player);
+        changePlayerEntityLocation(player, nextLocation);
     }
 
     @Override

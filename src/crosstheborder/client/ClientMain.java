@@ -168,6 +168,7 @@ public class ClientMain extends Application {
             GameScreenController controller = loader.getController();
             controller.setUp(this);
             root.setCenter(gameRoot);
+            gameRoot.requestFocus();
             primaryStage.setTitle("In Game");
         }
         catch (IOException x){
