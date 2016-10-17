@@ -7,7 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Created by guill on 3-10-2016.
+ * @author guill
  */
 public class AbilityTest {
 

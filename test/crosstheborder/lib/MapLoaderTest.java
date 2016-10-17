@@ -11,7 +11,7 @@ import java.awt.*;
 import static org.junit.Assert.*;
 
 /**
- * Created by guill on 17-10-2016.
+ * @author guill
  */
 public class MapLoaderTest {
 
