@@ -10,7 +10,7 @@ import java.time.LocalTime;
 import static org.junit.Assert.*;
 
 /**
- * Created by guill on 3-10-2016.
+ * @author guill
  */
 public class LobbyTest {
 

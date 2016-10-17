@@ -8,7 +8,7 @@ import org.junit.Test;
 import java.time.LocalTime;
 
 /**
- *
+ * @author guill
  */
 public class MessageTest {
 
