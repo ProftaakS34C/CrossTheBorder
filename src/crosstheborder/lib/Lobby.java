@@ -1,6 +1,11 @@
 package crosstheborder.lib;
 
+import crosstheborder.lib.interfaces.GameSettings;
+
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Represents a lobby of the game
@@ -15,6 +20,9 @@ public class Lobby {
     private ArrayList<User> users;
     private User owner;
     private Game game;
+    private GameSettings settings;
+
+
 
     /**
      * This is the constructor method of the class "Lobby"
@@ -72,19 +80,26 @@ public class Lobby {
     }
 
     /**
+     * Gets the gameSettings of this lobby
+     * @return a GameSettings object containing all settings
+     */
+    public GameSettings getSettings() {
+        return settings;
+    }
+
+    /**
+     * Sets the gameSettings of this lobby
+     * @param settings a GameSettings object containing all settings
+     */
+    public void setSettings(GameSettings settings) {
+        this.settings = settings;
+    }
+    /**
      * This method gets the game of this lobby
      * @return Game, the game object of this lobby
      */
     public Game getGame(){
         return game;
-    }
-
-    /**
-     * This method is used to set the game of the lobby
-     * @param game the new game for the lobby
-     */
-    public void setGame(Game game){
-        this.game = game;
     }
 
     /**
@@ -102,6 +117,31 @@ public class Lobby {
      */
     public void setMaxPlayers(int value){
         maxPlayers = value;
+    }
+
+    /**
+     * Adds a user to the array list of users in the lobby
+     * @param user The user to add
+     * @return a boolean value indicating success
+     */
+    public boolean addUser(User user){
+        if(maxPlayers <= users.size()){
+            users.add(user);
+            return true;
+        }
+        return false;
+    }
+    /**
+     * Removes a user from the array list of users in the lobby
+     * only removes if the user is present in list
+     * @param user The user to remove
+     * @return a boolean value indicating success
+     */
+    public boolean removeUser(User user){
+        if(users.contains(user)){
+            users.remove(user);
+        }
+        return false;
     }
 
     /**
@@ -129,8 +169,14 @@ public class Lobby {
     /**
      * This method is used to start the game
      */
-    public void startGame() {
-        Game game = new Game("empty"); //TODO change this to the mapname that is chosen in the lobby.
+    public void startGame(String mapName) {
+        Game game = new Game(mapName);
+        //game.getSettings(settings);
+        ArrayList<User> randomList = new ArrayList<>(users);
+        Collections.shuffle(randomList);
 
+        for(User u : randomList){
+            game.addPlayer(u);
+        }
     }
 }
