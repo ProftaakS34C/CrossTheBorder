@@ -19,6 +19,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The controller class for the game screen
  *
@@ -26,11 +29,12 @@ import javafx.util.Duration;
  * @author Oscar de Leeuw
  */
 public class GameScreenController {
-    private final static int FRAMES_PER_SECOND = 60;
+    private final static int FRAMES_PER_SECOND = 30;
     private GraphicsContext gc;
     private Painter painter;
     private ClientMain main;
     private InputConverter inputConverter;
+    private List<KeyCode> activeKeys;
 
     private GameInterface game;
     private Player player;
@@ -45,14 +49,29 @@ public class GameScreenController {
         this.gc = gameCanvas.getGraphicsContext2D();
         this.painter = new FXPainter(gc);
         this.inputConverter = new InputConverter();
+        this.activeKeys = new ArrayList<>();
     }
 
     @FXML
     private void handleKeyPress(KeyEvent event) {
-        System.out.println("Ik handel shit");
         KeyCode code = event.getCode();
-        MoveDirection move = inputConverter.getMoveDirectionFromKey(code);
-        game.sendMoveInput(move, (PlayerEntity) player); //TODO FIX THIS SHIIIT
+
+        if (!activeKeys.contains(code)) {
+            activeKeys.add(code);
+        }
+    }
+
+    @FXML
+    void handleKeyRelease(KeyEvent event) {
+        KeyCode code = event.getCode();
+        activeKeys.removeIf(x -> x == code);
+    }
+
+    private void sendMoves() {
+        if (!activeKeys.isEmpty()) {
+            MoveDirection move = inputConverter.getMoveDirectionFromKey(activeKeys.get(activeKeys.size() - 1));
+            game.sendMoveInput(move, (PlayerEntity) player);
+        }
     }
 
     /**
@@ -76,12 +95,12 @@ public class GameScreenController {
     }
 
     private void runGame() {
+        sendMoves(); //TODO Should be reque.stable by the server every time it wants to calculate a move.
         draw();
     }
 
     private void draw() {
         Camera cam = game.getCamera(player.getCameraLocation(), 40, (int) gameCanvas.getWidth(), (int) gameCanvas.getHeight());
-        System.out.println(timeline.getCurrentTime());
         cam.draw(painter);
     }
 }

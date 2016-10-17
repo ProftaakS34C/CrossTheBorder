@@ -230,7 +230,7 @@ public class Game implements GameManipulator, GameInterface {
         //Get a free point in the team area of the player.
         Tile nextLocation = map.getFreeTileInArea(player.getTeam().getTeamArea(), player);
 
-        player.immobilize(settings.getRespawnTime());
+        //player.immobilize(settings.getRespawnTime());
         changePlayerEntityLocation(player, nextLocation);
     }
 

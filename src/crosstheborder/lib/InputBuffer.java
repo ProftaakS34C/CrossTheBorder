@@ -1,10 +1,11 @@
 package crosstheborder.lib;
 
 import crosstheborder.lib.enumeration.MoveDirection;
-import crosstheborder.lib.interfaces.InputPropertiesGetter;
 
-import java.util.Queue;
-import java.util.concurrent.ArrayBlockingQueue;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Represents a buffer for inputMoves.
@@ -15,14 +16,16 @@ import java.util.concurrent.ArrayBlockingQueue;
  * @author Oscar de Leeuw
  */
 public class InputBuffer {
-    private Queue<MoveDirection> inputMoves;
-    private InputPropertiesGetter properties = ServerSettings.getInstance();
+    private Deque<MoveDirection> inputMoves;
+    //private InputPropertiesGetter properties = ServerSettings.getInstance();
+    //private int bufferSize = properties.getInputBufferSize();
+    private MoveDirection lastMove = MoveDirection.NONE;
 
     /**
      * Creates a new InputBuffer.
      */
     public InputBuffer() {
-        inputMoves = new ArrayBlockingQueue<>(properties.getInputBufferSize());
+        inputMoves = new ArrayDeque<>();
     }
 
     /**
@@ -35,12 +38,7 @@ public class InputBuffer {
     public synchronized void addToInputMoves(MoveDirection md) {
         //Add method throws an illegal state exception when you can't add any more input,
         //(ab)using that to remove the oldest element since Java does not have a build in solution for this.
-        try {
-            inputMoves.add(md);
-        } catch (IllegalStateException ex) {
-            inputMoves.poll();
-            inputMoves.add(md);
-        }
+        inputMoves.offerFirst(md);
     }
 
     /**
@@ -50,9 +48,23 @@ public class InputBuffer {
      * @return The oldest move in the input buffer.
      */
     public synchronized MoveDirection getNextInputMove() {
-        MoveDirection ret = inputMoves.poll();
+        MoveDirection currentMove = inputMoves.pollFirst();
+
+        if (currentMove == null) {
+            return MoveDirection.NONE;
+        }
+
+        //If there is another move in the buffer that is different from the last move, send that one instead.
+        if (currentMove.equals(lastMove)) {
+            List<MoveDirection> otherMoves = inputMoves.stream().filter(move -> !move.equals(lastMove)).collect(Collectors.toList());
+            if (!otherMoves.isEmpty()) {
+                currentMove = otherMoves.get(0);
+            }
+        }
 
         //Poll method gives back a null when there is no element, i.e. when there is no input.
-        return ret != null ? ret : MoveDirection.NONE;
+        lastMove = currentMove;
+        inputMoves.clear();
+        return currentMove;
     }
 }
