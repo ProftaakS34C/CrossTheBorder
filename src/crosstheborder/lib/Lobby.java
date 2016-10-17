@@ -1,5 +1,7 @@
 package crosstheborder.lib;
 
+import crosstheborder.lib.interfaces.GameSettings;
+
 import java.util.ArrayList;
 
 /**
@@ -13,6 +15,7 @@ public class Lobby {
     private int maxPlayers;
     private ArrayList<Message> messages;
     private ArrayList<User> users;
+    private GameSettings gameSettings;
 
     /**
      * This is the constructor method of the class "Lobby"
@@ -20,13 +23,26 @@ public class Lobby {
      * @param password The password of the lobby
      * @param maxPlayers The maximum amount of players allowed in the lobby
      */
-    public Lobby(String name, String password, int maxPlayers){
+    public Lobby(String name, String password, int maxPlayers, GameSettings gameSettings){
         this.name = name;
         this.password = password;
         this.maxPlayers = maxPlayers;
         this.messages = new ArrayList<>();
         this.users = new ArrayList<>();
+        this.gameSettings = gameSettings;
     }
+
+    /**
+     * This method is used to get the gameSettings of the lobby object
+     * @return GameSettings this returns the gameSettings of the lobby
+     */
+    public GameSettings getGameSettings(){return gameSettings;}
+
+    /**
+     * This method is used to set the gameSettings of the lobby object
+     * @param value the new gameSettings of the lobby
+     */
+    public void setGameSettings(GameSettings value){this.gameSettings = value;}
 
     /**
      * This method is used to get the name of the lobby object
