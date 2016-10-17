@@ -3,13 +3,9 @@ package crosstheborder.client.controller;
 
 import crosstheborder.client.ClientMain;
 import crosstheborder.lib.Message;
-import crosstheborder.lib.User;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
 
 /**
  * @author Yannic
@@ -17,6 +13,7 @@ import javafx.scene.control.Button;
  */
 public class LobbyMenuController {
 
+    int maxPlayers;
     @FXML
     private Button startGameButton;
     @FXML
@@ -39,9 +36,7 @@ public class LobbyMenuController {
     private Button addAiButton;
     @FXML
     private TextField mapNameInputTextField;
-
     private ClientMain instance;
-    int maxPlayers;
 
     @FXML
     private void initialize(){
@@ -53,7 +48,7 @@ public class LobbyMenuController {
      */
     public void setUp(){
 
-        if(!instance.getUser().isOwnerOfLobby()){
+        if (!instance.getUser().isOwnerOfLobby()) {
             startGameButton.setVisible(false);
             lobbyPassInputPasswordField.setVisible(false);
             isPrivateCheckBox.setVisible(false);
@@ -64,7 +59,7 @@ public class LobbyMenuController {
     @FXML
     private void textBoxIsPrivate_OnAction(ActionEvent event){
         if(isPrivateCheckBox.isSelected()){
-            if(!lobbyPassInputPasswordField.getText().trim().equals("") && lobbyPassInputPasswordField.getText() != null){
+            if (!lobbyPassInputPasswordField.getText().trim().equals("") && lobbyPassInputPasswordField.getText() != null) {
                 lobbyPassInputPasswordField.setVisible(false);
                 instance.getUser().getLobby().setPassword(lobbyPassInputPasswordField.getText());
                 System.out.println("set password");
@@ -96,8 +91,9 @@ public class LobbyMenuController {
         instance.getLobby().startGame(mapName);
         instance.showGameScreen();
     }
+
     @FXML
-    private void addAiButton_OnAction(){
+    private void addAiButton_OnAction() {
         //instance.getLobby().addAi
         //todo: implement adding of AI
         //instance.getLobby().addUser(new User("fakeAI"));

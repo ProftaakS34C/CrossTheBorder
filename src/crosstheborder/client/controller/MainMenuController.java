@@ -1,18 +1,11 @@
 package crosstheborder.client.controller;
 
 
-
 import crosstheborder.client.ClientMain;
-import crosstheborder.client.dialog.CreateLobbyDialog;
-import crosstheborder.lib.Lobby;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * @author yannic
@@ -38,7 +31,7 @@ public class MainMenuController {
     private ClientMain instance;
 
     @FXML
-    private void initialize(){
+    private void initialize() {
         //constructor type stuff
 
     }

@@ -3,9 +3,7 @@ package crosstheborder.lib;
 import crosstheborder.lib.interfaces.GameSettings;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * Represents a lobby of the game
@@ -21,7 +19,6 @@ public class Lobby {
     private User owner;
     private Game game;
     private GameSettings settings;
-
 
 
     /**
@@ -89,11 +86,13 @@ public class Lobby {
 
     /**
      * Sets the gameSettings of this lobby
+     *
      * @param settings a GameSettings object containing all settings
      */
     public void setSettings(GameSettings settings) {
         this.settings = settings;
     }
+
     /**
      * This method gets the game of this lobby
      * @return Game, the game object of this lobby
@@ -121,24 +120,27 @@ public class Lobby {
 
     /**
      * Adds a user to the array list of users in the lobby
+     *
      * @param user The user to add
      * @return a boolean value indicating success
      */
-    public boolean addUser(User user){
-        if(maxPlayers <= users.size()){
+    public boolean addUser(User user) {
+        if (maxPlayers <= users.size()) {
             users.add(user);
             return true;
         }
         return false;
     }
+
     /**
      * Removes a user from the array list of users in the lobby
      * only removes if the user is present in list
+     *
      * @param user The user to remove
      * @return a boolean value indicating success
      */
-    public boolean removeUser(User user){
-        if(users.contains(user)){
+    public boolean removeUser(User user) {
+        if (users.contains(user)) {
             users.remove(user);
         }
         return false;
@@ -175,7 +177,7 @@ public class Lobby {
         ArrayList<User> randomList = new ArrayList<>(users);
         Collections.shuffle(randomList);
 
-        for(User u : randomList){
+        for (User u : randomList) {
             game.addPlayer(u);
         }
     }

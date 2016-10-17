@@ -85,15 +85,10 @@ public class CreateLobbyDialog {
      * @param toCheck The String value to check
      * @return true if able to convert and false if not.
      */
-    private boolean checkIfInt(String toCheck, int under){
+    private boolean checkIfInt(String toCheck, int under) {
         try{
             int checked = Integer.parseInt(toCheck);
-            if(checked <= under){
-                return true;
-            }
-            else {
-                return false;
-            }
+            return checked <= under;
 
         }catch (NumberFormatException x){
             return false;

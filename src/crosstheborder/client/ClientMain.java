@@ -6,23 +6,20 @@ package crosstheborder.client;
  *
  */
 
-import crosstheborder.client.dialog.CreateLobbyDialog;
-import crosstheborder.lib.Lobby;
-import crosstheborder.lib.Map;
-import crosstheborder.lib.User;
 import crosstheborder.client.controller.GameScreenController;
 import crosstheborder.client.controller.LayoutController;
 import crosstheborder.client.controller.LobbyMenuController;
 import crosstheborder.client.controller.MainMenuController;
+import crosstheborder.client.dialog.CreateLobbyDialog;
+import crosstheborder.lib.Lobby;
+import crosstheborder.lib.Map;
+import crosstheborder.lib.User;
 import crosstheborder.lib.interfaces.Camera;
-import crosstheborder.lib.interfaces.GameSettings;
 import crosstheborder.lib.interfaces.Painter;
-import crosstheborder.lib.player.PlayerEntity;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
@@ -75,24 +72,28 @@ public class ClientMain extends Application {
 
         showMainMenu();
     }
+
     /**
      * This method gets the user for this client
+     *
      * @return A User object
      */
-    public User getUser(){
+    public User getUser() {
         return user;
     }
 
     /**
      * Gets the lobby of this client
+     *
      * @return a lobby object
      */
-    public Lobby getLobby(){
+    public Lobby getLobby() {
         return this.lobby;
     }
 
     /**
      * Sets the lobby of this client
+     *
      * @param lobby the lobby  object to set
      */
     public void setLobby(Lobby lobby) {
@@ -216,12 +217,12 @@ public class ClientMain extends Application {
     /**
      * Creates a new lobby and switches the view to the main menu
      */
-    public void createLobby(){
+    public void createLobby() {
         CreateLobbyDialog dialog = new CreateLobbyDialog();
         dialog.setTitle("set lobby settings");
         dialog.setHeaderText("");
         Optional<List<String>> result = dialog.showAndWait();
-        if(result.isPresent()){
+        if (result.isPresent()) {
             ArrayList<String> lobbyList = (ArrayList<String>) result.get();
             Lobby lobby = new Lobby(user, lobbyList.get(0), Integer.parseInt(lobbyList.get(1)));
             user.setLobby(lobby);
@@ -234,7 +235,7 @@ public class ClientMain extends Application {
      * Leaves lobby if currently in one, if User is owner of the lobby,
      * every user is removed and then the whole lobby is deleted
      */
-    public void leaveLobby(){
+    public void leaveLobby() {
 //        if(user.isOwnerOfLobby()){
 //            for(User u : user.getLobby().getUsers()){
 //                u.leaveLobby();
@@ -247,9 +248,9 @@ public class ClientMain extends Application {
     }
 
 
-    public void joinLobby(Lobby toJoin){
+    public void joinLobby(Lobby toJoin) {
 
-        if(toJoin.addUser(user)){
+        if (toJoin.addUser(user)) {
             setLobby(toJoin);
         }
     }
