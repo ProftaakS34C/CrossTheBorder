@@ -5,10 +5,11 @@ package crosstheborder.client.controller;
  */
 
 import crosstheborder.client.ClientMain;
+import crosstheborder.lib.Lobby;
+import crosstheborder.lib.Message;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
 
 /**
  * The controller class of the lobby menu
@@ -16,6 +17,7 @@ import javafx.scene.control.Button;
 public class LobbyMenuController {
 
 
+    int maxPlayers;
     @FXML
     private Button startGameButton;
     @FXML
@@ -34,13 +36,12 @@ public class LobbyMenuController {
     private ChoiceBox choiceBoxAmountOfPlayers;
     @FXML
     private Button leaveLobbyButton;
-
     private ClientMain instance;
-    int maxPlayers;
+    private Lobby lobby;
 
     @FXML
     private void initialize(){
-        //todo: only if the user is owner of the lobby should the start button be set visible
+        //todo: only if the user is owner of the lobby should the start button be set visible.
     }
 
     /**
@@ -49,6 +50,7 @@ public class LobbyMenuController {
     public void setUp(){
         if(instance.getUser().isOwnerOfLobby()){
             leaveLobbyButton.setVisible(false);
+            lobby = instance.getUser().getLobby();
         }
         else {
             startGameButton.setVisible(false);
@@ -64,7 +66,7 @@ public class LobbyMenuController {
         if(isPrivateCheckBox.isSelected()){
             if(lobbyPassInputPasswordField.getText() != null){
                 lobbyPassInputPasswordField.setVisible(false);
-                instance.getUser().getLobby().setPassword(lobbyPassInputPasswordField.getText());
+                lobby.setPassword(lobbyPassInputPasswordField.getText());
                 System.out.println("set password");
             }
             else {
@@ -73,7 +75,7 @@ public class LobbyMenuController {
         }
         else {
             lobbyPassInputPasswordField.setText("");
-            instance.getUser().getLobby().setPassword("");
+            lobby.setPassword("");
             System.out.println("removed password");
             lobbyPassInputPasswordField.setVisible(true);
         }
@@ -96,10 +98,17 @@ public class LobbyMenuController {
 
     @FXML
     private void btnChat_OnAction(){
-        //String toSend = tfieldChatInput.getText();
-        //ClientMain.getInstance().sendChatmsg(toSend);
-        //chatListView.getItems().add(toSend);
-        throw new UnsupportedOperationException();
+        String message = chatInputTextField.getText();
+        Message chatMessage = new Message(instance.getUser().getName(), message);
+        lobby.addMessage(chatMessage);
+        refreshChatLog();
+    }
+
+    private void refreshChatLog() {
+        chatListView.getItems().clear();
+        for (Message message : lobby.getMessages()) {
+            chatListView.getItems().add(message);
+        }
     }
 
     public TableView getPlayersTableView() {
