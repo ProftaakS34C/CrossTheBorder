@@ -1,8 +1,10 @@
 package crosstheborder.lib;
 
 /**
- * Represents a user of the game
+ * Represents a user of the game.
+ *
  * @author Joram
+ * @author Oscar de Leeuw
  * @version 1.0
  */
 public class User {
@@ -24,26 +26,23 @@ public class User {
      * @return true if User is owner, false if not or if lobby is null.
      */
     public boolean isOwnerOfLobby(){
-        if(lobby.getOwner().equals(this)){
-            return true;
-        }else {
-            return false;
-        }
-    }
-    /**
-     * This method sets the value of player
-     * @param player the player object the user is playing as
-     */
-    public void setPlayer(Player player){
-        this.player = player;
+        return lobby.getOwner().equals(this);
     }
 
     /**
      * This method sets the lobby of the player.
      * @param lobby the lobby object the player is part of
      */
-    public void setLobby(Lobby lobby){
+    public void joinLobby(Lobby lobby) {
         this.lobby = lobby;
+        lobby.addUser(this);
+    }
+
+    public void leaveLobby() {
+        if (this.lobby != null) {
+            this.lobby.removeUser(this);
+            this.lobby = null;
+        }
     }
 
     /**
@@ -51,6 +50,15 @@ public class User {
      * @return Player the player object of the user
      */
     public Player getPlayer(){return player;}
+
+    /**
+     * This method sets the value of player
+     *
+     * @param player the player object the user is playing as
+     */
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
 
     /**
      * This method is used to get the name of the user

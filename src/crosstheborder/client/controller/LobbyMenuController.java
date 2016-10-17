@@ -2,7 +2,9 @@ package crosstheborder.client.controller;
 
 
 import crosstheborder.client.ClientMain;
+import crosstheborder.lib.Lobby;
 import crosstheborder.lib.Message;
+import crosstheborder.lib.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -17,7 +19,7 @@ public class LobbyMenuController {
     @FXML
     private Button startGameButton;
     @FXML
-    private ListView chatListView;
+    private ListView<Message> chatListView;
     @FXML
     private TableView playersTableView;
     @FXML
@@ -36,17 +38,21 @@ public class LobbyMenuController {
     private Button addAiButton;
     @FXML
     private TextField mapNameInputTextField;
-    private ClientMain instance;
 
-    @FXML
-    private void initialize(){
-        //todo: only if the user is owner of the lobby should the start button be set visible
-    }
+    private ClientMain instance;
+    private Lobby lobby;
+    private User user;
 
     /**
      * This method is used for first time setup of the controller, if the initialize method cannot be used.
+     * Sets the main class this controller uses for functions
+     *
+     * @param instance the ClientMain class
      */
-    public void setUp(){
+    public void setUp(ClientMain instance) {
+        this.instance = instance;
+        this.user = instance.getUser();
+        this.lobby = this.user.getLobby();
 
         if (!instance.getUser().isOwnerOfLobby()) {
             startGameButton.setVisible(false);
@@ -61,7 +67,7 @@ public class LobbyMenuController {
         if(isPrivateCheckBox.isSelected()){
             if (!lobbyPassInputPasswordField.getText().trim().equals("") && lobbyPassInputPasswordField.getText() != null) {
                 lobbyPassInputPasswordField.setVisible(false);
-                instance.getUser().getLobby().setPassword(lobbyPassInputPasswordField.getText());
+                lobby.setPassword(lobbyPassInputPasswordField.getText());
                 System.out.println("set password");
             }
             else {
@@ -70,7 +76,7 @@ public class LobbyMenuController {
         }
         else {
             lobbyPassInputPasswordField.setText("");
-            instance.getUser().getLobby().setPassword("");
+            lobby.setPassword("");
             System.out.println("removed password");
             lobbyPassInputPasswordField.setVisible(true);
         }
@@ -78,9 +84,7 @@ public class LobbyMenuController {
 
     @FXML
     private void leaveLobbyButton_OnAction(){
-        //do necessary actions for leaving lobby
-        //TODO POLISH if user is owner of lobby popup a dialog and remove everyone else from the lobby.
-        instance.leaveLobby();
+        leaveLobby();
     }
 
     @FXML
@@ -88,7 +92,7 @@ public class LobbyMenuController {
         //TODO POLISH change into choicebox with all available maps
         String mapName = mapNameInputTextField.getText();
 
-        instance.getLobby().startGame(mapName);
+        lobby.startGame(mapName);
         instance.showGameScreen();
     }
 
@@ -103,30 +107,23 @@ public class LobbyMenuController {
     @FXML
     private void btnChat_OnAction(){
         Message message = new Message(instance.getUser().getName(), chatInputTextField.getText());
-        instance.getLobby().addMessage(message);
+        lobby.addMessage(message);
         refreshChatLog();
+    }
+
+    /**
+     * Leaves the current lobby.
+     */
+    private void leaveLobby() {
+        System.out.println("Leaving lobby...");
+        user.leaveLobby();
+        instance.showMainMenu();
     }
 
     private void refreshChatLog() {
         chatListView.getItems().clear();
-        for (Message message : instance.getLobby().getMessages()) {
+        for (Message message : lobby.getMessages()) {
             chatListView.getItems().add(message);
         }
     }
-
-    public TableView getPlayersTableView() {
-        return playersTableView;
-    }
-
-    /**
-     * Sets the main class this controller uses for functions
-     * @param instance the ClientMain class
-     */
-    public void setInstance(ClientMain instance){
-        this.instance = instance;
-
-    }
-
-
-
 }

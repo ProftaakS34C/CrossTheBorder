@@ -4,6 +4,7 @@ import crosstheborder.lib.interfaces.GameSettings;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Represents a lobby of the game
@@ -14,8 +15,8 @@ public class Lobby {
     private String name;
     private String password;
     private int maxPlayers;
-    private ArrayList<Message> messages;
-    private ArrayList<User> users;
+    private List<Message> messages;
+    private List<User> users;
     private User owner;
     private Game game;
     private GameSettings settings;
@@ -127,6 +128,10 @@ public class Lobby {
     public boolean addUser(User user) {
         if (maxPlayers <= users.size()) {
             users.add(user);
+
+            if (owner == null) {
+                owner = user;
+            }
             return true;
         }
         return false;
@@ -142,6 +147,11 @@ public class Lobby {
     public boolean removeUser(User user) {
         if (users.contains(user)) {
             users.remove(user);
+
+            //If we just removed the owner assign it to someone else.
+            if (owner == user) {
+                owner = users.get(0);
+            }
         }
         return false;
     }
@@ -166,7 +176,9 @@ public class Lobby {
      * This method is used to get all messages from this lobby.
      * @return List of messages
      */
-    public ArrayList<Message> getMessages(){ return this.messages; }
+    public List<Message> getMessages() {
+        return this.messages;
+    }
 
     /**
      * This method is used to start the game
