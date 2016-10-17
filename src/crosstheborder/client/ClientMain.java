@@ -58,7 +58,7 @@ public class ClientMain extends Application {
 
         initLayout();
         String userName = askForUserName();
-        user = new User(userName);
+        this.user = new User(userName);
 
         showMainMenu();
     }
@@ -166,8 +166,7 @@ public class ClientMain extends Application {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/GameScreen.fxml"));
             gameRoot = loader.load();
             GameScreenController controller = loader.getController();
-            controller.setInstance(this);
-            controller.setUp();
+            controller.setUp(this);
             root.setCenter(gameRoot);
             primaryStage.setTitle("In Game");
         }

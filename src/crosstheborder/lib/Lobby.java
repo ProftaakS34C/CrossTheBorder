@@ -126,7 +126,7 @@ public class Lobby {
      * @return a boolean value indicating success
      */
     public boolean addUser(User user) {
-        if (maxPlayers <= users.size()) {
+        if (maxPlayers >= users.size() && !users.contains(user)) {
             users.add(user);
 
             if (owner == null) {
@@ -189,8 +189,13 @@ public class Lobby {
         ArrayList<User> randomList = new ArrayList<>(users);
         Collections.shuffle(randomList);
 
+        game.addPlayer(new User("Trump")); //TODO TESTING CODE.
+
         for (User u : randomList) {
             game.addPlayer(u);
         }
+
+        game.startGame();
+        this.game = game;
     }
 }

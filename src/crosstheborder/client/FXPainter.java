@@ -11,17 +11,22 @@ import java.io.File;
  * This is the javaFX implementation of the Painter interface
  *
  * @author yannic
+ * @author Oscar de Leeuw
  */
 public class FXPainter implements Painter {
     private GraphicsContext gc;
+    private FXFileToImageConverter imageConverter;
+
 
     public FXPainter(GraphicsContext gc) {
         this.gc = gc;
+        this.imageConverter = new FXFileToImageConverter();
+
     }
 
     @Override
     public void drawImage(File file, Point location, int width, int height) {
-        javafx.scene.image.Image img = new Image(file.getPath());
+        Image img = imageConverter.getImage(file);
         gc.drawImage(img, location.x, location.y, width, height);
     }
 }
