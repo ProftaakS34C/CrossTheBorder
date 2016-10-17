@@ -40,7 +40,7 @@ public class AStarAlgorithm implements PathingAlgorithm {
         try {
             performAStar(map, entity, start, end);
         } catch (Exception e) {
-            //TODO Think of something to do when we encounter such an exception.
+            //TODO Think of something to do when we encounter an illegal cost exception.
         }
 
 

@@ -11,6 +11,7 @@ public class User {
     private String name;
     private Player player;
     private Lobby lobby;
+    private boolean isComputer;
 
     /**
      * This is the constructor method of the class "User"
@@ -36,6 +37,22 @@ public class User {
      */
     public String getOwner() {
         return isOwnerOfLobby() ? "Yes" : "No";
+    }
+
+    /**
+     * Gets whether this user should be treated as a computer.
+     *
+     * @return True when this user is a computer.
+     */
+    public boolean isComputer() {
+        return this.isComputer;
+    }
+
+    /**
+     * Turn this user into a computer.
+     */
+    public void turnIntoComputer() {
+        this.isComputer = true;
     }
 
     /**

@@ -96,10 +96,8 @@ public class LobbyMenuController {
 
     @FXML
     private void addAiButton_OnAction() {
-        //instance.getLobby().addAi
-        //todo: implement adding of AI
-        //instance.getLobby().addUser(new User("fakeAI"));
-        throw new UnsupportedOperationException();
+        lobby.addAI();
+        refreshUsersTableView();
     }
 
     @FXML
@@ -123,7 +121,6 @@ public class LobbyMenuController {
      * Leaves the current lobby.
      */
     private void leaveLobby() {
-        System.out.println("Leaving lobby...");
         user.leaveLobby();
         instance.showMainMenu();
     }

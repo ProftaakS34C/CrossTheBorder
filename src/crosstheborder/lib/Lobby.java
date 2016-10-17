@@ -2,9 +2,7 @@ package crosstheborder.lib;
 
 import crosstheborder.lib.interfaces.GameSettings;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Represents a lobby of the game
@@ -13,6 +11,11 @@ import java.util.List;
  * @version 1.0
  */
 public class Lobby {
+    private final List<String> NAME_POOL = Arrays.asList("Henk", "Piet", "Arnold", "Gert", "Adolf", "Phuc", "Nico", "Gert-Jan",
+            "xXSniperEliteXx", "SuperMaster69", "EzGame4613", "Ferdinand", "MexicanDestroyer", "ЦукаБлзат", "ИдиНахуи", "PenPineappleApplePen",
+            "MaatwerkBoi", "ManManMan", "PannenkoekenKoekenpan", "MaatwerkExceptie", "GrijsGebied", "MeneerPopo");
+    private final Iterator<String> AI_NAMES;
+
     private String name;
     private String password;
     private int maxPlayers;
@@ -44,6 +47,9 @@ public class Lobby {
         this.maxPlayers = maxPlayers;
         this.messages = new ArrayList<>();
         this.users = new ArrayList<>();
+
+        Collections.shuffle(NAME_POOL);
+        AI_NAMES = NAME_POOL.iterator();
     }
 
     /**
@@ -159,11 +165,20 @@ public class Lobby {
             users.remove(user);
 
             //If we just removed the owner assign it to someone else.
-            if (owner == user) {
-                owner = users.get(0);
+            if (owner == user && !users.stream().allMatch(User::isComputer)) {
+                owner = users.stream().filter(u -> !u.isComputer()).findFirst().get();
+            } else {
+                users.forEach(u -> u.leaveLobby());
+                //TODO destroy the lobby.
             }
         }
         return false;
+    }
+
+    public void addAI() {
+        User computer = new User(AI_NAMES.next());
+        computer.turnIntoComputer();
+        computer.joinLobby(this);
     }
 
     /**
