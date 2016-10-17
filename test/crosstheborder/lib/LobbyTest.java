@@ -7,10 +7,9 @@ import org.junit.Test;
 
 import java.time.LocalTime;
 
-import static org.junit.Assert.*;
-
 /**
- * Created by guill on 3-10-2016.
+ * @author Oscar de Leeuw
+ * @author guill
  */
 public class LobbyTest {
 
@@ -28,8 +27,8 @@ public class LobbyTest {
 
     @Test
     public void addMessage() throws Exception {
-        lobby.addMessage(new Message("Henk" , "Dit is een mooi bericht"));
-        lobby.addMessage(new Message("Piet", "Dit is idd een geweldig bericht!"));
+        lobby.addMessage(new Message(new User("Henk"), "Dit is een mooi bericht"));
+        lobby.addMessage(new Message(new User("Kippetje"), "Dit is idd een geweldig bericht!"));
 
         for(Message m : lobby.getMessages()){
             System.out.println(m);

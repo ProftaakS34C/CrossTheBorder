@@ -104,8 +104,18 @@ public class LobbyMenuController {
 
     @FXML
     private void btnChat_OnAction(){
-        Message message = new Message(instance.getUser().getName(), chatInputTextField.getText());
-        lobby.addMessage(message);
+        String chatText = chatInputTextField.getText();
+
+        if (chatText.matches("(<script>alert\\((\\d*|\".*\")\\)</script>)")) {
+            Alert popup = new Alert(Alert.AlertType.INFORMATION);
+            popup.setContentText(chatText.substring(chatText.indexOf('(') + 1, chatText.lastIndexOf(')')).replace('"', '\u0000'));
+            popup.showAndWait();
+        } else {
+            Message message = new Message(user, chatText);
+            lobby.addMessage(message);
+        }
+
+        chatInputTextField.clear();
         refreshChatListView();
     }
 

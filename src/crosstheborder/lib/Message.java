@@ -9,7 +9,7 @@ import java.time.LocalTime;
  *  @author Oscar de Leeuw
  */
 public class Message {
-    private String author;
+    private User author;
     private String message;
     private LocalTime time;
 
@@ -20,7 +20,7 @@ public class Message {
      * @param author  The author of the message.
      * @param message The message.
      */
-    public Message(String author, String message) {
+    public Message(User author, String message) {
         this.author = author;
         this.message = message;
         this.time = LocalTime.now();
@@ -33,7 +33,6 @@ public class Message {
      */
     @Override
     public String toString() {
-        return this.time.getHour() + ":" + this.time.getMinute() + " " +
-                this.author + ": " + this.message;
+        return String.format("%1$02d:%2$02d %3$s: %4$s", time.getHour(), time.getMinute(), author.getName(), message);
     }
 }
