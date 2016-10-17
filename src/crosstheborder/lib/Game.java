@@ -1,5 +1,6 @@
 package crosstheborder.lib;
 
+import crosstheborder.lib.enumeration.Country;
 import crosstheborder.lib.enumeration.MoveDirection;
 import crosstheborder.lib.enumeration.PlaceableType;
 import crosstheborder.lib.interfaces.*;
@@ -51,8 +52,8 @@ public class Game implements GameManipulator, GameInterface {
         this.timeLimit = settings.getTimeLimit() * SERVER_TICK_RATE;
         this.players = new ArrayList<>();
         this.map = MapLoader.getInstance().buildMap(mapName);
-        this.usa = new Team("USA", map.getUsaArea(), settings.getUsaScoringModifier());
-        this.mex = new Team("MEX", map.getMexicoArea(), settings.getMexicanScoringModifier());
+        usa = new Team(Country.USA, map.getUsaArea(), settings.getUsaScoringModifier());
+        mex = new Team(Country.MEX, map.getMexicoArea(), settings.getMexicanScoringModifier());
     }
 
     /**
@@ -115,7 +116,8 @@ public class Game implements GameManipulator, GameInterface {
         if (trump == null) {
             trump = new Trump(user.getName(), usa, settings);
             //Little hackish to set the camera location somewhere in the USA area.
-            trump.getCameraLocation().setLocation(map.getFreePointInArea(usa.getTeamArea()));
+            Point initCameraLoc = (Point) map.getTileInArea(usa.getTeamArea()).getLocation().clone();
+            trump.getCameraLocation().setLocation(initCameraLoc);
             player = trump;
         } else {
             Team team;
@@ -136,35 +138,29 @@ public class Game implements GameManipulator, GameInterface {
 
             player = playerEntity;
             players.add(playerEntity);
-            Point location = map.getFreePointInArea(team.getTeamArea());
-            changePlayerEntityLocation(playerEntity, location);
+            respawnPlayer(playerEntity);
         }
 
         user.setPlayer(player);
     }
 
     /**
-     * Update is called at every tick of the server clock.
+     * Update is called at every tick of the game timer.
      */
     public void update(){
-        //Update all the players.
-        for (Player player : players) {
-            //Update the player entities.
-            if (player instanceof PlayerEntity) {
-                PlayerEntity entity = (PlayerEntity) player;
-
-                //Move the player if there is input.
-                Point nextLocation = entity.getNextMove();
-                if (nextLocation != null) {
-                    movePlayerEntity(entity, nextLocation);
-                }
-
-                //Decrease the immobilization timer.
-                entity.decreaseMoveTimer();
-            } else if (player instanceof Trump) {
-                ((Trump) player).tickPlaceableAmount();
+        //Update all the player entities.
+        for (PlayerEntity player : players) {
+            //Move the player if there is input.
+            Point nextLocation = player.getNextMove();
+            if (nextLocation != null) {
+                movePlayerEntity(player, nextLocation);
             }
+            //Decrease the immobilization timer.
+            player.decreaseMoveTimer();
         }
+
+        //Tick the placeables for Trump.
+        trump.tickPlaceableAmount();
 
         //Check whether time has expired.
         timeLimit--;
@@ -199,33 +195,43 @@ public class Game implements GameManipulator, GameInterface {
 
     @Override
     public void movePlayerEntity(PlayerEntity player, Point nextLocation) {
-        boolean canContinue = true;
+        Tile nextTile = map.getTile(nextLocation);
 
-        //Check whether there's a PlayerEntity at the next location.
-        if (canContinue && map.hasTileObject(nextLocation)) {
-            canContinue = map.getTileObject(nextLocation).interactWith(player, this);
-        }
-        //Check whether the movement would enter a country.
-        if (canContinue && map.hasCountry(nextLocation)) {
-            canContinue = player.interactWith(map.getCountry(nextLocation), this);
-        }
-        //Check whether there's a tileObject at the next location.
-        if (canContinue && map.hasPlayerEntity(nextLocation)) {
-            canContinue = map.getPlayerEntity(nextLocation).interactWith(player, this);
-        }
-        //If the tile is free just move the entity.
-        if (canContinue) {
-            changePlayerEntityLocation(player, nextLocation);
+        //If the tile is accessible try to move to it.
+        if (nextTile.isAccessible(player)) {
+
+            //Boolean to store whether further evaluation of interaction/movement is needed.
+            boolean shouldMove = true;
+
+            //Check whether there's a PlayerEntity at the next location.
+            if (nextTile.hasPlayerEntity()) {
+                shouldMove = nextTile.getPlayerEntity().interactWith(player, this);
+            }
+
+            //Check whether there's a TileObject at the next location.
+            if (shouldMove && nextTile.hasTileObject()) {
+                shouldMove = nextTile.getTileObject().interactWith(player, this);
+            }
+
+            //Interact with the country of the next location.
+            if (shouldMove) {
+                shouldMove = nextTile.getCountry().interactWith(player, this);
+            }
+
+            //If the movement should be executed, move the player.
+            if (shouldMove) {
+                changePlayerEntityLocation(player, nextTile);
+            }
         }
     }
 
     @Override
     public void respawnPlayer(PlayerEntity player) {
         //Get a free point in the team area of the player.
-        Point nextLocation = map.getFreePointInArea(player.getTeam().getTeamArea());
+        Tile nextLocation = map.getFreeTileInArea(player.getTeam().getTeamArea(), player);
 
         player.immobilize(settings.getRespawnTime());
-        changePlayerEntityLocation(player, nextLocation);
+        nextLocation.setPlayerEntity(player);
     }
 
     @Override
@@ -237,28 +243,28 @@ public class Game implements GameManipulator, GameInterface {
     }
 
     @Override
-    public void changePlayerEntityLocation(PlayerEntity entity, Point nextLocation) {
-        Point currentLocation = entity.getLocation();
+    public void changePlayerEntityLocation(PlayerEntity entity, Tile nextLocation) {
+        Tile currentLocation = entity.getTile();
 
-        map.changePlayerEntity(currentLocation, null);
-        map.changePlayerEntity(nextLocation, entity);
-        //Move the location of the entity to the next location. Saves having to recreate a new point object every time.
-        currentLocation.move(nextLocation.x, nextLocation.y);
+        if (currentLocation != null) {
+            currentLocation.setPlayerEntity(null);
+        }
+        nextLocation.setPlayerEntity(entity);
     }
 
     @Override
-    public void changeTileObjectLocation(TileObject object, Point nextLocation) {
-        Point currentLocation = object.getLocation();
+    public void changeTileObjectLocation(TileObject object, Tile nextLocation) {
+        Tile currentLocation = object.getTile();
 
-        map.changeTileObject(currentLocation, null);
-        map.changeTileObject(nextLocation, object);
-        //Move the location of the entity to the next location. Saves having to recreate a new point object every time.
-        currentLocation.move(nextLocation.x, nextLocation.y);
+        if (currentLocation != null) {
+            currentLocation.setTileObject(null);
+        }
+        nextLocation.setTileObject(object);
     }
 
     @Override
     public void removeTileObject(TileObject tileObject) {
-        map.changeTileObject(tileObject.getLocation(), null);
+        tileObject.getTile().setTileObject(null);
     }
 
     @Override
@@ -291,11 +297,12 @@ public class Game implements GameManipulator, GameInterface {
     @Override
     public void addPlaceable(Point location, PlaceableType placeableType) {
         try {
+            Tile tile = map.getTile(location);
             Placeable placeable = placeableType.getPlaceable(settings);
 
-            if (this.trump.canPlace(placeable) && map.canPlacePlaceable(location, placeable)) {
-                map.changeTileObject(location, placeable);
-                this.trump.decreasePlaceableAmount(placeable);
+            if (trump.canPlace(placeable) && map.canPlacePlaceable(tile, placeable)) {
+                changeTileObjectLocation(placeable, tile);
+                trump.decreasePlaceableAmount(placeable);
             }
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, ex.toString(), ex);

@@ -62,6 +62,16 @@ public class Mexican extends PlayerEntity {
     }
 
     /**
+     * Gets the total amount of ticks it takes before a wall should be climbed.
+     *
+     * @param wall The wall that is going to be climbed.
+     * @return The amount of ticks it takes to climb the wall.
+     */
+    public int getTotalClimbTime(Wall wall) {
+        return (int) (wall.getHeight() * climbModifier * serverTickRate);
+    }
+
+    /**
      * {@inheritDoc}
      * <p>
      * If the other playerEntity is a {@link BorderPatrol}, respawn the mexican and raise the score of the BorderPatrol team.
@@ -74,7 +84,7 @@ public class Mexican extends PlayerEntity {
      */
     @Override
     public boolean interactWith(PlayerEntity player, GameManipulator game) {
-        if (player instanceof BorderPatrol) {
+        if (player.getTeam().getCountry() == Country.USA) {
             game.increaseScore(player.getTeam());
             game.respawnPlayer(this);
         }
@@ -82,13 +92,20 @@ public class Mexican extends PlayerEntity {
     }
 
     @Override
-    public boolean interactWith(Country country, GameManipulator game) {
-        switch (country) {
-            case USA:
-                game.increaseScore(this.getTeam());
-                game.respawnPlayer(this);
-                return false;
+    public boolean isAccessible(PlayerEntity entity) {
+        if (entity.getTeam().getCountry() == Country.USA) {
+            return true;
         }
-        return true;
+
+        return false;
+    }
+
+    @Override
+    public int getCost(PlayerEntity entity) {
+        if (!isAccessible(entity)) {
+            return -1;
+        }
+
+        return 0;
     }
 }

@@ -42,7 +42,7 @@ public class Wall extends Placeable {
      * </p>
      * Calls the following methods from GameManipulator:
      * <ul>
-     *     <li>Calls {@link GameManipulator#changePlayerEntityLocation(PlayerEntity, Point)} when the PlayerEntity is a Mexican and the wall in successfully climbed.</li>
+     *     <li>Calls {@link GameManipulator#movePlayerEntity(PlayerEntity, Point)} when the PlayerEntity is a Mexican and the wall in successfully climbed.</li>
      * </ul>
      */
     @Override
@@ -54,6 +54,28 @@ public class Wall extends Placeable {
             }
         }
         return false;
+    }
+
+    @Override
+    public boolean isAccessible(PlayerEntity entity) {
+        if (entity instanceof Mexican) {
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public int getCost(PlayerEntity entity) {
+        if (!isAccessible(entity)) {
+            return -1;
+        }
+
+        if (entity instanceof Mexican) {
+            return ((Mexican) entity).getTotalClimbTime(this);
+        }
+
+        return 0;
     }
 
     /**

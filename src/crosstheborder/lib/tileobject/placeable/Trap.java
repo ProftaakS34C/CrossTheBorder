@@ -1,13 +1,12 @@
 package crosstheborder.lib.tileobject.placeable;
 
+import crosstheborder.lib.enumeration.Country;
 import crosstheborder.lib.interfaces.GameManipulator;
 import crosstheborder.lib.interfaces.GameSettings;
 import crosstheborder.lib.interfaces.TileObject;
 import crosstheborder.lib.player.PlayerEntity;
 import crosstheborder.lib.player.entity.Mexican;
 import crosstheborder.lib.tileobject.Placeable;
-
-import java.awt.*;
 
 /**
  * Represents a trap that can be placed by {@link crosstheborder.lib.player.Trump}.
@@ -38,14 +37,13 @@ public class Trap extends Placeable {
      * </p>
      * Calls the following methods from GameManipulator:
      * <ul>
-     *     <li>Calls {@link GameManipulator#changePlayerEntityLocation(PlayerEntity, Point)} when the PlayerEntity is a Mexican.</li>
      *     <li>Calls {@link GameManipulator#removeTileObject(TileObject)} with itself if the trap has no uses left.</li>
      * </ul>
      */
     @Override
     public boolean interactWith(PlayerEntity player, GameManipulator game) {
         //Trap the player if it is a mexican.
-        if (player instanceof Mexican) {
+        if (player.getTeam().getCountry() == Country.MEX) {
             player.immobilize(trapTime);
 
             trapUses--;
@@ -54,6 +52,23 @@ public class Trap extends Placeable {
             }
         }
         return true;
+    }
+
+    @Override
+    public boolean isAccessible(PlayerEntity entity) {
+        return true;
+    }
+
+    @Override
+    public int getCost(PlayerEntity entity) {
+        if (!isAccessible(entity)) {
+            return -1;
+        }
+        if (entity.getTeam().getCountry() == Country.MEX) {
+            return trapTime * 5; //TODO Change trapTime etc in gameSettings so it's in ticks rather than seconds.
+        }
+
+        return 0;
     }
 
     /**

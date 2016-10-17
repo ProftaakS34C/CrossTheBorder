@@ -1,6 +1,6 @@
 package crosstheborder.lib;
 
-import crosstheborder.lib.enumeration.TeamName;
+import crosstheborder.lib.enumeration.Country;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import java.util.List;
  * @author Oscar de Leeuw
  */
 public class Team {
-    private TeamName name;
+    private Country country;
     private int score;
     private int scoreIncrease; //Amount of points to increase each time increaseScore is called.
     private List<Player> teamMembers = new ArrayList();
@@ -22,12 +22,12 @@ public class Team {
     /**
      * Constructor of Team class.
      *
-     * @param name Name of the team
+     * @param country The country of the team.
      * @param scoreIncrease The amount the score of this team is increased by after each call of increaseScore.
      * @param teamArea The area of this team.
      */
-    public Team(String name, Rectangle teamArea, int scoreIncrease) {
-        this.name = TeamName.valueOf(name);
+    public Team(Country country, Rectangle teamArea, int scoreIncrease) {
+        this.country = country;
         this.score = 0;
         this.teamArea = teamArea;
         this.scoreIncrease = scoreIncrease;
@@ -45,12 +45,12 @@ public class Team {
 
 
     /**
-     * Gets name of team.
+     * Gets country of the team.
      *
-     * @return name of team.
+     * @return The country of the team.
      */
-    public TeamName getName(){
-        return name;
+    public Country getCountry() {
+        return country;
     }
 
     /**
