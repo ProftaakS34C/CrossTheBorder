@@ -8,30 +8,28 @@ import crosstheborder.lib.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 /**
- * @author Yannic
  * The controller class of the lobby menu
+ *
+ * @author Yannic
+ * @author Oscar de Leeuw
  */
 public class LobbyMenuController {
 
-    int maxPlayers;
     @FXML
     private Button startGameButton;
     @FXML
     private ListView<Message> chatListView;
     @FXML
-    private TableView playersTableView;
+    private TableView<User> usersTableView;
     @FXML
     private CheckBox isPrivateCheckBox;
     @FXML
     private PasswordField lobbyPassInputPasswordField;
     @FXML
-    private Button chatButton;
-    @FXML
     private TextField chatInputTextField;
-    @FXML
-    private ChoiceBox choiceBoxAmountOfPlayers;
     @FXML
     private Button leaveLobbyButton;
     @FXML
@@ -58,8 +56,10 @@ public class LobbyMenuController {
             startGameButton.setVisible(false);
             lobbyPassInputPasswordField.setVisible(false);
             isPrivateCheckBox.setVisible(false);
-            choiceBoxAmountOfPlayers.setVisible(false);
         }
+
+        refreshUsersTableView();
+        refreshChatListView();
     }
 
     @FXML
@@ -68,7 +68,6 @@ public class LobbyMenuController {
             if (!lobbyPassInputPasswordField.getText().trim().equals("") && lobbyPassInputPasswordField.getText() != null) {
                 lobbyPassInputPasswordField.setVisible(false);
                 lobby.setPassword(lobbyPassInputPasswordField.getText());
-                System.out.println("set password");
             }
             else {
                 isPrivateCheckBox.setSelected(false);
@@ -77,7 +76,6 @@ public class LobbyMenuController {
         else {
             lobbyPassInputPasswordField.setText("");
             lobby.setPassword("");
-            System.out.println("removed password");
             lobbyPassInputPasswordField.setVisible(true);
         }
     }
@@ -108,7 +106,7 @@ public class LobbyMenuController {
     private void btnChat_OnAction(){
         Message message = new Message(instance.getUser().getName(), chatInputTextField.getText());
         lobby.addMessage(message);
-        refreshChatLog();
+        refreshChatListView();
     }
 
     /**
@@ -120,10 +118,23 @@ public class LobbyMenuController {
         instance.showMainMenu();
     }
 
-    private void refreshChatLog() {
+    private void refreshChatListView() {
         chatListView.getItems().clear();
         for (Message message : lobby.getMessages()) {
             chatListView.getItems().add(message);
+        }
+    }
+
+    private void refreshUsersTableView() {
+        usersTableView.getItems().clear();
+
+        TableColumn nameColumn = usersTableView.getColumns().get(0);
+        TableColumn ownerColumn = usersTableView.getColumns().get(1);
+        nameColumn.setCellValueFactory(new PropertyValueFactory<User, String>("name"));
+        ownerColumn.setCellValueFactory(new PropertyValueFactory<User, Boolean>("owner"));
+
+        for (User user : lobby.getUsers()) {
+            usersTableView.getItems().add(user);
         }
     }
 }

@@ -9,6 +9,7 @@ import java.util.List;
 /**
  * Represents a lobby of the game
  * @author Joram
+ * @author Oscar de Leeuw
  * @version 1.0
  */
 public class Lobby {
@@ -100,6 +101,15 @@ public class Lobby {
      */
     public Game getGame(){
         return game;
+    }
+
+    /**
+     * Gets the users that are present in this lobby.
+     *
+     * @return The list of users.
+     */
+    public List<User> getUsers() {
+        return new ArrayList<>(users);
     }
 
     /**

@@ -3,14 +3,14 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.Pane?>
 <Pane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-      minWidth="-Infinity" prefHeight="435.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/8.0.102"
+      minWidth="-Infinity" prefHeight="435.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/8"
       fx:controller="crosstheborder.client.controller.LobbyMenuController">
    <children>
        <ListView fx:id="chatListView" layoutX="385.0" layoutY="178.0" prefHeight="200.0" prefWidth="252.0"/>
-      <TableView fx:id="playersTableView" layoutX="14.0" layoutY="13.0" prefHeight="398.0" prefWidth="252.0">
+       <TableView fx:id="usersTableView" layoutX="14.0" layoutY="13.0" prefHeight="398.0" prefWidth="252.0">
         <columns>
-          <TableColumn prefWidth="185.0" text="Speler" />
-          <TableColumn prefWidth="79.0" text="team" />
+            <TableColumn prefWidth="149.0" text="Name"/>
+            <TableColumn prefWidth="101.0" text="Owner"/>
         </columns>
       </TableView>
        <TextField fx:id="chatInputTextField" layoutX="385.0" layoutY="386.0" prefHeight="25.0" prefWidth="192.0"/>

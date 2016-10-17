@@ -30,6 +30,15 @@ public class User {
     }
 
     /**
+     * Method used for filling the owner column.
+     *
+     * @return A string that represents whether this user is the owner of the lobby.
+     */
+    public String getOwner() {
+        return isOwnerOfLobby() ? "Yes" : "No";
+    }
+
+    /**
      * This method sets the lobby of the player.
      * @param lobby the lobby object the player is part of
      */
