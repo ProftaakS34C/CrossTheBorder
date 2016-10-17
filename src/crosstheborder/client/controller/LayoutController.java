@@ -1,6 +1,6 @@
-package crosstheborder.ui.controller;
+package crosstheborder.client.controller;
 
-import crosstheborder.ui.ClientMain;
+import crosstheborder.client.ClientMain;
 import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -12,10 +12,7 @@ import javafx.scene.control.MenuItem;
  */
 public class LayoutController {
 
-    @FXML
-    private void initialize(){
 
-    }
 
     @FXML
     private MenuBar menuBar;
@@ -32,6 +29,17 @@ public class LayoutController {
 
     private ClientMain instance;
 
+    @FXML
+    private void initialize(){
+
+    }
+
+    /**
+     * This method is used for first time setup of the controller, if the initialize method cannot be used.
+     */
+    public void setUp(){
+
+    }
     /**
      * Shows the lobby menu screen, see showLobbyMenu in ClientMain.
      */

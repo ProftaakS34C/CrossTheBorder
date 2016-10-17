@@ -18,7 +18,7 @@ public class LobbyTest {
 
     @Before
     public void setUp() throws Exception {
-        lobby = new Lobby("The Kek Game", "", 8);
+        lobby = new Lobby(new User("test"), "The Kek Game", "", 8);
     }
 
     @After
