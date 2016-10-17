@@ -153,13 +153,13 @@ public class Tile implements Drawable {
         File file = ImageFinder.getInstance().getImage(type);
         painter.drawImage(file, location, tileWidth, tileWidth);
 
-        country.draw(painter, location, tileWidth);
-
         if (hasTileObject()) {
             tileObject.draw(painter, location, tileWidth);
         }
         if (hasPlayerEntity()) {
             playerEntity.draw(painter, location, tileWidth);
         }
+
+        country.draw(painter, location, tileWidth);
     }
 }
