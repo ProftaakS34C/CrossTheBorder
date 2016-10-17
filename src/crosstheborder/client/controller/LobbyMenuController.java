@@ -102,7 +102,7 @@ public class LobbyMenuController {
     private void addAiButton_OnAction(){
         //instance.getLobby().addAi
         //todo: implement adding of AI
-        instance.getLobby().addUser(new User("fakeAI"));
+        //instance.getLobby().addUser(new User("fakeAI"));
         throw new UnsupportedOperationException();
     }
 
