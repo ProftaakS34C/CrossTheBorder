@@ -30,7 +30,7 @@ public class FXFileToImageConverter {
             cache.put(file, img);
             return img;
         } catch (IOException e) {
-            return new WritableImage(40, 40); //TODO make sure this is not magical.
+            return new WritableImage(1, 1); //TODO make sure this is not magical.
         }
     }
 }
