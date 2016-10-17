@@ -1,11 +1,10 @@
-package crosstheborder.ui.controller;
+package crosstheborder.client.controller;
 
 /**
  * @author Yannic
- *
  */
 
-import crosstheborder.ui.ClientMain;
+import crosstheborder.client.ClientMain;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -15,10 +14,8 @@ import javafx.scene.control.Button;
  * The controller class of the lobby menu
  */
 public class LobbyMenuController {
-    @FXML
-    private void initialize(){
-        //todo: only if the user is owner of the lobby should the start button be set visible
-    }
+
+
     @FXML
     private Button startGameButton;
     @FXML
@@ -32,10 +29,34 @@ public class LobbyMenuController {
     @FXML
     private Button chatButton;
     @FXML
+    private TextField chatInputTextField;
+    @FXML
     private ChoiceBox choiceBoxAmountOfPlayers;
+    @FXML
+    private Button leaveLobbyButton;
 
     private ClientMain instance;
     int maxPlayers;
+
+    @FXML
+    private void initialize(){
+        //todo: only if the user is owner of the lobby should the start button be set visible
+    }
+
+    /**
+     * This method is used for first time setup of the controller, if the initialize method cannot be used.
+     */
+    public void setUp(){
+        if(instance.getUser().isOwnerOfLobby()){
+            leaveLobbyButton.setVisible(false);
+        }
+        else {
+            startGameButton.setVisible(false);
+            lobbyPassInputPasswordField.setVisible(false);
+            isPrivateCheckBox.setVisible(false);
+            choiceBoxAmountOfPlayers.setVisible(false);
+        }
+    }
 
     @FXML
     private void textBoxIsPrivate_OnAction(ActionEvent event){
@@ -43,7 +64,8 @@ public class LobbyMenuController {
         if(isPrivateCheckBox.isSelected()){
             if(lobbyPassInputPasswordField.getText() != null){
                 lobbyPassInputPasswordField.setVisible(false);
-                //set het wachtwoord van de lobby...
+                instance.getUser().getLobby().setPassword(lobbyPassInputPasswordField.getText());
+                System.out.println("set password");
             }
             else {
                 System.out.println("please specify a password");
@@ -51,8 +73,20 @@ public class LobbyMenuController {
         }
         else {
             lobbyPassInputPasswordField.setText("");
+            instance.getUser().getLobby().setPassword("");
+            System.out.println("removed password");
             lobbyPassInputPasswordField.setVisible(true);
         }
+    }
+
+    @FXML
+    private void leaveLobbyButton_OnAction(){
+        //do necessary actions for leaving lobby
+        //TODO if user is owner of lobby popup a dialog and remove everyone else from the lobby.
+
+        System.out.println("leaving lobby...");
+        instance.getUser().setLobby(null);
+        instance.showMainMenu();
     }
 
     @FXML
@@ -79,10 +113,9 @@ public class LobbyMenuController {
      */
     public void setInstance(ClientMain instance){
         this.instance = instance;
-        int maxPlayers = instance.getMaxPlayers();
-        for(int i = maxPlayers; i > 0; i--){
-            choiceBoxAmountOfPlayers.getItems().add(i);
-        }
+
     }
+
+
 
 }

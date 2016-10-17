@@ -13,14 +13,25 @@ public class Lobby {
     private int maxPlayers;
     private ArrayList<Message> messages;
     private ArrayList<User> users;
+    private User owner;
+    private Game game;
 
+    /**
+     * This is the constructor method of the class "Lobby"
+     * @param name The name of the lobby
+     * @param maxPlayers The maximum amount of players allowed in the lobby
+     */
+    public Lobby(User owner, String name, int maxPlayers){
+        this(owner, name, "", maxPlayers);
+    }
     /**
      * This is the constructor method of the class "Lobby"
      * @param name The name of the lobby
      * @param password The password of the lobby
      * @param maxPlayers The maximum amount of players allowed in the lobby
      */
-    public Lobby(String name, String password, int maxPlayers){
+    public Lobby(User owner, String name, String password, int maxPlayers){
+        this.owner = owner;
         this.name = name;
         this.password = password;
         this.maxPlayers = maxPlayers;
@@ -61,6 +72,22 @@ public class Lobby {
     }
 
     /**
+     * This method gets the game of this lobby
+     * @return Game, the game object of this lobby
+     */
+    public Game getGame(){
+        return game;
+    }
+
+    /**
+     * This method is used to set the game of the lobby
+     * @param game the new game for the lobby
+     */
+    public void setGame(Game game){
+        this.game = game;
+    }
+
+    /**
      * This method is used to get the maximum amount of players allowed inside the lobby
      *
      * @return int  this returns the maximum amount of players allowed inside the lobby
@@ -77,6 +104,13 @@ public class Lobby {
         maxPlayers = value;
     }
 
+    /**
+     * This method returns the owner of this lobby
+     * @return the User object which is owner of the lobby.
+     */
+    public User getOwner() {
+        return owner;
+    }
     /**
      * This method is used when a user in the lobby sends a message
      * @param message the message object that you want to add to the lobby
@@ -97,5 +131,6 @@ public class Lobby {
      */
     public void startGame() {
         Game game = new Game("empty"); //TODO change this to the mapname that is chosen in the lobby.
+
     }
 }

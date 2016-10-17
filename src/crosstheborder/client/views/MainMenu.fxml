@@ -7,7 +7,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="434.0" prefWidth="642.0" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="crosstheborder.ui.controller.MainMenuController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="434.0" prefWidth="642.0" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="crosstheborder.client.controller.MainMenuController">
    <children>
       <Button fx:id="createLobbyButton" layoutX="14.0" layoutY="396.0" mnemonicParsing="false" onAction="#btnCreateLobby_OnAction" prefHeight="25.0" prefWidth="85.0" text="Maak lobby" />
       <Button fx:id="joinLobbyButton" layoutX="178.0" layoutY="396.0" mnemonicParsing="false" onAction="#btnJoinLobby_OnAction" prefHeight="25.0" prefWidth="71.0" text="Join" />
