@@ -48,6 +48,7 @@ public class GameScreenController {
      * tbt
      */
     public void draw(){
+        instance.draw();
         //draw the game using a Paintable interface similar to JCC.
     }
 }

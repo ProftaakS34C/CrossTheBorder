@@ -33,6 +33,7 @@ public class CreateLobbyDialog {
 
         TextField lobbyNameInput = new TextField();
         TextField playerAmountInput = new TextField();
+        playerAmountInput.setPromptText("max 8");
 
         gridPane.add(new Label("lobby naam"), 0, 0);
         gridPane.add(lobbyNameInput, 1, 0);
@@ -50,12 +51,14 @@ public class CreateLobbyDialog {
             enableButtonIfInputOk();
         });
         playerAmountInput.textProperty().addListener((observable, oldVal, newVal) ->{
-            playerAmountOK = checkIfInt(newVal);
+            playerAmountOK = checkIfInt(newVal, 8); //8 because that is the maximum amount of players
             enableButtonIfInputOk();
         });
 
         dialog.getDialogPane().setContent(gridPane);
 
+
+        //focus the name input textfield
         Platform.runLater(()-> lobbyNameInput.requestFocus());
 
         dialog.setResultConverter(dialogButton -> {
@@ -82,10 +85,16 @@ public class CreateLobbyDialog {
      * @param toCheck The String value to check
      * @return true if able to convert and false if not.
      */
-    private boolean checkIfInt(String toCheck){
+    private boolean checkIfInt(String toCheck, int under){
         try{
-            Integer.parseInt(toCheck);
-            return true;
+            int checked = Integer.parseInt(toCheck);
+            if(checked <= under){
+                return true;
+            }
+            else {
+                return false;
+            }
+
         }catch (NumberFormatException x){
             return false;
         }
@@ -112,6 +121,5 @@ public class CreateLobbyDialog {
      */
     public Optional<List<String>> showAndWait(){
         return dialog.showAndWait();
-        //todo: test this class
     }
 }

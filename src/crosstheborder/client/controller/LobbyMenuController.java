@@ -1,25 +1,26 @@
 package crosstheborder.client.controller;
 
-/**
- * @author Yannic
- */
 
 import crosstheborder.client.ClientMain;
+import crosstheborder.lib.Message;
+import crosstheborder.lib.User;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 
 /**
+ * @author Yannic
  * The controller class of the lobby menu
  */
 public class LobbyMenuController {
 
-
     @FXML
     private Button startGameButton;
     @FXML
-    private ListView chatListView;
+    private ListView<Message> chatListView;
     @FXML
     private TableView playersTableView;
     @FXML
@@ -34,41 +35,44 @@ public class LobbyMenuController {
     private ChoiceBox choiceBoxAmountOfPlayers;
     @FXML
     private Button leaveLobbyButton;
+    @FXML
+    private Button addAiButton;
+    @FXML
+    private TextField mapNameInputTextField;
 
     private ClientMain instance;
     int maxPlayers;
 
     @FXML
     private void initialize(){
-        //todo: only if the user is owner of the lobby should the start button be set visible
+        ObservableList<Message> listViewItems = FXCollections.observableArrayList();
+        chatListView.setItems(listViewItems); //todo: cannot add list to ListView?
     }
 
     /**
      * This method is used for first time setup of the controller, if the initialize method cannot be used.
      */
     public void setUp(){
-        if(instance.getUser().isOwnerOfLobby()){
-            leaveLobbyButton.setVisible(false);
-        }
-        else {
+
+        if(!instance.getUser().isOwnerOfLobby()){
             startGameButton.setVisible(false);
             lobbyPassInputPasswordField.setVisible(false);
             isPrivateCheckBox.setVisible(false);
             choiceBoxAmountOfPlayers.setVisible(false);
+
         }
     }
 
     @FXML
     private void textBoxIsPrivate_OnAction(ActionEvent event){
-        //test implementatie, werkt wel
         if(isPrivateCheckBox.isSelected()){
-            if(lobbyPassInputPasswordField.getText() != null){
+            if(!lobbyPassInputPasswordField.getText().trim().equals("") && lobbyPassInputPasswordField.getText() != null){
                 lobbyPassInputPasswordField.setVisible(false);
                 instance.getUser().getLobby().setPassword(lobbyPassInputPasswordField.getText());
                 System.out.println("set password");
             }
             else {
-                System.out.println("please specify a password");
+                isPrivateCheckBox.setSelected(false);
             }
         }
         else {
@@ -82,28 +86,33 @@ public class LobbyMenuController {
     @FXML
     private void leaveLobbyButton_OnAction(){
         //do necessary actions for leaving lobby
-        //TODO if user is owner of lobby popup a dialog and remove everyone else from the lobby.
-
-        System.out.println("leaving lobby...");
-        instance.getUser().setLobby(null);
-        instance.showMainMenu();
+        //TODO POLISH if user is owner of lobby popup a dialog and remove everyone else from the lobby.
+        instance.leaveLobby();
     }
 
     @FXML
     private void btnStartGame_OnAction(){
+        //TODO POLISH change into choicebox with all available maps
+        String mapName = mapNameInputTextField.getText();
+
+        instance.getLobby().startGame(mapName);
+        instance.showGameScreen();
+    }
+    @FXML
+    private void addAiButton_OnAction(){
+        //instance.getLobby().addAi
+        //todo: implement adding of AI
+        //instance.getLobby().addUser(new User("fakeAI"));
         throw new UnsupportedOperationException();
     }
 
     @FXML
     private void btnChat_OnAction(){
-        //String toSend = tfieldChatInput.getText();
-        //ClientMain.getInstance().sendChatmsg(toSend);
-        //chatListView.getItems().add(toSend);
-        throw new UnsupportedOperationException();
+        Message message = new Message(instance.getUser().getName(), chatInputTextField.getText());
+        chatListView.getItems().add(message);
     }
 
     public TableView getPlayersTableView() {
-        //playersTableView.getItems().add(new User("test"));
         return playersTableView;
     }
 
