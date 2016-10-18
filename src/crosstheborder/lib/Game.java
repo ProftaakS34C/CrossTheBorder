@@ -1,5 +1,6 @@
 package crosstheborder.lib;
 
+import crosstheborder.lib.computer.Computer;
 import crosstheborder.lib.enumeration.Country;
 import crosstheborder.lib.enumeration.MoveDirection;
 import crosstheborder.lib.enumeration.PlaceableType;
@@ -12,6 +13,7 @@ import crosstheborder.lib.tileobject.Placeable;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
@@ -27,14 +29,15 @@ public class Game implements GameManipulator, GameInterface {
     private static final Logger LOGGER = Logger.getLogger(Game.class.getName());
     private static final int SERVER_TICK_RATE = ServerSettings.getInstance().getServerTickRate();
     private GameSettings settings;
-    private Timer timer;
+    private Timer timer = new Timer();
     private boolean inProgress;
 
     private int scoreLimit;
     private int timeLimit;
 
     private Trump trump;
-    private ArrayList<PlayerEntity> players;
+    private List<PlayerEntity> players = new ArrayList<>();
+    private List<Computer> computers = new ArrayList<>();
 
     private Map map;
     private Team usa;
@@ -47,10 +50,8 @@ public class Game implements GameManipulator, GameInterface {
      */
     public Game(String mapName) {
         this.settings = new GameSettingsImpl(SERVER_TICK_RATE);
-        this.timer = new Timer();
         this.scoreLimit = settings.getScoreLimit();
         this.timeLimit = settings.getTimeLimit() * SERVER_TICK_RATE;
-        this.players = new ArrayList<>();
         this.map = MapLoader.getInstance().buildMap(mapName);
         usa = new Team(Country.USA, map.getUsaArea(), settings.getUsaScoringModifier());
         mex = new Team(Country.MEX, map.getMexicoArea(), settings.getMexicanScoringModifier());
@@ -92,6 +93,7 @@ public class Game implements GameManipulator, GameInterface {
      */
     public void startGame() {
         this.inProgress = true;
+        this.computers.forEach(computer -> computer.resetComputer(map));
 
         this.timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -113,7 +115,7 @@ public class Game implements GameManipulator, GameInterface {
         Player player;
 
         //If trump does not exist make the user a trump.
-        if (trump == null) {
+        if (trump == null && !user.isComputer()) {
             trump = new Trump(user.getName(), usa, settings);
             //Little hackish to set the camera location somewhere in the USA area.
             Point initCameraLoc = (Point) map.getTileInArea(usa.getTeamArea()).getLocation().clone();
@@ -139,6 +141,12 @@ public class Game implements GameManipulator, GameInterface {
             player = playerEntity;
             players.add(playerEntity);
             respawnPlayer(playerEntity);
+
+            //If the user has the computer flag, add it to the computers.
+            if (user.isComputer()) {
+                Computer computer = new Computer(playerEntity);
+                computers.add(computer);
+            }
         }
 
         user.setPlayer(player);
@@ -161,6 +169,9 @@ public class Game implements GameManipulator, GameInterface {
 
         //Tick the placeables for Trump.
         trump.tickPlaceableAmount();
+
+        //Let all the computers compute
+        computers.forEach(computer -> computer.computeMove(map));
 
         //Check whether time has expired.
         timeLimit--;
@@ -230,13 +241,15 @@ public class Game implements GameManipulator, GameInterface {
         //Get a free point in the team area of the player.
         Tile nextLocation = map.getFreeTileInArea(player.getTeam().getTeamArea(), player);
 
-        player.immobilize(settings.getRespawnTime());
-        nextLocation.setPlayerEntity(player);
+        //player.immobilize(settings.getRespawnTime());
+        changePlayerEntityLocation(player, nextLocation);
     }
 
     @Override
     public void increaseScore(Team team) {
         team.increaseScore();
+
+        System.out.printf("Mexican score = %1$d | Usa score = %2$d\n", mex.getScore(), usa.getScore()); //TODO REMOVE THIS.
 
         //Check whether the score limit has been reached.
         checkScore();

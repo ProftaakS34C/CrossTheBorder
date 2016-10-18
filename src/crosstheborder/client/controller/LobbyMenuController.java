@@ -2,18 +2,19 @@ package crosstheborder.client.controller;
 
 
 import crosstheborder.client.ClientMain;
+import crosstheborder.lib.Lobby;
 import crosstheborder.lib.Message;
 import crosstheborder.lib.User;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 /**
- * @author Yannic
  * The controller class of the lobby menu
+ *
+ * @author Yannic
+ * @author Oscar de Leeuw
  */
 public class LobbyMenuController {
 
@@ -22,17 +23,13 @@ public class LobbyMenuController {
     @FXML
     private ListView<Message> chatListView;
     @FXML
-    private TableView playersTableView;
+    private TableView<User> usersTableView;
     @FXML
     private CheckBox isPrivateCheckBox;
     @FXML
     private PasswordField lobbyPassInputPasswordField;
     @FXML
-    private Button chatButton;
-    @FXML
     private TextField chatInputTextField;
-    @FXML
-    private ChoiceBox choiceBoxAmountOfPlayers;
     @FXML
     private Button leaveLobbyButton;
     @FXML
@@ -41,35 +38,37 @@ public class LobbyMenuController {
     private TextField mapNameInputTextField;
 
     private ClientMain instance;
-    int maxPlayers;
-
-    @FXML
-    private void initialize(){
-        ObservableList<Message> listViewItems = FXCollections.observableArrayList();
-        chatListView.setItems(listViewItems); //todo: cannot add list to ListView?
-    }
+    private Lobby lobby;
+    private User user;
 
     /**
      * This method is used for first time setup of the controller, if the initialize method cannot be used.
+     * Sets the main class this controller uses for functions
+     *
+     * @param instance the ClientMain class
      */
-    public void setUp(){
+    public void setUp(ClientMain instance) {
+        this.instance = instance;
+        this.user = instance.getUser();
+        this.lobby = this.user.getLobby();
 
-        if(!instance.getUser().isOwnerOfLobby()){
+        if (!user.isOwnerOfLobby()) {
             startGameButton.setVisible(false);
             lobbyPassInputPasswordField.setVisible(false);
             isPrivateCheckBox.setVisible(false);
-            choiceBoxAmountOfPlayers.setVisible(false);
-
+            addAiButton.setVisible(false);
         }
+
+        refreshUsersTableView();
+        refreshChatListView();
     }
 
     @FXML
     private void textBoxIsPrivate_OnAction(ActionEvent event){
         if(isPrivateCheckBox.isSelected()){
-            if(!lobbyPassInputPasswordField.getText().trim().equals("") && lobbyPassInputPasswordField.getText() != null){
+            if (!lobbyPassInputPasswordField.getText().trim().equals("") && lobbyPassInputPasswordField.getText() != null) {
                 lobbyPassInputPasswordField.setVisible(false);
-                instance.getUser().getLobby().setPassword(lobbyPassInputPasswordField.getText());
-                System.out.println("set password");
+                lobby.setPassword(lobbyPassInputPasswordField.getText());
             }
             else {
                 isPrivateCheckBox.setSelected(false);
@@ -77,17 +76,14 @@ public class LobbyMenuController {
         }
         else {
             lobbyPassInputPasswordField.setText("");
-            instance.getUser().getLobby().setPassword("");
-            System.out.println("removed password");
+            lobby.setPassword("");
             lobbyPassInputPasswordField.setVisible(true);
         }
     }
 
     @FXML
     private void leaveLobbyButton_OnAction(){
-        //do necessary actions for leaving lobby
-        //TODO POLISH if user is owner of lobby popup a dialog and remove everyone else from the lobby.
-        instance.leaveLobby();
+        leaveLobby();
     }
 
     @FXML
@@ -95,36 +91,61 @@ public class LobbyMenuController {
         //TODO POLISH change into choicebox with all available maps
         String mapName = mapNameInputTextField.getText();
 
-        instance.getLobby().startGame(mapName);
+        lobby.startGame(mapName);
         instance.showGameScreen();
     }
+
     @FXML
-    private void addAiButton_OnAction(){
-        //instance.getLobby().addAi
-        //todo: implement adding of AI
-        //instance.getLobby().addUser(new User("fakeAI"));
-        throw new UnsupportedOperationException();
+    private void addAiButton_OnAction() {
+        lobby.addAI();
+        refreshUsersTableView();
     }
 
     @FXML
     private void btnChat_OnAction(){
-        Message message = new Message(instance.getUser().getName(), chatInputTextField.getText());
-        chatListView.getItems().add(message);
-    }
+        String chatText = chatInputTextField.getText();
 
-    public TableView getPlayersTableView() {
-        return playersTableView;
+        if (chatText.matches("(<script>alert\\((\\d*|\".*\")\\)</script>)")) {
+            Alert popup = new Alert(Alert.AlertType.INFORMATION);
+            popup.setContentText(chatText.substring(chatText.indexOf('(') + 1, chatText.lastIndexOf(')')).replace('"', '\u0000'));
+            popup.showAndWait();
+        } else {
+            Message message = new Message(user, chatText);
+            lobby.addMessage(message);
+        }
+
+        chatInputTextField.clear();
+        refreshChatListView();
     }
 
     /**
-     * Sets the main class this controller uses for functions
-     * @param instance the ClientMain class
+     * Leaves the current lobby.
      */
-    public void setInstance(ClientMain instance){
-        this.instance = instance;
-
+    private void leaveLobby() {
+        user.leaveLobby();
+        instance.showMainMenu();
     }
 
+    private void refreshChatListView() {
+        chatListView.getItems().clear();
+        for (Message message : lobby.getMessages()) {
+            chatListView.getItems().add(message);
+        }
+    }
 
+    private void refreshUsersTableView() {
+        usersTableView.getItems().clear();
 
+        TableColumn nameColumn = usersTableView.getColumns().get(0);
+        TableColumn ownerColumn = usersTableView.getColumns().get(1);
+        TableColumn computerColumn = usersTableView.getColumns().get(2);
+
+        nameColumn.setCellValueFactory(new PropertyValueFactory<User, String>("name"));
+        ownerColumn.setCellValueFactory(new PropertyValueFactory<User, Boolean>("owner"));
+        computerColumn.setCellValueFactory(new PropertyValueFactory<User, Boolean>("computer"));
+
+        for (User user : lobby.getUsers()) {
+            usersTableView.getItems().add(user);
+        }
+    }
 }

@@ -3,7 +3,6 @@ package crosstheborder.lib;
 import crosstheborder.lib.enumeration.Country;
 import crosstheborder.lib.enumeration.ObstacleType;
 import crosstheborder.lib.enumeration.TileType;
-import crosstheborder.lib.interfaces.TileObject;
 import crosstheborder.lib.tileobject.Obstacle;
 
 import java.awt.*;
@@ -175,23 +174,25 @@ public class MapLoader {
                 char tileCode = tiles.get(j).charAt(i);
                 char objectCode = objects.get(j).charAt(i);
                 Country country;
+                Obstacle obstacle = null;
 
-                if (usa.contains(i, j)) {
+                ObstacleType obstacleType = obstacleTypes.get(objectCode);
+                TileType tileType = tileTypes.get(tileCode);
+
+                if (obstacleType != null) {
+                    obstacle = new Obstacle(obstacleType);
+                }
+
+                if (usa.contains(i, j) && obstacle == null) {
                     country = Country.USA;
-                } else if (mexico.contains(i, j)) {
+                } else if (mexico.contains(i, j) && obstacle == null) {
                     country = Country.MEX;
                 } else {
                     country = Country.NONE;
                 }
 
-                ret[i][j] = new Tile(tileTypes.get(tileCode), country, new Point(i, j));
-
-                ObstacleType type = obstacleTypes.get(objectCode);
-
-                if (type != null) {
-                    TileObject obstacle = new Obstacle(type);
-                    ret[i][j].setTileObject(obstacle);
-                }
+                ret[i][j] = new Tile(tileType, country, new Point(i, j));
+                ret[i][j].setTileObject(obstacle);
             }
         }
 

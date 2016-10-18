@@ -51,7 +51,7 @@ public class ServerSettings implements InputPropertiesGetter {
 
     /**
      * {@inheritDoc}
-     * <p>If the key is not found in the properties it returns the integer value 10.</p>
+     * <p>If the key is not found in the properties it returns the integer value 1.</p>
      */
     @Override
     public int getInputBufferSize() {
@@ -60,7 +60,7 @@ public class ServerSettings implements InputPropertiesGetter {
         } catch (NumberFormatException e) {
             LOGGER.log(Level.SEVERE, e.toString(), e);
         }
-        return 10;
+        return 1;
     }
 
     /**

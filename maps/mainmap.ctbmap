@@ -1,7 +1,7 @@
 width=60;
 height=66;
-usaArea=11,9,40,4;
-mexicoArea=11,53,40,6;
+usaArea=0,8,60,4;
+mexicoArea=0,52,60,6;
 tiles=
 gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg
 gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg

@@ -1,5 +1,6 @@
 package crosstheborder.lib;
 
+import crosstheborder.lib.enumeration.Country;
 import crosstheborder.lib.enumeration.ObstacleType;
 import crosstheborder.lib.enumeration.TileType;
 import crosstheborder.lib.player.PlayerEntity;
@@ -70,6 +71,11 @@ public class ImageFinder {
      */
     public File getImage(PlayerEntity entity) {
         String name = entity.getClass().getSimpleName().toLowerCase();
+        return getImage(name);
+    }
+
+    public File getImage(Country country) {
+        String name = country.name().toLowerCase();
         return getImage(name);
     }
 

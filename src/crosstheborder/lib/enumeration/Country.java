@@ -1,5 +1,6 @@
 package crosstheborder.lib.enumeration;
 
+import crosstheborder.lib.ImageFinder;
 import crosstheborder.lib.Team;
 import crosstheborder.lib.Tile;
 import crosstheborder.lib.interfaces.Drawable;
@@ -9,6 +10,7 @@ import crosstheborder.lib.interfaces.Painter;
 import crosstheborder.lib.player.PlayerEntity;
 
 import java.awt.*;
+import java.io.File;
 
 /**
  * Enum for capturing the Countries that can exist within the game.
@@ -86,6 +88,7 @@ public enum Country implements Drawable, Interactable {
 
     @Override
     public void draw(Painter painter, Point location, int tileWidth) {
-        //TODO Add a draw method for painter.
+        File file = ImageFinder.getInstance().getImage(this);
+        painter.drawImage(file, location, tileWidth, tileWidth);
     }
 }

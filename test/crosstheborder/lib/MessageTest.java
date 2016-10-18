@@ -16,7 +16,7 @@ public class MessageTest {
 
     @Before
     public void setUp() throws Exception {
-        mes = new Message("Henk", "Wat een mooi spel is dit!");
+        mes = new Message(new User("Henk"), "Wat een mooi spel is dit!");
     }
 
     @After

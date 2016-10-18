@@ -2,26 +2,29 @@ package crosstheborder.lib;
 
 import crosstheborder.lib.interfaces.GameSettings;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Represents a lobby of the game
  * @author Joram
+ * @author Oscar de Leeuw
  * @version 1.0
  */
 public class Lobby {
+    private final List<String> NAME_POOL = Arrays.asList("Henk", "Piet", "Arnold", "Gert", "Adolf", "Phuc", "Nico", "Gert-Jan",
+            "xXSniperEliteXx", "SuperMaster69", "EzGame4613", "Ferdinand", "MexicanDestroyer", "ЦукаБлзат", "ИдиНахуи", "PenPineappleApplePen",
+            "MaatwerkBoi", "ManManMan", "PannenkoekenKoekenpan", "MaatwerkExceptie", "GrijsGebied", "MeneerPopo");
+    private final Iterator<String> AI_NAMES;
+
     private String name;
     private String password;
     private int maxPlayers;
-    private ArrayList<Message> messages;
-    private ArrayList<User> users;
+    private List<Message> messages;
+    private List<User> users;
     private User owner;
     private Game game;
     private GameSettings settings;
-
 
 
     /**
@@ -45,6 +48,10 @@ public class Lobby {
         this.maxPlayers = maxPlayers;
         this.messages = new ArrayList<>();
         this.users = new ArrayList<>();
+        this.owner.joinLobby(this);
+
+        Collections.shuffle(NAME_POOL);
+        AI_NAMES = NAME_POOL.iterator();
     }
 
     /**
@@ -87,19 +94,29 @@ public class Lobby {
         return settings;
     }
 
-    /**
-     * Sets the gameSettings of this lobby
-     * @param settings a GameSettings object containing all settings
-     */
-    public void setSettings(GameSettings settings) {
-        this.settings = settings;
+    public String getUserAmount() {
+        return String.format("%1$d/%2$d", users.size(), maxPlayers);
     }
+
+    public String getIsPrivate() {
+        return password.equals("") ? "No" : "Yes";
+    }
+
     /**
      * This method gets the game of this lobby
      * @return Game, the game object of this lobby
      */
     public Game getGame(){
         return game;
+    }
+
+    /**
+     * Gets the users that are present in this lobby.
+     *
+     * @return The list of users.
+     */
+    public List<User> getUsers() {
+        return new ArrayList<>(users);
     }
 
     /**
@@ -121,27 +138,56 @@ public class Lobby {
 
     /**
      * Adds a user to the array list of users in the lobby
+     *
      * @param user The user to add
      * @return a boolean value indicating success
      */
-    public boolean addUser(User user){
-        if(maxPlayers <= users.size()){
+    public boolean addUser(User user) {
+        if (maxPlayers >= users.size() && !users.contains(user)) {
             users.add(user);
+
+            if (owner == null) {
+                owner = user;
+            }
             return true;
         }
         return false;
     }
+
     /**
      * Removes a user from the array list of users in the lobby
      * only removes if the user is present in list
+     *
      * @param user The user to remove
-     * @return a boolean value indicating success
+     * @return True when the lobby should stay alive. False when the lobby should be removed.
      */
-    public boolean removeUser(User user){
-        if(users.contains(user)){
+    public boolean removeUser(User user) {
+        if (users.contains(user)) {
             users.remove(user);
+            List<User> humans = getAllHumanUsers();
+
+            //If we just removed the owner assign it to someone else.
+            if (humans.isEmpty()) {
+                //TODO DESTROY LOBBY
+                if (game != null) {
+                    game.stop();
+                }
+                return false;
+            } else if (owner == user) {
+                owner = humans.get(0);
+            }
         }
-        return false;
+        return true;
+    }
+
+    private List<User> getAllHumanUsers() {
+        return users.stream().filter(u -> !u.isComputer()).collect(Collectors.toList());
+    }
+
+    public void addAI() {
+        User computer = new User(AI_NAMES.next());
+        computer.turnIntoComputer();
+        computer.joinLobby(this);
     }
 
     /**
@@ -164,7 +210,9 @@ public class Lobby {
      * This method is used to get all messages from this lobby.
      * @return List of messages
      */
-    public ArrayList<Message> getMessages(){ return this.messages; }
+    public List<Message> getMessages() {
+        return this.messages;
+    }
 
     /**
      * This method is used to start the game
@@ -175,8 +223,13 @@ public class Lobby {
         ArrayList<User> randomList = new ArrayList<>(users);
         Collections.shuffle(randomList);
 
-        for(User u : randomList){
+        game.addPlayer(new User("Trump")); //TODO TESTING CODE.
+
+        for (User u : randomList) {
             game.addPlayer(u);
         }
+
+        game.startGame();
+        this.game = game;
     }
 }
