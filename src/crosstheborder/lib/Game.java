@@ -249,6 +249,8 @@ public class Game implements GameManipulator, GameInterface {
     public void increaseScore(Team team) {
         team.increaseScore();
 
+        System.out.printf("Mexican score = %1$d | Usa score = %2$d\n", mex.getScore(), usa.getScore()); //TODO REMOVE THIS.
+
         //Check whether the score limit has been reached.
         checkScore();
     }

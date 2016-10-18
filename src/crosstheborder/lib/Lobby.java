@@ -169,6 +169,9 @@ public class Lobby {
             //If we just removed the owner assign it to someone else.
             if (humans.isEmpty()) {
                 //TODO DESTROY LOBBY
+                if (game != null) {
+                    game.stop();
+                }
                 return false;
             } else if (owner == user) {
                 owner = humans.get(0);
