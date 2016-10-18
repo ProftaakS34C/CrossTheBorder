@@ -9,13 +9,14 @@
        <ListView fx:id="chatListView" layoutX="385.0" layoutY="178.0" prefHeight="200.0" prefWidth="252.0"/>
        <TableView fx:id="usersTableView" layoutX="14.0" layoutY="13.0" prefHeight="398.0" prefWidth="252.0">
         <columns>
-            <TableColumn prefWidth="149.0" text="Name"/>
-            <TableColumn prefWidth="101.0" text="Owner"/>
+            <TableColumn prefWidth="123.0" text="Name"/>
+            <TableColumn prefWidth="61.0" text="Owner"/>
+            <TableColumn prefWidth="66.0" text="Computer"/>
         </columns>
       </TableView>
        <TextField fx:id="chatInputTextField" layoutX="385.0" layoutY="386.0" prefHeight="25.0" prefWidth="192.0"/>
        <CheckBox fx:id="isPrivateCheckBox" layoutX="271.0" layoutY="114.0" mnemonicParsing="false"
-                 onAction="#textBoxIsPrivate_OnAction" text="private"/>
+                 onAction="#textBoxIsPrivate_OnAction" text="Set Private"/>
        <PasswordField fx:id="lobbyPassInputPasswordField" layoutX="271.0" layoutY="131.0"/>
       <Button fx:id="chatButton" layoutX="583.0" layoutY="386.0" mnemonicParsing="false" onAction="#btnChat_OnAction" prefHeight="25.0" prefWidth="51.0" text="Chat" />
        <Button fx:id="startGameButton" layoutX="281.0" layoutY="177.0" mnemonicParsing="false"
@@ -23,7 +24,7 @@
        <Button fx:id="leaveLobbyButton" layoutX="529.0" layoutY="13.0" mnemonicParsing="false"
                onAction="#leaveLobbyButton_OnAction" prefHeight="25.0" prefWidth="109.0" text="Leave lobby"/>
        <Button fx:id="addAiButton" layoutX="271.0" layoutY="13.0" mnemonicParsing="false"
-               onAction="#addAiButton_OnAction" text="add AI"/>
+               onAction="#addAiButton_OnAction" text="Add AI"/>
        <TextField fx:id="mapNameInputTextField" layoutX="271.0" layoutY="70.0"/>
        <Label layoutX="270.0" layoutY="53.0" text="Map name:"/>
    </children>

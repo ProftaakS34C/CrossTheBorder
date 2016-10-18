@@ -10,6 +10,7 @@ import crosstheborder.client.controller.GameScreenController;
 import crosstheborder.client.controller.LayoutController;
 import crosstheborder.client.controller.LobbyMenuController;
 import crosstheborder.client.controller.MainMenuController;
+import crosstheborder.lib.Lobby;
 import crosstheborder.lib.Map;
 import crosstheborder.lib.User;
 import javafx.application.Application;
@@ -23,6 +24,8 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,6 +40,7 @@ public class ClientMain extends Application {
     private Stage primaryStage;
     private BorderPane root;
     private User user;
+    private List<Lobby> lobbies = new ArrayList<>();
 
     /**
      * The main method for the class
@@ -60,6 +64,8 @@ public class ClientMain extends Application {
         String userName = askForUserName();
         this.user = new User(userName);
 
+        lobbies.add(new Lobby(new User("Henk"), "Mexicaantjes", 6));
+
         showMainMenu();
     }
 
@@ -70,6 +76,10 @@ public class ClientMain extends Application {
      */
     public User getUser() {
         return user;
+    }
+
+    public List<Lobby> getLobbies() {
+        return new ArrayList<>(lobbies);
     }
 
     /**

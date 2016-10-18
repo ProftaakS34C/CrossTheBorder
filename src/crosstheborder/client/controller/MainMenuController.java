@@ -6,9 +6,10 @@ import crosstheborder.client.dialog.CreateLobbyDialog;
 import crosstheborder.lib.Lobby;
 import crosstheborder.lib.User;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,17 +21,9 @@ import java.util.Optional;
 public class MainMenuController {
 
     @FXML
-    private Button joinLobbyButton;
-    @FXML
-    private Button createLobbyButton;
-    @FXML
-    private Button joinRandomLobbyButton;
-    @FXML
-    private Button settingsButton;
-    @FXML
     private Label playerNameLabel;
     @FXML
-    private TableView lobbyTableView; //todo: add lobbies to tableView and the ability to join them.
+    private TableView<Lobby> lobbyTableView; //todo: add lobbies to tableView and the ability to join them.
 
     private ClientMain instance;
     private User user;
@@ -46,6 +39,7 @@ public class MainMenuController {
         this.instance = instance;
         this.user = instance.getUser();
         setLblPlayerName(user.getName());
+        refreshLobbyTableView();
     }
 
     /**
@@ -56,16 +50,6 @@ public class MainMenuController {
         playerNameLabel.setText(name);
     }
 
-    @FXML
-    private void btnCreateLobby_OnAction(){
-        createLobby();
-    }
-    @FXML
-    private void btnJoinLobby_OnAction(){
-        //join a lobby
-
-        throw new UnsupportedOperationException();
-    }
     @FXML
     private void btnJoinRandomLobby_OnAction(){
         //join a random lobby
@@ -84,9 +68,10 @@ public class MainMenuController {
     /**
      * Creates a new lobby and switches the view to the main menu
      */
+    @FXML
     public void createLobby() {
         CreateLobbyDialog dialog = new CreateLobbyDialog();
-        dialog.setTitle("Set lobby settings");
+        dialog.setTitle("Create Lobby");
         dialog.setHeaderText("");
         Optional<List<String>> result = dialog.showAndWait();
 
@@ -95,16 +80,31 @@ public class MainMenuController {
             int maxPlayers = Integer.parseInt(result.get().get(1));
 
             Lobby lobby = new Lobby(user, lobbyName, maxPlayers);
-            joinLobby(lobby);
+            instance.showLobbyMenu();
         }
     }
 
-    public void joinLobby(Lobby toJoin) {
-        user.joinLobby(toJoin);
-        showLobbyMenu();
+    @FXML
+    public void joinLobby() {
+        Lobby lobby = lobbyTableView.getSelectionModel().getSelectedItem();
+        user.joinLobby(lobby);
+        instance.showLobbyMenu();
     }
 
-    public TableView getLobbyTableView() {
-        return lobbyTableView;
+    @FXML
+    public void refreshLobbyTableView() {
+        lobbyTableView.getItems().clear();
+
+        TableColumn nameColumn = lobbyTableView.getColumns().get(0);
+        TableColumn userAmountColumn = lobbyTableView.getColumns().get(1);
+        TableColumn privateColumn = lobbyTableView.getColumns().get(2);
+
+        nameColumn.setCellValueFactory(new PropertyValueFactory<Lobby, String>("name"));
+        userAmountColumn.setCellValueFactory(new PropertyValueFactory<Lobby, String>("userAmount"));
+        privateColumn.setCellValueFactory(new PropertyValueFactory<Lobby, String>("isPrivate"));
+
+        for (Lobby lobby : instance.getLobbies()) {
+            lobbyTableView.getItems().add(lobby);
+        }
     }
 }

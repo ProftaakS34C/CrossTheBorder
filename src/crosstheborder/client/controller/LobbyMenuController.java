@@ -52,10 +52,11 @@ public class LobbyMenuController {
         this.user = instance.getUser();
         this.lobby = this.user.getLobby();
 
-        if (!instance.getUser().isOwnerOfLobby()) {
+        if (!user.isOwnerOfLobby()) {
             startGameButton.setVisible(false);
             lobbyPassInputPasswordField.setVisible(false);
             isPrivateCheckBox.setVisible(false);
+            addAiButton.setVisible(false);
         }
 
         refreshUsersTableView();
@@ -137,8 +138,11 @@ public class LobbyMenuController {
 
         TableColumn nameColumn = usersTableView.getColumns().get(0);
         TableColumn ownerColumn = usersTableView.getColumns().get(1);
+        TableColumn computerColumn = usersTableView.getColumns().get(2);
+
         nameColumn.setCellValueFactory(new PropertyValueFactory<User, String>("name"));
         ownerColumn.setCellValueFactory(new PropertyValueFactory<User, Boolean>("owner"));
+        computerColumn.setCellValueFactory(new PropertyValueFactory<User, Boolean>("computer"));
 
         for (User user : lobby.getUsers()) {
             usersTableView.getItems().add(user);

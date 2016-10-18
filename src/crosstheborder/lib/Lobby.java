@@ -3,6 +3,7 @@ package crosstheborder.lib;
 import crosstheborder.lib.interfaces.GameSettings;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Represents a lobby of the game
@@ -47,6 +48,7 @@ public class Lobby {
         this.maxPlayers = maxPlayers;
         this.messages = new ArrayList<>();
         this.users = new ArrayList<>();
+        this.owner.joinLobby(this);
 
         Collections.shuffle(NAME_POOL);
         AI_NAMES = NAME_POOL.iterator();
@@ -92,13 +94,12 @@ public class Lobby {
         return settings;
     }
 
-    /**
-     * Sets the gameSettings of this lobby
-     *
-     * @param settings a GameSettings object containing all settings
-     */
-    public void setSettings(GameSettings settings) {
-        this.settings = settings;
+    public String getUserAmount() {
+        return String.format("%1$d/%2$d", users.size(), maxPlayers);
+    }
+
+    public String getIsPrivate() {
+        return password.equals("") ? "No" : "Yes";
     }
 
     /**
@@ -158,21 +159,26 @@ public class Lobby {
      * only removes if the user is present in list
      *
      * @param user The user to remove
-     * @return a boolean value indicating success
+     * @return True when the lobby should stay alive. False when the lobby should be removed.
      */
     public boolean removeUser(User user) {
         if (users.contains(user)) {
             users.remove(user);
+            List<User> humans = getAllHumanUsers();
 
             //If we just removed the owner assign it to someone else.
-            if (owner == user && !users.stream().allMatch(User::isComputer)) {
-                owner = users.stream().filter(u -> !u.isComputer()).findFirst().get();
-            } else {
-                users.forEach(u -> u.leaveLobby());
-                //TODO destroy the lobby.
+            if (humans.isEmpty()) {
+                //TODO DESTROY LOBBY
+                return false;
+            } else if (owner == user) {
+                owner = humans.get(0);
             }
         }
-        return false;
+        return true;
+    }
+
+    private List<User> getAllHumanUsers() {
+        return users.stream().filter(u -> !u.isComputer()).collect(Collectors.toList());
     }
 
     public void addAI() {

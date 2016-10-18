@@ -48,6 +48,10 @@ public class User {
         return this.isComputer;
     }
 
+    public String getComputer() {
+        return isComputer ? "Yes" : "No";
+    }
+
     /**
      * Turn this user into a computer.
      */

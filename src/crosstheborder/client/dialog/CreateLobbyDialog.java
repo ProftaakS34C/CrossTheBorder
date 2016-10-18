@@ -23,7 +23,7 @@ public class CreateLobbyDialog {
     public CreateLobbyDialog(){
         dialog = new Dialog<>();
         //Set button types
-        ButtonType okButton = new ButtonType("done", ButtonBar.ButtonData.OK_DONE);
+        ButtonType okButton = new ButtonType("Done", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(okButton, ButtonType.CANCEL);
         //add the inputs
         GridPane gridPane = new GridPane();
@@ -33,11 +33,11 @@ public class CreateLobbyDialog {
 
         TextField lobbyNameInput = new TextField();
         TextField playerAmountInput = new TextField();
-        playerAmountInput.setPromptText("max 8");
+        playerAmountInput.setPromptText("8");
 
-        gridPane.add(new Label("lobby naam"), 0, 0);
+        gridPane.add(new Label("Lobby Name"), 0, 0);
         gridPane.add(lobbyNameInput, 1, 0);
-        gridPane.add(new Label("aantal spelers"), 0, 1);
+        gridPane.add(new Label("Max Players"), 0, 1);
         gridPane.add(playerAmountInput, 1, 1);
 
         //only enable the okButton if input is valid
