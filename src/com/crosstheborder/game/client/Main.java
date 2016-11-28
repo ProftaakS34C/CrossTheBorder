@@ -14,7 +14,8 @@ public class Main {
     public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in);
 
-        client = new GameClient("localhost");
+        System.out.println("Type the ip of the server.");
+        client = new GameClient(scanner.next());
 
         while (true) {
             System.out.println("Type 'Q' to exit, any other character to send a packet.");
