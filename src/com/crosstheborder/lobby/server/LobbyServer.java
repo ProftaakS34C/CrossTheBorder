@@ -1,5 +1,7 @@
 package com.crosstheborder.lobby.server;
 
+import crosstheborder.lib.User;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.rmi.RemoteException;
@@ -32,11 +34,11 @@ public class LobbyServer {
         // Creating lobby
         try{
             lobby = new Lobby();
-            lobby.createRoom("Test room");
-            lobby.createRoom("Kekkerdekek");
-            lobby.createRoom("Bla bla lbagsdgsg");
-            lobby.createRoom("Test 2");
-            lobby.createRoom("Test 3");
+            lobby.createRoom("Test room", new User("henk1"));
+            lobby.createRoom("Kekkerdekek", new User("henk2"));
+            lobby.createRoom("Bla bla lbagsdgsg", new User("henk3"));
+            lobby.createRoom("Test 2", new User("henk4"));
+            lobby.createRoom("Test 3", new User("henk5"));
             System.out.println("Lobby created!");
         } catch (RemoteException e) {
             System.out.println("Cannot create lobby: " + e.getMessage());

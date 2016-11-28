@@ -51,10 +51,21 @@ public class LobbyMenuController {
         pullerTimer.scheduleAtFixedRate(new LobbyPuller(this), 0, 5000);
     }
 
+    /**
+     * Sets the lobby for the controller
+     * @param lobby an interface of Lobby
+     */
     public void setLobby(ILobby lobby) {
         this.lobby = lobby;
     }
 
+    /**
+     * Gets the lobby of this controller
+     * @return an interface of Lobby
+     */
+    public ILobby getLobby(){
+        return lobby;
+    }
     /**
      * Sets the text of the label used for displaying the name of the current user.
      * @param name the desired name.

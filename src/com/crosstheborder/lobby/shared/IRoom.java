@@ -88,4 +88,6 @@ public interface IRoom extends Remote{
      */
     String getName() throws RemoteException;
 
+
+
 }

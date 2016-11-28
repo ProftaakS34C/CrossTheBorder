@@ -13,7 +13,8 @@ import java.rmi.registry.Registry;
 import java.util.TimerTask;
 
 /**
- * Created by guillaime on 22-11-2016.
+ * @author Yannic
+ * @author Guillaime
  */
 public class LobbyPuller extends TimerTask {
 
@@ -62,8 +63,11 @@ public class LobbyPuller extends TimerTask {
                             lobby = null;
                         }
                     }
-                    controller.setLobby(lobby);
-                    controller.refreshRoomTableView();
+//                    if(!controller.getLobby().equals(lobby)){
+                        controller.setLobby(lobby);
+                        controller.refreshRoomTableView();
+//                    }
+
 
                 } catch (Exception ex){
                     System.out.println("Failed Getting lobby!");

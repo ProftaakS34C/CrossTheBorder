@@ -71,7 +71,7 @@ public class RoomMenuController {
             if (!lobbyPassInputPasswordField.getText().trim().equals("") && lobbyPassInputPasswordField.getText() != null) {
                 lobbyPassInputPasswordField.setVisible(false);
                 try {
-                    room.changePassword(lobbyPassInputPasswordField.getText());
+                    room.setPassword(lobbyPassInputPasswordField.getText());
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
@@ -83,7 +83,7 @@ public class RoomMenuController {
         else {
             lobbyPassInputPasswordField.setText("");
             try {
-                room.changePassword("");
+                room.setPassword("");
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
