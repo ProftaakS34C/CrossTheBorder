@@ -21,5 +21,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="SSTEngine-v0.0.1-alpha" level="project" />
+    <orderEntry type="library" name="com.esotericsoftware:kryonet:2.22.0-RC1" level="project" />
   </component>
 </module>
