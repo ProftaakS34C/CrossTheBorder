@@ -8,7 +8,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="434.0" prefWidth="642.0" style="-fx-background-image: url('../../../../images/mainmenu_background.png');" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="crosstheborder.client.controller.LobbyMenuController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="434.0" prefWidth="642.0" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.crosstheborder.lobby.client.controller.LobbyMenuController">
    <children>
        <Button layoutX="14.0" layoutY="396.0" mnemonicParsing="false" onAction="#createRoom" prefHeight="25.0" prefWidth="97.0" text="Create Lobby" />
        <Button layoutX="267.0" layoutY="396.0" mnemonicParsing="false" onAction="#joinRoom" prefHeight="25.0" prefWidth="71.0" text="Join" />
@@ -24,10 +24,6 @@
        <Label layoutX="449.0" layoutY="400.0" text="Welcome, " textFill="WHITE" />
        <Label fx:id="playerNameLabel" layoutX="504.0" layoutY="400.0" text="Username" textFill="WHITE" />
        <Button layoutX="117.0" layoutY="396.0" mnemonicParsing="false" onAction="#refreshRoomTableView" prefHeight="25.0" prefWidth="59.0" text="Refresh" />
-      <ImageView fitHeight="434.0" fitWidth="71.0" layoutX="258.0" layoutY="371.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../../images/mainmenu_background.png" />
-         </image>
-      </ImageView>
+
    </children>
 </Pane>

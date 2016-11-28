@@ -1,7 +1,6 @@
 package crosstheborder.lib;
 
-import crosstheborder.server.Room;
-import crosstheborder.shared.IRoom;
+import com.crosstheborder.lobby.shared.IRoom;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;

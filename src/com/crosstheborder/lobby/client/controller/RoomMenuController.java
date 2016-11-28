@@ -1,10 +1,10 @@
-package crosstheborder.client.controller;
+package com.crosstheborder.lobby.client.controller;
 
 
-import crosstheborder.client.ClientMain;
+import com.crosstheborder.lobby.client.ClientMain;
 import crosstheborder.lib.Message;
 import crosstheborder.lib.User;
-import crosstheborder.shared.IRoom;
+import com.crosstheborder.lobby.shared.IRoom;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;

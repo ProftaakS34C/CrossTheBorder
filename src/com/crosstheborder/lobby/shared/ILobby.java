@@ -1,7 +1,7 @@
-package crosstheborder.shared;
+package com.crosstheborder.lobby.shared;
 
 import crosstheborder.lib.User;
-import crosstheborder.server.Room;
+import com.crosstheborder.lobby.server.Room;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

@@ -1,16 +1,16 @@
-package crosstheborder.client;
+package com.crosstheborder.lobby.client;
 
 /**
  * @author Oscar
- * @autor Yannic
+ * @author Yannic
  *
  */
 
-import crosstheborder.client.controller.GameScreenController;
-import crosstheborder.client.controller.LayoutController;
-import crosstheborder.client.controller.RoomMenuController;
-import crosstheborder.client.controller.LobbyMenuController;
-import crosstheborder.server.Room;
+import com.crosstheborder.lobby.client.controller.GameScreenController;
+import com.crosstheborder.lobby.client.controller.LayoutController;
+import com.crosstheborder.lobby.client.controller.RoomMenuController;
+import com.crosstheborder.lobby.client.controller.LobbyMenuController;
+import com.crosstheborder.lobby.server.Room;
 import crosstheborder.lib.Map;
 import crosstheborder.lib.User;
 import javafx.application.Application;

@@ -1,4 +1,4 @@
-package crosstheborder.client.dialog;
+package com.crosstheborder.lobby.client.dialog;
 
 import javafx.application.Platform;
 import javafx.geometry.Insets;

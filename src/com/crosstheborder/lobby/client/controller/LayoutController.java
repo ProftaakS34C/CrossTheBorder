@@ -1,6 +1,6 @@
-package crosstheborder.client.controller;
+package com.crosstheborder.lobby.client.controller;
 
-import crosstheborder.client.ClientMain;
+import com.crosstheborder.lobby.client.ClientMain;
 import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;

@@ -1,4 +1,4 @@
-package crosstheborder.client;
+package com.crosstheborder.lobby.client;
 
 import crosstheborder.lib.interfaces.Painter;
 import javafx.scene.canvas.GraphicsContext;

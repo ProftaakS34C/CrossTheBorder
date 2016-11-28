@@ -1,8 +1,8 @@
-package crosstheborder.client.controller;
+package com.crosstheborder.lobby.client.controller;
 
-import crosstheborder.client.ClientMain;
-import crosstheborder.client.FXPainter;
-import crosstheborder.client.InputConverter;
+import com.crosstheborder.lobby.client.ClientMain;
+import com.crosstheborder.lobby.client.FXPainter;
+import com.crosstheborder.lobby.client.InputConverter;
 import crosstheborder.lib.Player;
 import crosstheborder.lib.enumeration.MoveDirection;
 import crosstheborder.lib.interfaces.Camera;

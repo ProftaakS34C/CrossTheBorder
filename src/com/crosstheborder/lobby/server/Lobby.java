@@ -1,8 +1,8 @@
-package crosstheborder.server;
+package com.crosstheborder.lobby.server;
 
 import crosstheborder.lib.User;
-import crosstheborder.shared.ILobby;
-import crosstheborder.shared.IRoom;
+import com.crosstheborder.lobby.shared.ILobby;
+import com.crosstheborder.lobby.shared.IRoom;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class Lobby extends UnicastRemoteObject implements ILobby{
 
     private ArrayList<IRoom> rooms;
+    private ArrayList<User> users;
 
     public Lobby() throws RemoteException {
         this.rooms = new ArrayList<>();
@@ -32,11 +33,13 @@ public class Lobby extends UnicastRemoteObject implements ILobby{
     @Override
     public void createRoom(String name) throws RemoteException{
         rooms.add(new Room(new User("Henkie"), name, 8));
+
     }
 
     @Override
     public void joinRoom(Room room) throws RemoteException{
         System.out.println("Joining room");
+
     }
 
     @Override

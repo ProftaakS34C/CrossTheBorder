@@ -1,8 +1,7 @@
-package crosstheborder.client;
+package com.crosstheborder.lobby.client;
 
-import crosstheborder.client.controller.LobbyMenuController;
-import crosstheborder.server.Lobby;
-import crosstheborder.shared.ILobby;
+import com.crosstheborder.lobby.client.controller.LobbyMenuController;
+import com.crosstheborder.lobby.shared.ILobby;
 import javafx.application.Platform;
 
 import java.net.InetAddress;
@@ -14,12 +13,12 @@ import java.rmi.registry.Registry;
 import java.util.TimerTask;
 
 /**
- * Created by guill on 22-11-2016.
+ * Created by guillaime on 22-11-2016.
  */
 public class LobbyPuller extends TimerTask {
 
     private LobbyMenuController controller;
-    public String ipAddress;
+    public String ipAddress = "localhost"; //should be server ip
     private static int portNumber = 1099;
 
     private static final String bindingName = "lobby";

@@ -1,4 +1,4 @@
-package crosstheborder.server;
+package com.crosstheborder.lobby.server;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -7,7 +7,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 /**
- * @author guill
+ * @author guillaime
  */
 public class LobbyServer {
 

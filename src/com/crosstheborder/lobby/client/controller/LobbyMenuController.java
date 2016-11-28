@@ -1,13 +1,12 @@
-package crosstheborder.client.controller;
+package com.crosstheborder.lobby.client.controller;
 
 
-import crosstheborder.client.ClientMain;
-import crosstheborder.client.LobbyPuller;
-import crosstheborder.client.dialog.CreateLobbyDialog;
-import crosstheborder.server.Lobby;
+import com.crosstheborder.lobby.client.ClientMain;
+import com.crosstheborder.lobby.client.LobbyPuller;
+import com.crosstheborder.lobby.client.dialog.CreateLobbyDialog;
 import crosstheborder.lib.User;
-import crosstheborder.shared.ILobby;
-import crosstheborder.shared.IRoom;
+import com.crosstheborder.lobby.shared.ILobby;
+import com.crosstheborder.lobby.shared.IRoom;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -15,7 +14,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Timer;

@@ -1,4 +1,4 @@
-package crosstheborder.shared;
+package com.crosstheborder.lobby.shared;
 
 import crosstheborder.lib.Message;
 import crosstheborder.lib.User;

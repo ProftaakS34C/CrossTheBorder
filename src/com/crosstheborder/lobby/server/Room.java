@@ -1,10 +1,10 @@
-package crosstheborder.server;
+package com.crosstheborder.lobby.server;
 
 import crosstheborder.lib.Game;
 import crosstheborder.lib.Message;
 import crosstheborder.lib.User;
 import crosstheborder.lib.interfaces.GameSettings;
-import crosstheborder.shared.IRoom;
+import com.crosstheborder.lobby.shared.IRoom;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;

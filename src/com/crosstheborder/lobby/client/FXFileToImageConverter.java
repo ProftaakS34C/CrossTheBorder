@@ -1,4 +1,4 @@
-package crosstheborder.client;
+package com.crosstheborder.lobby.client;
 
 
 import javafx.scene.image.Image;
