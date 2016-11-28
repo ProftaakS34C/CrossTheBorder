@@ -9,7 +9,8 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
 /**
- * Created by guill on 22-11-2016.
+ * @author Yannic
+ * @author Guillaime
  */
 public class Lobby extends UnicastRemoteObject implements ILobby{
 
@@ -25,20 +26,17 @@ public class Lobby extends UnicastRemoteObject implements ILobby{
         return this.rooms;
     }
 
-    @Override
-    public String getName() throws RemoteException {
-        return null;
-    }
 
     @Override
-    public void createRoom(String name) throws RemoteException{
-        rooms.add(new Room(new User("Henkie"), name, 8));
+    public void createRoom(String name, User creator) throws RemoteException{
+        rooms.add(new Room(creator, name, 8));
 
     }
 
     @Override
-    public void joinRoom(Room room) throws RemoteException{
+    public void joinRoom(Room room, User user) throws RemoteException{
         System.out.println("Joining room");
+        room.addUser(user);
 
     }
 

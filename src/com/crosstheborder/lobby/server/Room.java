@@ -13,9 +13,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Represents a lobby of the game
+ * Represents a room in the lobby
  * @author Joram
  * @author Oscar de Leeuw
+ * @author Yannic
  * @version 1.0
  */
 public class Room extends UnicastRemoteObject implements IRoom, Serializable{
@@ -65,6 +66,7 @@ public class Room extends UnicastRemoteObject implements IRoom, Serializable{
      * This method is used to get the name of the lobby object
      * @return String this returns the name of the lobby object
      */
+    @Override
     public String getName(){
         return name;
     }
@@ -101,12 +103,9 @@ public class Room extends UnicastRemoteObject implements IRoom, Serializable{
         return settings;
     }
 
-    public String getUserAmount() {
-        return String.format("%1$d/%2$d", users.size(), maxPlayers);
-    }
 
-    public String getIsPrivate() {
-        return password.equals("") ? "No" : "Yes";
+    public boolean getIsPrivate() {
+        return password.equals("") ? false : true;
     }
 
     /**
@@ -160,11 +159,6 @@ public class Room extends UnicastRemoteObject implements IRoom, Serializable{
             return true;
         }
         return false;
-    }
-
-    @Override
-    public void changePassword(String pswd) throws RemoteException {
-
     }
 
     /**
