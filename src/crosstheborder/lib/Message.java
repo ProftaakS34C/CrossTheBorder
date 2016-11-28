@@ -1,5 +1,6 @@
 package crosstheborder.lib;
 
+import java.io.Serializable;
 import java.time.LocalTime;
 
 /**
@@ -8,7 +9,7 @@ import java.time.LocalTime;
  *
  *  @author Oscar de Leeuw
  */
-public class Message {
+public class Message implements Serializable {
     private User author;
     private String message;
     private LocalTime time;

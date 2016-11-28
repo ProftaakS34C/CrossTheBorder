@@ -78,7 +78,7 @@ public class GameScreenController {
      * This method is used for first time setup of the controller, if the initialize method cannot be used.
      */
     public void setUp(ClientMain main) {
-        this.game = main.getUser().getLobby().getGame();
+        //this.game = main.getUser().getRoom().getGame();
         this.player = main.getUser().getPlayer();
         start();
     }
@@ -91,7 +91,7 @@ public class GameScreenController {
 
     private void stop() {
         timeline.stop();
-        main.showLobbyMenu();
+        main.showRoomMenu();
     }
 
     private void runGame() {

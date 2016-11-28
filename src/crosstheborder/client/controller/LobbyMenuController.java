@@ -2,150 +2,124 @@ package crosstheborder.client.controller;
 
 
 import crosstheborder.client.ClientMain;
-import crosstheborder.lib.Lobby;
-import crosstheborder.lib.Message;
+import crosstheborder.client.LobbyPuller;
+import crosstheborder.client.dialog.CreateLobbyDialog;
+import crosstheborder.server.Lobby;
 import crosstheborder.lib.User;
-import javafx.event.ActionEvent;
+import crosstheborder.shared.ILobby;
+import crosstheborder.shared.IRoom;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Timer;
+
 /**
- * The controller class of the lobby menu
- *
- * @author Yannic
- * @author Oscar de Leeuw
+ * @author yannic
+ * The controller class of the main menu
  */
 public class LobbyMenuController {
 
     @FXML
-    private Button startGameButton;
+    private Label playerNameLabel;
     @FXML
-    private ListView<Message> chatListView;
-    @FXML
-    private TableView<User> usersTableView;
-    @FXML
-    private CheckBox isPrivateCheckBox;
-    @FXML
-    private PasswordField lobbyPassInputPasswordField;
-    @FXML
-    private TextField chatInputTextField;
-    @FXML
-    private Button leaveLobbyButton;
-    @FXML
-    private Button addAiButton;
-    @FXML
-    private TextField mapNameInputTextField;
+    private TableView<IRoom> roomTableView; //todo: add lobbies to tableView and the ability to join them.
 
     private ClientMain instance;
-    private Lobby lobby;
     private User user;
+
+    private Timer pullerTimer;
+    private ILobby lobby;
+    //TODO keep a list of lobbies. Should be fetching from the server.
 
     /**
      * This method is used for first time setup of the controller, if the initialize method cannot be used.
-     * Sets the main class this controller uses for functions
+     * Sets the main class this controller uses for functions.
      *
      * @param instance the ClientMain class
      */
     public void setUp(ClientMain instance) {
         this.instance = instance;
         this.user = instance.getUser();
-        this.lobby = this.user.getLobby();
+        setLblPlayerName(user.getName());
 
-        if (!user.isOwnerOfLobby()) {
-            startGameButton.setVisible(false);
-            lobbyPassInputPasswordField.setVisible(false);
-            isPrivateCheckBox.setVisible(false);
-            addAiButton.setVisible(false);
-        }
-
-        refreshUsersTableView();
-        refreshChatListView();
+        pullerTimer = new Timer();
+        pullerTimer.scheduleAtFixedRate(new LobbyPuller(this), 0, 5000);
     }
 
-    @FXML
-    private void textBoxIsPrivate_OnAction(ActionEvent event){
-        if(isPrivateCheckBox.isSelected()){
-            if (!lobbyPassInputPasswordField.getText().trim().equals("") && lobbyPassInputPasswordField.getText() != null) {
-                lobbyPassInputPasswordField.setVisible(false);
-                lobby.setPassword(lobbyPassInputPasswordField.getText());
-            }
-            else {
-                isPrivateCheckBox.setSelected(false);
-            }
-        }
-        else {
-            lobbyPassInputPasswordField.setText("");
-            lobby.setPassword("");
-            lobbyPassInputPasswordField.setVisible(true);
-        }
-    }
-
-    @FXML
-    private void leaveLobbyButton_OnAction(){
-        leaveLobby();
-    }
-
-    @FXML
-    private void btnStartGame_OnAction(){
-        //TODO POLISH change into choicebox with all available maps
-        String mapName = mapNameInputTextField.getText();
-
-        lobby.startGame(mapName);
-        instance.showGameScreen();
-    }
-
-    @FXML
-    private void addAiButton_OnAction() {
-        lobby.addAI();
-        refreshUsersTableView();
-    }
-
-    @FXML
-    private void btnChat_OnAction(){
-        String chatText = chatInputTextField.getText();
-
-        if (chatText.matches("(<script>alert\\((\\d*|\".*\")\\)</script>)")) {
-            Alert popup = new Alert(Alert.AlertType.INFORMATION);
-            popup.setContentText(chatText.substring(chatText.indexOf('(') + 1, chatText.lastIndexOf(')')).replace('"', '\u0000'));
-            popup.showAndWait();
-        } else {
-            Message message = new Message(user, chatText);
-            lobby.addMessage(message);
-        }
-
-        chatInputTextField.clear();
-        refreshChatListView();
+    public void setLobby(ILobby lobby) {
+        this.lobby = lobby;
     }
 
     /**
-     * Leaves the current lobby.
+     * Sets the text of the label used for displaying the name of the current user.
+     * @param name the desired name.
      */
-    private void leaveLobby() {
-        user.leaveLobby();
-        instance.showMainMenu();
+    public void setLblPlayerName(String name){
+        playerNameLabel.setText(name);
     }
 
-    private void refreshChatListView() {
-        chatListView.getItems().clear();
-        for (Message message : lobby.getMessages()) {
-            chatListView.getItems().add(message);
-        }
+    @FXML
+    private void btnJoinRandomLobby_OnAction(){
+        //join a random lobby
+        throw new UnsupportedOperationException();
+    }
+    @FXML
+    private void btnSettings_OnAction(){
+        //open settings
+        throw new UnsupportedOperationException();
     }
 
-    private void refreshUsersTableView() {
-        usersTableView.getItems().clear();
+    private void showRoomMenu() {
+        instance.showRoomMenu();
+    }
 
-        TableColumn nameColumn = usersTableView.getColumns().get(0);
-        TableColumn ownerColumn = usersTableView.getColumns().get(1);
-        TableColumn computerColumn = usersTableView.getColumns().get(2);
+    /**
+     * Creates a new lobby and switches the view to the main menu
+     */
+    @FXML
+    public void createRoom() {
+        CreateLobbyDialog dialog = new CreateLobbyDialog();
+        dialog.setTitle("Create Room");
+        dialog.setHeaderText("");
+        Optional<List<String>> result = dialog.showAndWait();
 
-        nameColumn.setCellValueFactory(new PropertyValueFactory<User, String>("name"));
-        ownerColumn.setCellValueFactory(new PropertyValueFactory<User, Boolean>("owner"));
-        computerColumn.setCellValueFactory(new PropertyValueFactory<User, Boolean>("computer"));
+        //TODO Create room on server
+    }
 
-        for (User user : lobby.getUsers()) {
-            usersTableView.getItems().add(user);
+    @FXML
+    public void joinRoom() {
+        IRoom room = roomTableView.getSelectionModel().getSelectedItem();
+        user.joinLobby(room);
+        instance.showRoomMenu();
+    }
+
+    @FXML
+    public void refreshRoomTableView() {
+        roomTableView.getItems().clear();
+
+        TableColumn nameColumn = roomTableView.getColumns().get(0);
+        TableColumn userAmountColumn = roomTableView.getColumns().get(1);
+        TableColumn privateColumn = roomTableView.getColumns().get(2);
+
+        nameColumn.setCellValueFactory(new PropertyValueFactory<IRoom, String>("name"));
+        userAmountColumn.setCellValueFactory(new PropertyValueFactory<IRoom, String>("userAmount"));
+        privateColumn.setCellValueFactory(new PropertyValueFactory<IRoom, String>("isPrivate"));
+
+        try {
+            for (IRoom room : lobby.getRooms()) {
+                roomTableView.getItems().add(room);
+            }
+
+        } catch (RemoteException e) {
+            System.out.println(e.getMessage());
         }
+
     }
 }

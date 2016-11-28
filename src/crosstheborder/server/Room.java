@@ -1,7 +1,14 @@
-package crosstheborder.lib;
+package crosstheborder.server;
 
+import crosstheborder.lib.Game;
+import crosstheborder.lib.Message;
+import crosstheborder.lib.User;
 import crosstheborder.lib.interfaces.GameSettings;
+import crosstheborder.shared.IRoom;
 
+import java.io.Serializable;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -11,7 +18,7 @@ import java.util.stream.Collectors;
  * @author Oscar de Leeuw
  * @version 1.0
  */
-public class Lobby {
+public class Room extends UnicastRemoteObject implements IRoom, Serializable{
     private final List<String> NAME_POOL = Arrays.asList("Henk", "Piet", "Arnold", "Gert", "Adolf", "Phuc", "Nico", "Gert-Jan",
             "xXSniperEliteXx", "SuperMaster69", "EzGame4613", "Ferdinand", "MexicanDestroyer", "ЦукаБлзат", "ИдиНахуи", "PenPineappleApplePen",
             "MaatwerkBoi", "ManManMan", "PannenkoekenKoekenpan", "MaatwerkExceptie", "GrijsGebied", "MeneerPopo");
@@ -20,28 +27,28 @@ public class Lobby {
     private String name;
     private String password;
     private int maxPlayers;
-    private List<Message> messages;
-    private List<User> users;
+    private ArrayList<Message> messages;
+    private ArrayList<User> users;
     private User owner;
     private Game game;
     private GameSettings settings;
 
 
     /**
-     * This is the constructor method of the class "Lobby"
+     * This is the constructor method of the class "Room"
      * @param name The name of the lobby
      * @param maxPlayers The maximum amount of players allowed in the lobby
      */
-    public Lobby(User owner, String name, int maxPlayers){
+    public Room(User owner, String name, int maxPlayers) throws RemoteException{
         this(owner, name, "", maxPlayers);
     }
     /**
-     * This is the constructor method of the class "Lobby"
+     * This is the constructor method of the class "Room"
      * @param name The name of the lobby
      * @param password The password of the lobby
      * @param maxPlayers The maximum amount of players allowed in the lobby
      */
-    public Lobby(User owner, String name, String password, int maxPlayers){
+    public Room(User owner, String name, String password, int maxPlayers) throws RemoteException{
         this.owner = owner;
         this.name = name;
         this.password = password;
@@ -115,7 +122,7 @@ public class Lobby {
      *
      * @return The list of users.
      */
-    public List<User> getUsers() {
+    public ArrayList<User> getUsers() {
         return new ArrayList<>(users);
     }
 
@@ -142,7 +149,8 @@ public class Lobby {
      * @param user The user to add
      * @return a boolean value indicating success
      */
-    public boolean addUser(User user) {
+    @Override
+    public boolean addUser(User user) throws RemoteException {
         if (maxPlayers >= users.size() && !users.contains(user)) {
             users.add(user);
 
@@ -154,6 +162,11 @@ public class Lobby {
         return false;
     }
 
+    @Override
+    public void changePassword(String pswd) throws RemoteException {
+
+    }
+
     /**
      * Removes a user from the array list of users in the lobby
      * only removes if the user is present in list
@@ -161,6 +174,7 @@ public class Lobby {
      * @param user The user to remove
      * @return True when the lobby should stay alive. False when the lobby should be removed.
      */
+    @Override
     public boolean removeUser(User user) {
         if (users.contains(user)) {
             users.remove(user);
@@ -197,12 +211,14 @@ public class Lobby {
     public User getOwner() {
         return owner;
     }
+
     /**
      * This method is used when a user in the lobby sends a message
      * @param message the message object that you want to add to the lobby
      * @return boolean true if message is added
      */
-    public boolean addMessage(Message message){
+    @Override
+    public boolean addMessage(Message message) throws RemoteException{
         return messages.add(message);
     }
 
@@ -210,14 +226,15 @@ public class Lobby {
      * This method is used to get all messages from this lobby.
      * @return List of messages
      */
-    public List<Message> getMessages() {
+    public ArrayList<Message> getMessages() {
         return this.messages;
     }
 
     /**
      * This method is used to start the game
      */
-    public void startGame(String mapName) {
+    @Override
+    public void startGame(String mapName) throws RemoteException{
         Game game = new Game(mapName);
         //game.getSettings(settings);
         ArrayList<User> randomList = new ArrayList<>(users);

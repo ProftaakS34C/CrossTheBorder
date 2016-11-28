@@ -8,9 +8,9 @@ package crosstheborder.client;
 
 import crosstheborder.client.controller.GameScreenController;
 import crosstheborder.client.controller.LayoutController;
+import crosstheborder.client.controller.RoomMenuController;
 import crosstheborder.client.controller.LobbyMenuController;
-import crosstheborder.client.controller.MainMenuController;
-import crosstheborder.lib.Lobby;
+import crosstheborder.server.Room;
 import crosstheborder.lib.Map;
 import crosstheborder.lib.User;
 import javafx.application.Application;
@@ -40,7 +40,7 @@ public class ClientMain extends Application {
     private Stage primaryStage;
     private BorderPane root;
     private User user;
-    private List<Lobby> lobbies = new ArrayList<>();
+    private List<Room> lobbies = new ArrayList<>();
 
     /**
      * The main method for the class
@@ -64,9 +64,7 @@ public class ClientMain extends Application {
         String userName = askForUserName();
         this.user = new User(userName);
 
-        lobbies.add(new Lobby(new User("Henk"), "Mexicaantjes", 6));
-
-        showMainMenu();
+        showLobbyMenu();
     }
 
     /**
@@ -78,7 +76,7 @@ public class ClientMain extends Application {
         return user;
     }
 
-    public List<Lobby> getLobbies() {
+    public List<Room> getLobbies() {
         return new ArrayList<>(lobbies);
     }
 
@@ -131,12 +129,12 @@ public class ClientMain extends Application {
     /**
      * loads the main menu into the layout
      */
-    public void showMainMenu(){
+    public void showLobbyMenu(){
         Pane menuRoot;
         try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/MainMenu.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/LobbyMenu.fxml"));
             menuRoot = loader.load();
-            MainMenuController controller = loader.getController();
+            LobbyMenuController controller = loader.getController();
             controller.setUp(this);
             root.setCenter(menuRoot);
             primaryStage.setTitle("Main Menu");
@@ -150,15 +148,15 @@ public class ClientMain extends Application {
     /**
      * loads the lobby menu onto the layout
      */
-    public void showLobbyMenu(){
+    public void showRoomMenu(){
         Pane lobbyRoot;
         try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/LobbyMenu.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/RoomMenu.fxml"));
             lobbyRoot = loader.load();
-            LobbyMenuController controller = loader.getController();
+            RoomMenuController controller = loader.getController();
             controller.setUp(this);
             root.setCenter(lobbyRoot);
-            primaryStage.setTitle("Lobby menu");
+            primaryStage.setTitle("Room menu");
         }
         catch (IOException x){
             System.err.println("could not load lobby menu fxml");

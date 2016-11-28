@@ -1,0 +1,171 @@
+package crosstheborder.client.controller;
+
+
+import crosstheborder.client.ClientMain;
+import crosstheborder.lib.Message;
+import crosstheborder.lib.User;
+import crosstheborder.shared.IRoom;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+
+import java.rmi.RemoteException;
+
+/**
+ * The controller class of the room menu
+ *
+ * @author Yannic
+ * @author Oscar de Leeuw
+ */
+public class RoomMenuController {
+
+    @FXML
+    private Button startGameButton;
+    @FXML
+    private ListView<Message> chatListView;
+    @FXML
+    private TableView<User> usersTableView;
+    @FXML
+    private CheckBox isPrivateCheckBox;
+    @FXML
+    private PasswordField lobbyPassInputPasswordField;
+    @FXML
+    private TextField chatInputTextField;
+    @FXML
+    private Button leaveLobbyButton;
+    @FXML
+    private Button addAiButton;
+    @FXML
+    private TextField mapNameInputTextField;
+
+    private ClientMain instance;
+    private IRoom room;
+    private User user;
+
+    /**
+     * This method is used for first time setup of the controller, if the initialize method cannot be used.
+     * Sets the main class this controller uses for functions
+     *
+     * @param instance the ClientMain class
+     */
+    public void setUp(ClientMain instance) {
+        this.instance = instance;
+        this.user = instance.getUser();
+        this.room = this.user.getRoom();
+
+        if (!user.isOwnerOfLobby()) {
+            startGameButton.setVisible(false);
+            lobbyPassInputPasswordField.setVisible(false);
+            isPrivateCheckBox.setVisible(false);
+            addAiButton.setVisible(false);
+        }
+
+        refreshUsersTableView();
+        refreshChatListView();
+    }
+
+    @FXML
+    private void textBoxIsPrivate_OnAction(ActionEvent event){
+        if(isPrivateCheckBox.isSelected()){
+            if (!lobbyPassInputPasswordField.getText().trim().equals("") && lobbyPassInputPasswordField.getText() != null) {
+                lobbyPassInputPasswordField.setVisible(false);
+                try {
+                    room.changePassword(lobbyPassInputPasswordField.getText());
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                isPrivateCheckBox.setSelected(false);
+            }
+        }
+        else {
+            lobbyPassInputPasswordField.setText("");
+            try {
+                room.changePassword("");
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            lobbyPassInputPasswordField.setVisible(true);
+        }
+    }
+
+    @FXML
+    private void leaveLobbyButton_OnAction(){
+        leaveLobby();
+    }
+
+    @FXML
+    private void btnStartGame_OnAction(){
+        //TODO POLISH change into choicebox with all available maps
+        String mapName = mapNameInputTextField.getText();
+
+        try {
+            room.startGame(mapName);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        instance.showGameScreen();
+    }
+
+    @FXML
+    private void btnChat_OnAction(){
+        String chatText = chatInputTextField.getText();
+
+        if (chatText.matches("(<script>alert\\((\\d*|\".*\")\\)</script>)")) {
+            Alert popup = new Alert(Alert.AlertType.INFORMATION);
+            popup.setContentText(chatText.substring(chatText.indexOf('(') + 1, chatText.lastIndexOf(')')).replace('"', '\u0000'));
+            popup.showAndWait();
+        } else {
+            Message message = new Message(user, chatText);
+            try {
+                room.addMessage(message);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        chatInputTextField.clear();
+        refreshChatListView();
+    }
+
+    /**
+     * Leaves the current room.
+     */
+    private void leaveLobby() {
+        user.leaveLobby();
+        instance.showLobbyMenu();
+    }
+
+    private void refreshChatListView() {
+        chatListView.getItems().clear();
+        try {
+            for (Message message : room.getMessages()) {
+                chatListView.getItems().add(message);
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void refreshUsersTableView() {
+        usersTableView.getItems().clear();
+
+        TableColumn nameColumn = usersTableView.getColumns().get(0);
+        TableColumn ownerColumn = usersTableView.getColumns().get(1);
+        TableColumn computerColumn = usersTableView.getColumns().get(2);
+
+        nameColumn.setCellValueFactory(new PropertyValueFactory<User, String>("name"));
+        ownerColumn.setCellValueFactory(new PropertyValueFactory<User, Boolean>("owner"));
+        computerColumn.setCellValueFactory(new PropertyValueFactory<User, Boolean>("computer"));
+
+        try {
+            for (User user : room.getUsers()) {
+                usersTableView.getItems().add(user);
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+}
