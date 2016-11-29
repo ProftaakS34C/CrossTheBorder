@@ -88,6 +88,11 @@ public interface IRoom extends Remote{
      */
     String getName() throws RemoteException;
 
-
+    /**
+     * Gets the max players allowed in this room.
+     * @return an int value.
+     * @throws RemoteException gets thrown when something goes worng remotely.
+     */
+    int getMaxPlayers() throws RemoteException;
 
 }

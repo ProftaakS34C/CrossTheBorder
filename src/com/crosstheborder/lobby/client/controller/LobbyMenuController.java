@@ -3,6 +3,7 @@ package com.crosstheborder.lobby.client.controller;
 
 import com.crosstheborder.lobby.client.ClientMain;
 import com.crosstheborder.lobby.client.LobbyPuller;
+import com.crosstheborder.lobby.client.UIRoom;
 import com.crosstheborder.lobby.client.dialog.CreateLobbyDialog;
 import crosstheborder.lib.User;
 import com.crosstheborder.lobby.shared.ILobby;
@@ -27,7 +28,7 @@ public class LobbyMenuController {
     @FXML
     private Label playerNameLabel;
     @FXML
-    private TableView<IRoom> roomTableView; //todo: add lobbies to tableView and the ability to join them.
+    private TableView<UIRoom> roomTableView; //todo: add the ability to join rooms.
 
     private ClientMain instance;
     private User user;
@@ -104,7 +105,7 @@ public class LobbyMenuController {
 
     @FXML
     public void joinRoom() {
-        IRoom room = roomTableView.getSelectionModel().getSelectedItem();
+        IRoom room = roomTableView.getSelectionModel().getSelectedItem().getRoom();
         user.joinLobby(room);
         instance.showRoomMenu();
     }
@@ -117,13 +118,14 @@ public class LobbyMenuController {
         TableColumn userAmountColumn = roomTableView.getColumns().get(1);
         TableColumn privateColumn = roomTableView.getColumns().get(2);
 
-        nameColumn.setCellValueFactory(new PropertyValueFactory<IRoom, String>("name"));
-        userAmountColumn.setCellValueFactory(new PropertyValueFactory<IRoom, String>("userAmount"));
-        privateColumn.setCellValueFactory(new PropertyValueFactory<IRoom, String>("isPrivate"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<UIRoom, String>("name"));
+        userAmountColumn.setCellValueFactory(new PropertyValueFactory<UIRoom, String>("userAmount"));
+        privateColumn.setCellValueFactory(new PropertyValueFactory<UIRoom, String>("isPrivate"));
 
         try {
             for (IRoom room : lobby.getRooms()) {
-                roomTableView.getItems().add(room);
+                UIRoom uiRoom = new UIRoom(room);
+                roomTableView.getItems().add(uiRoom);
             }
 
         } catch (RemoteException e) {

@@ -50,28 +50,27 @@ public class LobbyPuller extends TimerTask {
 
     @Override
     public void run() {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    if(registry != null){
-                        try {
-                            lobby = (ILobby) registry.lookup(bindingName);
-                        } catch (RemoteException e) {
-                            lobby = null;
-                        } catch (NotBoundException e) {
-                            lobby = null;
-                        }
+        Platform.runLater(() -> {
+            try{
+                if(registry != null){
+                    try {
+                        lobby = (ILobby) registry.lookup(bindingName);
+                    } catch (RemoteException e) {
+                        lobby = null;
+                        e.printStackTrace();
+                    } catch (NotBoundException e) {
+                        lobby = null;
+                        e.printStackTrace();
                     }
+                }
 //                    if(!controller.getLobby().equals(lobby)){
-                        controller.setLobby(lobby);
-                        controller.refreshRoomTableView();
+                    controller.setLobby(lobby);
+                    controller.refreshRoomTableView();
 //                    }
 
 
-                } catch (Exception ex){
-                    System.out.println("Failed Getting lobby!");
-                }
+            } catch (Exception ex){
+                System.out.println("Failed Getting lobby!");
             }
         });
     }
