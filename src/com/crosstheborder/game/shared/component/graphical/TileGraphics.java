@@ -13,20 +13,20 @@ import java.io.File;
  */
 public class TileGraphics extends GraphicsComponent {
     @Override
-    public void render(Object o, Painter painter, Point point, int i, int i1) {
+    public void render(Object o, Painter painter, Point point, int width, int height) {
 
         Tile caller = (Tile)o;
         CrossTheBorderTileType tileType = (CrossTheBorderTileType)caller.getType();
 
         switch (tileType){
             case DIRT:
-                painter.drawImage(new File("/images/dirt.png"), point, i , i1);
+                painter.drawImage(new File("/images/dirt.png"), point, width , height);
                 break;
             case SAND:
-                painter.drawImage(new File("/images/sand.png"), point, i , i1);
+                painter.drawImage(new File("/images/sand.png"), point, width , height);
                 break;
             case GRASS:
-                painter.drawImage(new File("/images/grass.png"), point, i , i1);
+                painter.drawImage(new File("/images/grass.png"), point, width , height);
                 break;
         }
     }
