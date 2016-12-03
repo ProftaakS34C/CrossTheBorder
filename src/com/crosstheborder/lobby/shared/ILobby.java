@@ -19,7 +19,7 @@ public interface ILobby extends Remote {
      * @param creator the user that created the room.
      * @throws RemoteException gets thrown when something goes wrong remotely.
      */
-    void createRoom(String name, User creator) throws RemoteException;
+    IRoom createRoom(String name, int maxPlrs, User creator) throws RemoteException;
 
     /**
      * This method lets a user join an existing room, if the room does not exist nothing happens.

@@ -35,7 +35,7 @@ public class LobbyMenuController {
 
     private Timer pullerTimer;
     private ILobby lobby;
-    //TODO keep a list of lobbies. Should be fetching from the server.
+    //TODO keep a list of rooms. Should be fetching from the server.
 
     /**
      * This method is used for first time setup of the controller, if the initialize method cannot be used.
@@ -91,7 +91,7 @@ public class LobbyMenuController {
     }
 
     /**
-     * Creates a new lobby and switches the view to the main menu
+     * Creates a new Room and switches the view to the main menu
      */
     @FXML
     public void createRoom() {
@@ -100,13 +100,27 @@ public class LobbyMenuController {
         dialog.setHeaderText("");
         Optional<List<String>> result = dialog.showAndWait();
 
+        List<String> roomStrings = result.get();
+        String name = roomStrings.get(0);
+        int maxPlrs = Integer.parseInt(roomStrings.get(1));
         //TODO Create room on server
+        try {
+            IRoom room = lobby.createRoom(name, maxPlrs, this.user);
+            user.joinRoom(room);
+            instance.showRoomMenu();
+        } catch (RemoteException e) {
+            //Todo Add logger to this controller
+            e.printStackTrace();
+        }
+
     }
 
     @FXML
     public void joinRoom() {
         IRoom room = roomTableView.getSelectionModel().getSelectedItem().getRoom();
-        user.joinLobby(room);
+
+        user.joinRoom(room);
+
         instance.showRoomMenu();
     }
 

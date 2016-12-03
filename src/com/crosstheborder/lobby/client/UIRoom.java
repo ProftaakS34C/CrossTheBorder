@@ -27,7 +27,7 @@ public class UIRoom {
         try{
             name = room.getName();
         }catch (RemoteException e){
-            LOGGER.log(Level.SEVERE, "RemoteException while getting name from room");
+            LOGGER.log(Level.SEVERE, e.toString(), e);
             name = "ERROR";
         }
         return name;
@@ -37,7 +37,7 @@ public class UIRoom {
         try{
             isPrivate = room.getIsPrivate();
         }catch (RemoteException e){
-            LOGGER.log(Level.SEVERE, "remoteException while getting isPrivate from room");
+            LOGGER.log(Level.SEVERE, e.toString(), e);
             isPrivate = true;
         }
         return isPrivate;
@@ -50,7 +50,7 @@ public class UIRoom {
             inRoom = Integer.toString(room.getUsers().size());
             maxPlrs = Integer.toString(room.getMaxPlayers());
         } catch (RemoteException e){
-            LOGGER.log(Level.SEVERE, "remoteException while getting userAmount from room");
+            LOGGER.log(Level.SEVERE, e.toString(), e);
         }
 
         return inRoom +"/"+maxPlrs;

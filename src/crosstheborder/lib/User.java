@@ -73,7 +73,7 @@ public class User implements Serializable {
      * This method sets the room of the player.
      * @param room the room object the player is part of
      */
-    public void joinLobby(IRoom room) {
+    public void joinRoom(IRoom room) {
         this.room = room;
         try {
             room.addUser(this);
@@ -82,7 +82,7 @@ public class User implements Serializable {
         }
     }
 
-    public void leaveLobby() {
+    public void leaveRoom() {
         if (this.room != null) {
             try {
                 this.room.removeUser(this);

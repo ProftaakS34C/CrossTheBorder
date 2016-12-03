@@ -56,7 +56,7 @@ public class Room extends UnicastRemoteObject implements IRoom, Serializable{
         this.maxPlayers = maxPlayers;
         this.messages = new ArrayList<>();
         this.users = new ArrayList<>();
-        this.owner.joinLobby(this);
+        this.owner.joinRoom(this);
 
         Collections.shuffle(NAME_POOL);
         AI_NAMES = NAME_POOL.iterator();
@@ -195,7 +195,7 @@ public class Room extends UnicastRemoteObject implements IRoom, Serializable{
     public void addAI() {
         User computer = new User(AI_NAMES.next());
         computer.turnIntoComputer();
-        computer.joinLobby(this);
+        computer.joinRoom(this);
     }
 
     /**

@@ -34,11 +34,11 @@ public class LobbyServer {
         // Creating lobby
         try{
             lobby = new Lobby();
-            lobby.createRoom("Test room", new User("henk1"));
-            lobby.createRoom("Kekkerdekek", new User("henk2"));
-            lobby.createRoom("Bla bla lbagsdgsg", new User("henk3"));
-            lobby.createRoom("Test 2", new User("henk4"));
-            lobby.createRoom("Test 3", new User("henk5"));
+            lobby.createRoom("Test room", 8, new User("henk1"));
+            lobby.createRoom("Kekkerdekek",8 , new User("henk2"));
+            lobby.createRoom("Bla bla lbagsdgsg",8 , new User("henk3"));
+            lobby.createRoom("Test 2",8 , new User("henk4"));
+            lobby.createRoom("Test 3",8 , new User("henk5"));
             System.out.println("Lobby created!");
         } catch (RemoteException e) {
             System.out.println("Cannot create lobby: " + e.getMessage());

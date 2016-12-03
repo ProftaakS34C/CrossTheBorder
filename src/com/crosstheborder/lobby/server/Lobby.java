@@ -28,9 +28,10 @@ public class Lobby extends UnicastRemoteObject implements ILobby{
 
 
     @Override
-    public void createRoom(String name, User creator) throws RemoteException{
-        rooms.add(new Room(creator, name, 8));
-
+    public IRoom createRoom(String name, int maxPlrs, User creator) throws RemoteException{
+        IRoom room = new Room(creator, name, maxPlrs);
+        rooms.add(room);
+        return room;
     }
 
     @Override

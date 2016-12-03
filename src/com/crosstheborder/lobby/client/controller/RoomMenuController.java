@@ -53,12 +53,13 @@ public class RoomMenuController {
         this.instance = instance;
         this.user = instance.getUser();
         this.room = this.user.getRoom();
+        //todo update room from server using polling(?)
 
         if (!user.isOwnerOfLobby()) {
             startGameButton.setVisible(false);
             lobbyPassInputPasswordField.setVisible(false);
             isPrivateCheckBox.setVisible(false);
-            addAiButton.setVisible(false);
+//            addAiButton.setVisible(false);
         }
 
         refreshUsersTableView();
@@ -134,7 +135,13 @@ public class RoomMenuController {
      * Leaves the current room.
      */
     private void leaveLobby() {
-        user.leaveLobby();
+
+        try {
+            room.removeUser(user);
+            user.leaveRoom();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
         instance.showLobbyMenu();
     }
 
