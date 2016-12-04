@@ -10,7 +10,7 @@ import com.crosstheborder.lobby.client.controller.GameScreenController;
 import com.crosstheborder.lobby.client.controller.LayoutController;
 import com.crosstheborder.lobby.client.controller.RoomMenuController;
 import com.crosstheborder.lobby.client.controller.LobbyMenuController;
-import com.crosstheborder.lobby.server.Room;
+import com.crosstheborder.lobby.shared.IRoom;
 import crosstheborder.lib.Map;
 import crosstheborder.lib.User;
 import javafx.application.Application;
@@ -40,7 +40,7 @@ public class ClientMain extends Application {
     private Stage primaryStage;
     private BorderPane root;
     private User user;
-    private List<Room> lobbies = new ArrayList<>();
+    private List<IRoom> rooms = new ArrayList<>();
 
     /**
      * The main method for the class
@@ -76,8 +76,8 @@ public class ClientMain extends Application {
         return user;
     }
 
-    public List<Room> getLobbies() {
-        return new ArrayList<>(lobbies);
+    public List<IRoom> getRooms() {
+        return new ArrayList<>(rooms);
     }
 
     /**

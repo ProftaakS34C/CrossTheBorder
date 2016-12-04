@@ -94,7 +94,7 @@ public class RoomMenuController {
 
     @FXML
     private void leaveLobbyButton_OnAction(){
-        leaveLobby();
+        leaveRoom();
     }
 
     @FXML
@@ -114,18 +114,12 @@ public class RoomMenuController {
     private void btnChat_OnAction(){
         String chatText = chatInputTextField.getText();
 
-        if (chatText.matches("(<script>alert\\((\\d*|\".*\")\\)</script>)")) {
-            Alert popup = new Alert(Alert.AlertType.INFORMATION);
-            popup.setContentText(chatText.substring(chatText.indexOf('(') + 1, chatText.lastIndexOf(')')).replace('"', '\u0000'));
-            popup.showAndWait();
-        } else {
             Message message = new Message(user, chatText);
             try {
                 room.addMessage(message);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
-        }
 
         chatInputTextField.clear();
         refreshChatListView();
@@ -134,7 +128,7 @@ public class RoomMenuController {
     /**
      * Leaves the current room.
      */
-    private void leaveLobby() {
+    private void leaveRoom() {
 
         try {
             room.removeUser(user);

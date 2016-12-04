@@ -61,7 +61,7 @@ public interface IRoom extends Remote{
     boolean removeUser(User user)throws RemoteException;
 
     /**
-     * This method sets the password required to join the room, if none is set no password is required.
+     * This method sets the password required to join the room, if none is set the room is considered public.
      * @param pswd the password to set.
      * @throws RemoteException gets thrown when something goes wrong remotely.
      */

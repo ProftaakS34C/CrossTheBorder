@@ -137,6 +137,7 @@ public class LobbyMenuController {
         privateColumn.setCellValueFactory(new PropertyValueFactory<UIRoom, String>("isPrivate"));
 
         try {
+            //todo lobby.getRooms vervangen met een field : List<IRoom> rooms, poll doet rooms = lobby.getRooms
             for (IRoom room : lobby.getRooms()) {
                 UIRoom uiRoom = new UIRoom(room);
                 roomTableView.getItems().add(uiRoom);
