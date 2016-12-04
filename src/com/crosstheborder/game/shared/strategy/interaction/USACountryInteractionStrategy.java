@@ -8,12 +8,11 @@ import com.sstengine.strategy.InteractionStrategy;
 import java.util.List;
 
 /**
- * @author Oscar de Leeuw
- * @author guillaime
+ * Created by guill on 29-11-2016.
  */
-public class MexicanInteractionStrategy implements InteractionStrategy {
+public class USACountryInteractionStrategy implements InteractionStrategy {
     @Override
     public void execute(Physical physical, PlayerEntity playerEntity, List<Event> list) {
-
+        physical.interactWith(playerEntity, list);
     }
 }
