@@ -2,6 +2,7 @@ package com.crosstheborder.lobby.client.controller;
 
 
 import com.crosstheborder.lobby.client.ClientMain;
+import com.crosstheborder.lobby.client.RoomPuller;
 import crosstheborder.lib.Message;
 import crosstheborder.lib.User;
 import com.crosstheborder.lobby.shared.IRoom;
@@ -11,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.rmi.RemoteException;
+import java.util.Timer;
 
 /**
  * The controller class of the room menu
@@ -42,7 +44,7 @@ public class RoomMenuController {
     private ClientMain instance;
     private IRoom room;
     private User user;
-
+    private Timer pullTimer;
     /**
      * This method is used for first time setup of the controller, if the initialize method cannot be used.
      * Sets the main class this controller uses for functions
@@ -59,11 +61,10 @@ public class RoomMenuController {
             startGameButton.setVisible(false);
             lobbyPassInputPasswordField.setVisible(false);
             isPrivateCheckBox.setVisible(false);
-//            addAiButton.setVisible(false);
-        }
 
-        refreshUsersTableView();
-        refreshChatListView();
+        }
+        pullTimer = new Timer();
+        pullTimer.scheduleAtFixedRate(new RoomPuller(this), 0,5000);
     }
 
     @FXML
@@ -139,7 +140,7 @@ public class RoomMenuController {
         instance.showLobbyMenu();
     }
 
-    private void refreshChatListView() {
+    public void refreshChatListView() {
         chatListView.getItems().clear();
         try {
             for (Message message : room.getMessages()) {
@@ -150,7 +151,7 @@ public class RoomMenuController {
         }
     }
 
-    private void refreshUsersTableView() {
+    public void refreshUsersTableView() {
         usersTableView.getItems().clear();
 
         TableColumn nameColumn = usersTableView.getColumns().get(0);
