@@ -19,59 +19,14 @@ import java.util.TimerTask;
 public class LobbyPuller extends TimerTask {
 
     private LobbyMenuController controller;
-    public String ipAddress = "localhost"; //should be server ip
-    private static int portNumber = 1099;
-
-    private static final String bindingName = "lobby";
-
-    private Registry registry = null;
-    private ILobby lobby = null;
 
     public LobbyPuller(LobbyMenuController controller){
 
-        try{
-            InetAddress serverhost = InetAddress.getLocalHost();
-            ipAddress = serverhost.getHostAddress();
-        } catch (UnknownHostException ex) {
-            System.out.println("Cannot get IP address of server: " + ex.getMessage());
-        }
-
         this.controller = controller;
-
-        // Locate registry
-        try{
-            registry = LocateRegistry.getRegistry(ipAddress, 1099);
-            System.out.println("Registry found");
-        } catch (RemoteException e) {
-            System.out.println("Cannot locate registry");
-            registry = null;
-        }
     }
 
     @Override
     public void run() {
-        Platform.runLater(() -> {
-            try{
-                if(registry != null){
-                    try {
-                        lobby = (ILobby) registry.lookup(bindingName);
-                    } catch (RemoteException e) {
-                        lobby = null;
-                        e.printStackTrace();
-                    } catch (NotBoundException e) {
-                        lobby = null;
-                        e.printStackTrace();
-                    }
-                }
-//                    if(!controller.getLobby().equals(lobby)){
-                    controller.setLobby(lobby);
-                    controller.refreshRoomTableView();
-//                    }
-
-
-            } catch (Exception ex){
-                System.out.println("Failed Getting lobby!");
-            }
-        });
+        Platform.runLater(() -> controller.refreshRoomTableView());
     }
 }

@@ -10,6 +10,7 @@ import com.crosstheborder.lobby.client.controller.GameScreenController;
 import com.crosstheborder.lobby.client.controller.LayoutController;
 import com.crosstheborder.lobby.client.controller.RoomMenuController;
 import com.crosstheborder.lobby.client.controller.LobbyMenuController;
+import com.crosstheborder.lobby.shared.ILobby;
 import com.crosstheborder.lobby.shared.IRoom;
 import crosstheborder.lib.Map;
 import crosstheborder.lib.User;
@@ -24,6 +25,12 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -40,7 +47,10 @@ public class ClientMain extends Application {
     private Stage primaryStage;
     private BorderPane root;
     private User user;
-    private List<IRoom> rooms = new ArrayList<>();
+    private ILobby lobby;
+    private String ipAddress = "localhost";
+    private Registry registry;
+    private static final String bindingName = "lobby";
 
     /**
      * The main method for the class
@@ -59,12 +69,43 @@ public class ClientMain extends Application {
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
-
+        connect();
         initLayout();
         String userName = askForUserName();
         this.user = new User(userName);
 
         showLobbyMenu();
+    }
+
+    private void connect() {
+        try{
+            InetAddress serverHost = InetAddress.getLocalHost();
+            ipAddress = serverHost.getHostAddress();
+        } catch (UnknownHostException ex) {
+            System.out.println("Cannot get IP address of server: " + ex.getMessage());
+        }
+
+        // Locate registry
+        try{
+            registry = LocateRegistry.getRegistry(ipAddress, 1099);
+            System.out.println("Registry found");
+        } catch (RemoteException e) {
+            System.out.println("Cannot locate registry");
+            registry = null;
+        }
+        if(registry != null){
+            try {
+                lobby = (ILobby) registry.lookup(bindingName);
+            } catch (RemoteException e) {
+                lobby = null;
+                e.printStackTrace();
+            } catch (NotBoundException e) {
+                lobby = null;
+                e.printStackTrace();
+            } catch (Exception ex) {
+                System.out.println("Failed Getting lobby!");
+            }
+        }
     }
 
     /**
@@ -74,10 +115,6 @@ public class ClientMain extends Application {
      */
     public User getUser() {
         return user;
-    }
-
-    public List<IRoom> getRooms() {
-        return new ArrayList<>(rooms);
     }
 
     /**
@@ -136,6 +173,7 @@ public class ClientMain extends Application {
             menuRoot = loader.load();
             LobbyMenuController controller = loader.getController();
             controller.setUp(this);
+            controller.setLobby(lobby);
             root.setCenter(menuRoot);
             primaryStage.setTitle("Main Menu");
         }
