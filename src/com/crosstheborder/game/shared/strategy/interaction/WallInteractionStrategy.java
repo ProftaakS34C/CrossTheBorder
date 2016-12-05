@@ -14,6 +14,6 @@ import java.util.List;
 public class WallInteractionStrategy implements InteractionStrategy {
     @Override
     public void execute(Physical physical, PlayerEntity playerEntity, List<Event> list) {
-        physical.interactWith(playerEntity, list);
+        //Intentionally left blank
     }
 }

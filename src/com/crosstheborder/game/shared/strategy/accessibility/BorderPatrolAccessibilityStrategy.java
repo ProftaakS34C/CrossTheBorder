@@ -10,6 +10,6 @@ import com.sstengine.strategy.AccessibilityStrategy;
 public class BorderPatrolAccessibilityStrategy implements AccessibilityStrategy {
     @Override
     public boolean execute(Physical physical, PlayerEntity playerEntity) {
-        return physical.isAccessible(playerEntity);
+        return false;
     }
 }

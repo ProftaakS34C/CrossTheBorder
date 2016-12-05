@@ -26,6 +26,9 @@ public class CountryFactory {
         return new Country(mexicoCountryPhysical, mexicoCountryGraphics, CrossTheBorderCountryTag.MEX);
     }
 
+    /**
+     * @return The Country of America
+     */
     public Country createUSA(){
         return new Country(usaCountryPhysical, usaCountryGraphics, CrossTheBorderCountryTag.USA);
     }

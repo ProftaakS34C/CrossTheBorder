@@ -1,5 +1,6 @@
 package com.crosstheborder.game.shared.component.graphical;
 
+import com.crosstheborder.game.shared.util.ResourceLocator;
 import com.sstengine.component.graphics.GraphicsComponent;
 import com.sstengine.component.graphics.Painter;
 import crosstheborder.lib.player.PlayerEntity;
@@ -15,6 +16,6 @@ import java.io.File;
 public class BorderPatrolGraphics extends GraphicsComponent {
     @Override
     public void render(Object o, Painter painter, Point point, int width, int height) {
-        painter.drawImage(new File("/images/borderpatrol.png"), point, width, height);
+        painter.drawImage(ResourceLocator.getImage("borderpatrol"), point, width, height);
     }
 }

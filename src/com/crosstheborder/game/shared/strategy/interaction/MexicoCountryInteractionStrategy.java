@@ -13,6 +13,6 @@ import java.util.List;
 public class MexicoCountryInteractionStrategy implements InteractionStrategy {
     @Override
     public void execute(Physical physical, PlayerEntity playerEntity, List<Event> list) {
-        physical.interactWith(playerEntity, list);
+        // Intentionally left blank
     }
 }
