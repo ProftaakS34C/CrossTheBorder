@@ -8,12 +8,11 @@ import java.awt.*;
 import java.io.File;
 
 /**
- * @author Oscar de Leeuw
  * @author guillaime
  */
-public class MexicanGraphics extends GraphicsComponent {
+public class TrapGraphics extends GraphicsComponent {
     @Override
-    public void render(Object caller, Painter painter, Point location, int width, int height) {
-        painter.drawImage(ResourceLocator.getImage("mexican"), location, width, height);
+    public void render(Object o, Painter painter, Point point, int width, int height) {
+        painter.drawImage(ResourceLocator.getImage("trap"), point, width, height);
     }
 }

@@ -8,10 +8,9 @@ import com.sstengine.util.enumeration.OrdinalDirection;
 import java.util.Map;
 
 /**
- * @author Oscar de Leeuw
  * @author guillaime
  */
-public class WallPlacementStrategy implements PlacementStrategy{
+public class TrapPlacementStrategy implements PlacementStrategy {
     @Override
     public boolean execute(PlaceableObstacle placeableObstacle, Map<OrdinalDirection, Tile> map, Tile tile) {
         return true;

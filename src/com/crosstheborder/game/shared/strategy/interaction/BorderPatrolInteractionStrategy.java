@@ -10,20 +10,21 @@ import com.sstengine.strategy.InteractionStrategy;
 
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * @author Oscar de Leeuw
  * @author guillaime
  */
-public class MexicanInteractionStrategy implements InteractionStrategy {
+public class BorderPatrolInteractionStrategy implements InteractionStrategy {
     @Override
     public void execute(Physical physical, PlayerEntity playerEntity, List<Event> list) {
 
-        PlayerEntity mexican = (PlayerEntity) physical;
+        PlayerEntity bp = (PlayerEntity) physical;
 
-        if(playerEntity.getTeam().getCountry().getTag() == CrossTheBorderCountryTag.USA){
-            list.add(new ChangeTeamScoreEvent(playerEntity.getTeam(), 1));
-            list.add(new ChangePlayerEntityTileEvent(mexican, mexican.getTeam().getRespawnPoint(mexican, new Random())));
+        if(playerEntity.getTeam().getCountry().getTag() == CrossTheBorderCountryTag.MEX){
+            list.add(new ChangeTeamScoreEvent(bp.getTeam(), 1));
+            list.add(new ChangePlayerEntityTileEvent(playerEntity, playerEntity.getTeam().getRespawnPoint(playerEntity, new Random())));
+            list.add(new ChangePlayerEntityTileEvent(bp, bp.getTile()));
         }
     }
 }

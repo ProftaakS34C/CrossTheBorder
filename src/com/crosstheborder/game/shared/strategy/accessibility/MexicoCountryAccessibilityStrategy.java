@@ -6,12 +6,11 @@ import com.sstengine.player.playerentity.PlayerEntity;
 import com.sstengine.strategy.AccessibilityStrategy;
 
 /**
- * @author Oscar de Leeuw
- * @author guillaime
+ * Created by guill on 29-11-2016.
  */
-public class MexicanAccessibiltyStrategy implements AccessibilityStrategy {
+public class MexicoCountryAccessibilityStrategy implements AccessibilityStrategy {
     @Override
     public boolean execute(Physical physical, PlayerEntity playerEntity) {
-        return (playerEntity.getTeam().getCountry().getTag() == CrossTheBorderCountryTag.USA);
+        return playerEntity.getTeam().getCountry().getTag() == CrossTheBorderCountryTag.MEX;
     }
 }
