@@ -1,6 +1,7 @@
 package com.crosstheborder.game.shared.component.graphical;
 
 import com.crosstheborder.game.shared.util.CrossTheBorderTileType;
+import com.crosstheborder.game.shared.util.ResourceLocator;
 import com.sstengine.component.graphics.GraphicsComponent;
 import com.sstengine.component.graphics.Painter;
 import com.sstengine.map.tile.Tile;
@@ -20,13 +21,13 @@ public class TileGraphics extends GraphicsComponent {
 
         switch (tileType){
             case DIRT:
-                painter.drawImage(new File("/images/dirt.png"), point, width , height);
+                painter.drawImage(ResourceLocator.getImage("dirt"), point, width , height);
                 break;
             case SAND:
-                painter.drawImage(new File("/images/sand.png"), point, width , height);
+                painter.drawImage(ResourceLocator.getImage("sand"), point, width , height);
                 break;
             case GRASS:
-                painter.drawImage(new File("/images/grass.png"), point, width , height);
+                painter.drawImage(ResourceLocator.getImage("grass"), point, width , height);
                 break;
         }
     }
