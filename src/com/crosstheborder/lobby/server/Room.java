@@ -37,17 +37,18 @@ public class Room extends UnicastRemoteObject implements IRoom, Serializable{
 
     /**
      * This is the constructor method of the class "Room"
-     * @param name The name of the lobby
-     * @param maxPlayers The maximum amount of players allowed in the lobby
+     * @param name The name of the room
+     * @param maxPlayers The maximum amount of players allowed in the room
      */
     public Room(User owner, String name, int maxPlayers) throws RemoteException{
         this(owner, name, "", maxPlayers);
     }
     /**
      * This is the constructor method of the class "Room"
-     * @param name The name of the lobby
-     * @param password The password of the lobby
-     * @param maxPlayers The maximum amount of players allowed in the lobby
+     * @param owner the creator of the room
+     * @param name The name of the room
+     * @param password The password of the room
+     * @param maxPlayers The maximum amount of players allowed in the room
      */
     public Room(User owner, String name, String password, int maxPlayers) throws RemoteException{
         this.owner = owner;
@@ -56,7 +57,9 @@ public class Room extends UnicastRemoteObject implements IRoom, Serializable{
         this.maxPlayers = maxPlayers;
         this.messages = new ArrayList<>();
         this.users = new ArrayList<>();
-        this.owner.joinRoom(this);
+        this.owner.setRoom(this);
+
+        addUser(owner);
 
         Collections.shuffle(NAME_POOL);
         AI_NAMES = NAME_POOL.iterator();
@@ -150,9 +153,8 @@ public class Room extends UnicastRemoteObject implements IRoom, Serializable{
      */
     @Override
     public boolean addUser(User user) throws RemoteException {
-        if (maxPlayers >= users.size() && !users.contains(user)) {
+        if (users.size() < maxPlayers && !users.contains(user)) {
             users.add(user);
-
             if (owner == null) {
                 owner = user;
             }
@@ -172,6 +174,7 @@ public class Room extends UnicastRemoteObject implements IRoom, Serializable{
     public boolean removeUser(User user) {
         if (users.contains(user)) {
             users.remove(user);
+
             List<User> humans = getAllHumanUsers();
 
             //If we just removed the owner assign it to someone else.
@@ -195,7 +198,7 @@ public class Room extends UnicastRemoteObject implements IRoom, Serializable{
     public void addAI() {
         User computer = new User(AI_NAMES.next());
         computer.turnIntoComputer();
-        computer.joinRoom(this);
+        computer.setRoom(this);
     }
 
     /**

@@ -14,7 +14,6 @@ import java.rmi.RemoteException;
  */
 public class User implements Serializable {
     private String name;
-    private Player player;
     private IRoom room;
     private boolean isComputer;
 
@@ -73,13 +72,9 @@ public class User implements Serializable {
      * This method sets the room of the player.
      * @param room the room object the player is part of
      */
-    public void joinRoom(IRoom room) {
+    public void setRoom(IRoom room) {
         this.room = room;
-        try {
-            room.addUser(this);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
+
     }
 
     public void leaveRoom() {
@@ -91,21 +86,6 @@ public class User implements Serializable {
             }
             this.room = null;
         }
-    }
-
-    /**
-     * This method is used to get the player object of the user
-     * @return Player the player object of the user
-     */
-    public Player getPlayer(){return player;}
-
-    /**
-     * This method sets the value of player
-     *
-     * @param player the player object the user is playing as
-     */
-    public void setPlayer(Player player) {
-        this.player = player;
     }
 
     /**

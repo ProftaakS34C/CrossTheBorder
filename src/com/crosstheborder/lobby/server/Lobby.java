@@ -31,6 +31,7 @@ public class Lobby extends UnicastRemoteObject implements ILobby{
     public IRoom createRoom(String name, int maxPlrs, User creator) throws RemoteException{
         IRoom room = new Room(creator, name, maxPlrs);
         rooms.add(room);
+        creator.setRoom(room);
         return room;
     }
 

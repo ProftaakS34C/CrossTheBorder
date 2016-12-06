@@ -79,7 +79,8 @@ public class GameScreenController {
      */
     public void setUp(ClientMain main) {
         //this.game = main.getUser().getRoom().getGame();
-        this.player = main.getUser().getPlayer();
+//        this.player = main.getUser().getPlayer();
+        //todo get player to get location and stuff from
         start();
     }
 
@@ -100,7 +101,7 @@ public class GameScreenController {
     }
 
     private void draw() {
-        Camera cam = game.getCamera(player.getCameraLocation(), 40, (int) gameCanvas.getWidth(), (int) gameCanvas.getHeight());
-        cam.draw(painter);
+       Camera cam = game.getCamera(player.getCameraLocation(), 40, (int) gameCanvas.getWidth(), (int) gameCanvas.getHeight());
+       cam.draw(painter);
     }
 }

@@ -55,7 +55,6 @@ public class RoomMenuController {
         this.instance = instance;
         this.user = instance.getUser();
         this.room = this.user.getRoom();
-        //todo update room from server using polling(?)
 
         if (!user.isOwnerOfLobby()) {
             startGameButton.setVisible(false);
@@ -137,6 +136,7 @@ public class RoomMenuController {
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+
         instance.showLobbyMenu();
     }
 
@@ -160,7 +160,7 @@ public class RoomMenuController {
 
         nameColumn.setCellValueFactory(new PropertyValueFactory<User, String>("name"));
         ownerColumn.setCellValueFactory(new PropertyValueFactory<User, Boolean>("owner"));
-        computerColumn.setCellValueFactory(new PropertyValueFactory<User, Boolean>("computer"));
+        //computerColumn.setCellValueFactory(new PropertyValueFactory<User, Boolean>("computer"));
 
         try {
             for (User user : room.getUsers()) {

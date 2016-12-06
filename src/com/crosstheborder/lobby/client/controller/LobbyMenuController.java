@@ -103,10 +103,9 @@ public class LobbyMenuController {
         List<String> roomStrings = result.get();
         String name = roomStrings.get(0);
         int maxPlrs = Integer.parseInt(roomStrings.get(1));
-        //TODO Create room on server
         try {
             IRoom room = lobby.createRoom(name, maxPlrs, this.user);
-            user.joinRoom(room);
+            user.setRoom(room);
             instance.showRoomMenu();
         } catch (RemoteException e) {
             //Todo Add logger to this controller
@@ -119,9 +118,15 @@ public class LobbyMenuController {
     public void joinRoom() {
         IRoom room = roomTableView.getSelectionModel().getSelectedItem().getRoom();
 
-        user.joinRoom(room);
+        try {
+            room.addUser(user);
+            user.setRoom(room);
+            instance.showRoomMenu();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
 
-        instance.showRoomMenu();
+
     }
 
     @FXML
