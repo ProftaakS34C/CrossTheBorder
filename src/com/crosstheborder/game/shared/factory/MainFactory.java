@@ -27,7 +27,7 @@ public class MainFactory {
 
     CrossTheBorderGameSettings settings = new CrossTheBorderGameSettings();
 
-    List<Team> teams;
+    List<Team> teams = new ArrayList<>();
 
     Team usaTeam;
     Team mexTeam;

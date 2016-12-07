@@ -1,50 +1,78 @@
 package com.crosstheborder.game.server;
 
+import com.crosstheborder.game.shared.factory.MainFactory;
 import com.crosstheborder.game.shared.network.Network;
 import com.crosstheborder.game.shared.network.Packet;
+import com.sstengine.Game;
+import com.sstengine.team.Team;
 
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.sql.Time;
+import java.util.*;
 
 /**
  * @author Oscar de Leeuw
  */
 public class Main {
-    public static GameServer gameServer;
+
+    private static String bindingName = "";
+    private static String mapName;
+
+    private static Timer timer;
+    private static MainFactory mainFactory = new MainFactory();
+    private static Game game;
+
+    private static List<String> names;
+
+    private static void setupTimer() {
+
+        System.out.println("Timer created");
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new GamePusher(game, bindingName), 0, 200);
+        System.out.println("OK");
+    }
 
     public static void main(String[] args) throws Exception {
-        Scanner scanner = new Scanner(System.in);
 
-        gameServer = new GameServer(Network.DEFAULT_PORT);
+        // Receiving list of players + sending bindingName
+        try{
 
-        while (true) {
-            System.out.println("Type 'Q' to exit, any other character to send a packet.");
-            if (scanner.next().equals("Q")) {
-                break;
-            }
+            // Creating sockets
+            Socket socket = new Socket("localhost", 999);
+            try {
 
-            System.out.print("Give the client ID: ");
-            int clientId = scanner.nextInt();
+                // Creating streams
+                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+                ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 
-            System.out.print("Give the PacketType: ");
-            int packetType = scanner.nextInt();
-            ArrayList<Integer> arguments = new ArrayList<>();
+                // Getting list of names of streams
+                names = (List<String>) in.readObject();
 
-            System.out.println("Give the arguments, type '0' to end.");
-            while (true) {
-                int next = scanner.nextInt();
-                if (next == 0) {
-                    break;
+                // Creating bindingName + sending it back
+                for(String s : names){
+                    bindingName += s;
                 }
-                arguments.add(next);
+                out.writeObject(bindingName);
 
-                System.out.println("Give another argument or type '0' to end.");
+                // Receiving map name
+                mapName = (String) in.readObject();
+                System.out.println(mapName);
+
+            } finally {
+                // Closing socket
+                socket.close();
             }
 
-            Packet packet = new Packet(packetType, arguments.stream().mapToInt(i -> i).toArray());
-            gameServer.sendPacket(clientId, packet);
+        }catch (IOException e){
+            e.printStackTrace();
         }
 
-        System.exit(0);
+        // Creating new game
+        game = mainFactory.createGame(mapName, names);
+        System.out.println("Game Creating");
+
+        setupTimer();
     }
 }
