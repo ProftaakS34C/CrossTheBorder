@@ -46,7 +46,7 @@ public class LobbyMenuController {
     public void setUp(ClientMain instance) {
         this.instance = instance;
         this.user = instance.getUser();
-        setLblPlayerName(user.getName());
+        setLblPlayerName(user.getName() + user.getID());
 
         pullerTimer = new Timer();
         pullerTimer.scheduleAtFixedRate(new LobbyPuller(this), 0, 5000);

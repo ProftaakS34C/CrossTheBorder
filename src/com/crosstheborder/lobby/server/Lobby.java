@@ -16,9 +16,11 @@ public class Lobby extends UnicastRemoteObject implements ILobby{
 
     private ArrayList<IRoom> rooms;
     private ArrayList<User> users;
+    private int userIDCounter = 1;
 
     public Lobby() throws RemoteException {
         this.rooms = new ArrayList<>();
+        this.users = new ArrayList<>();
     }
 
     @Override
@@ -27,11 +29,15 @@ public class Lobby extends UnicastRemoteObject implements ILobby{
     }
 
 
+    private int getNewID() {
+        return userIDCounter++;
+    }
+
+
     @Override
     public IRoom createRoom(String name, int maxPlrs, User creator) throws RemoteException{
         IRoom room = new Room(creator, name, maxPlrs);
         rooms.add(room);
-        creator.setRoom(room);
         return room;
     }
 
@@ -43,7 +49,9 @@ public class Lobby extends UnicastRemoteObject implements ILobby{
     }
 
     @Override
-    public void addUser(User user) throws RemoteException{
-        System.out.println("Adding User");
+    public int addUser(User user) throws RemoteException{
+        user.setID(getNewID());
+        users.add(user);
+        return user.getID();
     }
 }

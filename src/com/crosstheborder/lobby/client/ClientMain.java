@@ -69,11 +69,16 @@ public class ClientMain extends Application {
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
-        connect();
+
         initLayout();
         String userName = askForUserName();
         this.user = new User(userName);
-
+        connect();
+        try {
+            user.setID(lobby.addUser(user));
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
         showLobbyMenu();
     }
 

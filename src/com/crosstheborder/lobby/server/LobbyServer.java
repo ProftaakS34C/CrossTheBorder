@@ -34,11 +34,13 @@ public class LobbyServer {
         // Creating lobby
         try{
             lobby = new Lobby();
-            lobby.createRoom("Test room", 8, new User("henk1"));
-            lobby.createRoom("Kekkerdekek",8 , new User("henk2"));
-            lobby.createRoom("Bla bla lbagsdgsg",8 , new User("henk3"));
-            lobby.createRoom("Test 2",8 , new User("henk4"));
-            lobby.createRoom("Test 3",8 , new User("henk5"));
+            User henk = new User("henk1");
+            henk.setID(lobby.addUser(henk));
+            lobby.createRoom("Test room", 8, henk);
+//            lobby.createRoom("Kekkerdekek",8 , new User("henk2"));
+//            lobby.createRoom("Bla bla lbagsdgsg",8 , new User("henk3"));
+//            lobby.createRoom("Test 2",8 , new User("henk4"));
+//            lobby.createRoom("Test 3",8 , new User("henk5"));
             System.out.println("Lobby created!");
         } catch (RemoteException e) {
             System.out.println("Cannot create lobby: " + e.getMessage());
@@ -56,6 +58,7 @@ public class LobbyServer {
         // Bind effectenbeurs using registry
         try{
             registry.rebind(bindingName, lobby);
+            System.out.println("lobby bound to registry");
         } catch (RemoteException ex) {
             System.out.println("Cannot bind lobby to registry: " + ex.getMessage());
         }

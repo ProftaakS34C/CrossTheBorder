@@ -31,10 +31,11 @@ public interface ILobby extends Remote {
 
     /**
      * This method adds a user to the lobby.
+     * It also sets the id of the user on the server and returns the id to set on the client.
      * @param user the user to join the Lobby.
      * @throws RemoteException gets thrown when something goes wrong remotely.
      */
-    void addUser(User user) throws RemoteException;
+    int addUser(User user) throws RemoteException;
 
     /**
      * This method gets all the rooms present in the lobby
@@ -42,6 +43,5 @@ public interface ILobby extends Remote {
      * @throws RemoteException gets thrown when something goes wrong remotely.
      */
     ArrayList<IRoom> getRooms() throws RemoteException;
-
 
 }

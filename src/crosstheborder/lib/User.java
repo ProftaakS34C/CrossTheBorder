@@ -16,6 +16,7 @@ public class User implements Serializable {
     private String name;
     private IRoom room;
     private boolean isComputer;
+    private int ID = 0;
 
     /**
      * This is the constructor method of the class "User"
@@ -74,7 +75,6 @@ public class User implements Serializable {
      */
     public void setRoom(IRoom room) {
         this.room = room;
-
     }
 
     public void leaveRoom() {
@@ -102,5 +102,13 @@ public class User implements Serializable {
      */
     public IRoom getRoom() {
         return room;
+    }
+
+    public void setID(int id){
+        ID = id;
+    }
+
+    public int getID(){
+        return ID;
     }
 }
