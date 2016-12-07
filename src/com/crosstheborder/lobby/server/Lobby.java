@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class Lobby extends UnicastRemoteObject implements ILobby{
 
-    private ArrayList<IRoom> rooms;
+    private ArrayList<Room> rooms;
     private ArrayList<User> users;
     private int userIDCounter = 1;
 
@@ -25,7 +25,8 @@ public class Lobby extends UnicastRemoteObject implements ILobby{
 
     @Override
     public ArrayList<IRoom> getRooms() throws RemoteException{
-        return this.rooms;
+        removeDeadRooms();
+        return new ArrayList<IRoom>(rooms);
     }
 
 
@@ -33,10 +34,18 @@ public class Lobby extends UnicastRemoteObject implements ILobby{
         return userIDCounter++;
     }
 
+    private void removeDeadRooms(){
+        for(Room r : rooms){
+            if(r.getUsers().size() == 0){
+                rooms.remove(r);
+            }
+        }
+    }
+
 
     @Override
     public IRoom createRoom(String name, int maxPlrs, User creator) throws RemoteException{
-        IRoom room = new Room(creator, name, maxPlrs);
+        Room room = new Room(creator, name, maxPlrs);
         rooms.add(room);
         return room;
     }

@@ -66,8 +66,8 @@ public class Room extends UnicastRemoteObject implements IRoom, Serializable{
     }
 
     /**
-     * This method is used to get the name of the lobby object
-     * @return String this returns the name of the lobby object
+     * This method is used to get the name of the room object
+     * @return String this returns the name of the room object
      */
     @Override
     public String getName(){
@@ -75,31 +75,31 @@ public class Room extends UnicastRemoteObject implements IRoom, Serializable{
     }
 
     /**
-     * This method is used to set the name of the lobby
-     * @param value the new name of the lobby
+     * This method is used to set the name of the room
+     * @param value the new name of the room
      */
     public void setName(String value){
         name = value;
     }
 
     /**
-     * This method is used to get the password of the lobby object
-     * @return String this returns the password of the lobby object
+     * This method is used to get the password of the room object
+     * @return String this returns the password of the room object
      */
     public String getPassword() {
         return name;
     }
 
     /**
-     * This method is used to set the password of the lobby
-     * @param value the new password of the lobby
+     * This method is used to set the password of the room
+     * @param value the new password of the room
      */
     public void setPassword(String value){
         password = value;
     }
 
     /**
-     * Gets the gameSettings of this lobby
+     * Gets the gameSettings of this room
      * @return a GameSettings object containing all settings
      */
     public GameSettings getSettings() {
@@ -112,15 +112,15 @@ public class Room extends UnicastRemoteObject implements IRoom, Serializable{
     }
 
     /**
-     * This method gets the game of this lobby
-     * @return Game, the game object of this lobby
+     * This method gets the game of this room
+     * @return Game, the game object of this room
      */
     public Game getGame(){
         return game;
     }
 
     /**
-     * Gets the users that are present in this lobby.
+     * Gets the users that are present in this room.
      *
      * @return The list of users.
      */
@@ -129,32 +129,33 @@ public class Room extends UnicastRemoteObject implements IRoom, Serializable{
     }
 
     /**
-     * This method is used to get the maximum amount of players allowed inside the lobby
+     * This method is used to get the maximum amount of players allowed inside the room
      *
-     * @return int  this returns the maximum amount of players allowed inside the lobby
+     * @return int  this returns the maximum amount of players allowed inside the room
      */
     public int getMaxPlayers() {
         return maxPlayers;
     }
 
     /**
-     * This method is used to set the maximum amount of players allowed inside the lobby
-     * @param value the new maximum amount of players allowed inside the lobby
+     * This method is used to set the maximum amount of players allowed inside the room
+     * @param value the new maximum amount of players allowed inside the room
      */
     public void setMaxPlayers(int value){
         maxPlayers = value;
     }
 
     /**
-     * Adds a user to the array list of users in the lobby
+     * Adds a user to the array list of users in the room
      *
      * @param user The user to add
      * @return a boolean value indicating success
      */
     @Override
     public boolean addUser(User user) throws RemoteException {
-        if (users.size() < maxPlayers && !users.contains(user)) {
+        if (users.size() < maxPlayers/* && !users.contains(user)*/) {
             users.add(user);
+            user.setRoom(this);
             if (owner == null) {
                 owner = user;
             }
@@ -164,31 +165,33 @@ public class Room extends UnicastRemoteObject implements IRoom, Serializable{
     }
 
     /**
-     * Removes a user from the array list of users in the lobby
+     * Removes a user from the array list of users in the room
      * only removes if the user is present in list
      *
      * @param user The user to remove
-     * @return True when the lobby should stay alive. False when the lobby should be removed.
+     * @return True when the lobby should stay alive. False when the room should be removed.
      */
     @Override
     public boolean removeUser(User user) {
-        if (users.contains(user)) {
-            users.remove(user);
+        for(User u: users){
+            if (u.getID() == user.getID()) {
+                users.remove(u);
 
-            List<User> humans = getAllHumanUsers();
-
-            //If we just removed the owner assign it to someone else.
-            if (humans.isEmpty()) {
-                //TODO DESTROY LOBBY
-                if (game != null) {
-                    game.stop();
+                //If we just removed the owner assign it to someone else.
+                if (users.isEmpty()) {
+                    //TODO DESTROY LOBBY
+                    if (game != null) {
+                        game.stop();
+                    }
+                    return false;
+                } else if (owner.getID() == user.getID()) {
+                    owner = users.get(0);
                 }
-                return false;
-            } else if (owner == user) {
-                owner = humans.get(0);
+                return true;
             }
+
         }
-        return true;
+        return false;
     }
 
     private List<User> getAllHumanUsers() {

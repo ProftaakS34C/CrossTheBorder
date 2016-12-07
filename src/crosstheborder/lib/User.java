@@ -33,7 +33,7 @@ public class User implements Serializable {
      */
     public boolean isOwnerOfLobby(){
         try {
-            return room.getOwner().equals(this);
+            return room.getOwner().getID() == (getID());
         } catch (RemoteException e) {
             e.printStackTrace();
             return false;

@@ -9,6 +9,7 @@ import crosstheborder.lib.User;
 import com.crosstheborder.lobby.shared.ILobby;
 import com.crosstheborder.lobby.shared.IRoom;
 import javafx.fxml.FXML;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -119,9 +120,16 @@ public class LobbyMenuController {
         IRoom room = roomTableView.getSelectionModel().getSelectedItem().getRoom();
 
         try {
-            room.addUser(user);
-            user.setRoom(room);
-            instance.showRoomMenu();
+            if(room.addUser(user)){
+                user.setRoom(room);
+                instance.showRoomMenu();
+            }
+            else{
+                Dialog d = new Dialog();
+                d.setTitle("Error");
+                d.setHeaderText("The room you tried to join is full");
+            }
+
         } catch (RemoteException e) {
             e.printStackTrace();
         }

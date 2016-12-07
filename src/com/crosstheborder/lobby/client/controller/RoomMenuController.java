@@ -159,7 +159,7 @@ public class RoomMenuController {
         TableColumn computerColumn = usersTableView.getColumns().get(2);
 
         nameColumn.setCellValueFactory(new PropertyValueFactory<User, String>("name"));
-        //ownerColumn.setCellValueFactory(new PropertyValueFactory<User, Boolean>("owner"));
+        ownerColumn.setCellValueFactory(new PropertyValueFactory<User, Boolean>("owner"));
         //computerColumn.setCellValueFactory(new PropertyValueFactory<User, Boolean>("computer"));
 
         try {
