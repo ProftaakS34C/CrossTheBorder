@@ -95,4 +95,11 @@ public interface IRoom extends Remote{
      */
     int getMaxPlayers() throws RemoteException;
 
+    /**
+     * This method is used for checking the password.
+     * @param pswd the password to check if correct.
+     * @return true if correct, false when not. Always returns true if no password is required.
+     */
+    boolean checkPassword(String pswd) throws RemoteException;
+
 }

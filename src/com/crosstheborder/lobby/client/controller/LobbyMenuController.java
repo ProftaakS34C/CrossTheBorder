@@ -9,10 +9,7 @@ import crosstheborder.lib.User;
 import com.crosstheborder.lobby.shared.ILobby;
 import com.crosstheborder.lobby.shared.IRoom;
 import javafx.fxml.FXML;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.rmi.RemoteException;
@@ -29,14 +26,13 @@ public class LobbyMenuController {
     @FXML
     private Label playerNameLabel;
     @FXML
-    private TableView<UIRoom> roomTableView; //todo: add the ability to join rooms.
+    private TableView<UIRoom> roomTableView;
 
     private ClientMain instance;
     private User user;
 
     private Timer pullerTimer;
     private ILobby lobby;
-    //TODO keep a list of rooms. Should be fetching from the server.
 
     /**
      * This method is used for first time setup of the controller, if the initialize method cannot be used.
@@ -120,14 +116,35 @@ public class LobbyMenuController {
         IRoom room = roomTableView.getSelectionModel().getSelectedItem().getRoom();
 
         try {
+            if(room.getIsPrivate()){
+                TextInputDialog dialog = new TextInputDialog();
+                dialog.setTitle("password required");
+                dialog.setHeaderText("A password is required for this room");
+                dialog.setContentText("Please enter a password:");
+
+                Optional<String> result = dialog.showAndWait();
+                if(result.isPresent()){
+                    String pswd = result.get();
+                    if(!room.checkPassword(pswd)){
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("oops");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Wrong password!");
+                        alert.show();
+                        return;
+                    }
+                }
+            }
             if(room.addUser(user)){
                 user.setRoom(room);
                 instance.showRoomMenu();
             }
             else{
-                Dialog d = new Dialog();
-                d.setTitle("Error");
-                d.setHeaderText("The room you tried to join is full");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("The room you tried to join is full");
+                alert.show();
             }
 
         } catch (RemoteException e) {

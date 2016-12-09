@@ -179,7 +179,6 @@ public class Room extends UnicastRemoteObject implements IRoom, Serializable{
 
                 //If we just removed the owner assign it to someone else.
                 if (users.isEmpty()) {
-                    //TODO DESTROY LOBBY
                     if (game != null) {
                         game.stop();
                     }
@@ -228,6 +227,17 @@ public class Room extends UnicastRemoteObject implements IRoom, Serializable{
      */
     public ArrayList<Message> getMessages() {
         return this.messages;
+    }
+
+    public boolean checkPassword(String pswd){
+        if(password == ""){
+            return true;
+        }
+        if(pswd.equals(password)){
+            return true;
+        }else {
+            return false;
+        }
     }
 
     /**
