@@ -1,20 +1,23 @@
 package com.crosstheborder.game.server;
 
+import com.crosstheborder.game.shared.network.RMIConstants;
 import com.sstengine.Game;
 import fontyspublisher.RemotePublisher;
 
-import java.rmi.AccessException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by guill on 6-12-2016.
+ * @author Oscar de Leeuw
  */
 public class GamePusher extends TimerTask {
+    private static final Logger LOGGER = Logger.getLogger(GamePusher.class.getName());
 
-    private static final int REGISTRYNUMBER = 1099;
     private String bindingName;
     private RemotePublisher publisher;
 
@@ -28,60 +31,35 @@ public class GamePusher extends TimerTask {
     }
 
     private void createRegistry(){
-
         // Created a publisher that will push the game
         try{
             publisher = new RemotePublisher();
 
-        } catch (RemoteException e) {
-            e.printStackTrace();
-            return;
-        }
-
-        // Create registry on port 1099
-        Registry registry = null;
-        try{
-            registry = LocateRegistry.createRegistry(REGISTRYNUMBER);
-
-        } catch (RemoteException e) {
-            e.printStackTrace();
-            return;
-        }
-
-        // Bind publisher to registry
-        try{
+            Registry registry = LocateRegistry.createRegistry(RMIConstants.REGISTRY_PORT);
             registry.rebind(bindingName, publisher);
 
-        } catch (RemoteException e) {
-            e.printStackTrace();
-            return;
-        }
-
-        // Set property on publisher
-        try{
-            publisher.registerProperty("game");
+            publisher.registerProperty(RMIConstants.GAME_PROPERTY_NAME);
 
         } catch (RemoteException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.toString(), e);
         }
     }
 
-    public void updateClients(Game newGameStatus) throws RemoteException{
-        this.game = newGameStatus;
-
+    private void updateClients() throws RemoteException {
         try{
-            publisher.inform("game", null, game);
-        }catch (Exception e){
-            System.out.println("Publisher not found!");
+            publisher.inform(RMIConstants.GAME_PROPERTY_NAME, null, game);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, e.toString(), e);
         }
     }
 
     @Override
     public void run() {
         try {
-            updateClients(game);
+            game.update();
+            updateClients();
         } catch (RemoteException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.toString(), e);
         }
     }
 }

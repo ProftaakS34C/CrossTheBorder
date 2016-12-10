@@ -1,16 +1,17 @@
 package com.crosstheborder.game.server;
 
+import com.crosstheborder.game.shared.network.RMIConstants;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by guill on 5-12-2016.
+ * @author Oscar de Leeuw
  */
 public class TestLobbyServer {
 
@@ -26,12 +27,8 @@ public class TestLobbyServer {
         names.add("Pietje");
 
         try{
-            // Waiting for a connection
-            System.out.println("Waiting...");
-            ServerSocket s = new ServerSocket(999);
-
-            // Receive connection
-            Socket incoming = s.accept();
+            // Connect to the GameServer
+            Socket incoming = new Socket(RMIConstants.GAME_SERVER_LOCATION, RMIConstants.SOCKET_PORT);
             System.out.println("Connected");
 
             try{
