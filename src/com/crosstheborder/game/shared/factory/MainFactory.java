@@ -12,7 +12,6 @@ import com.sstengine.team.Team;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 /**
  * @author Oscar de Leeuw
@@ -54,6 +53,7 @@ public class MainFactory {
 
         Game game = new Game(settings, map, teams);
         createAllPlayers(names).forEach(game::addPlayer);
+        game.respawnAllPlayers();
         return game;
     }
 
