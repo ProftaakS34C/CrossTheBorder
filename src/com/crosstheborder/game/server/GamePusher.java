@@ -1,7 +1,7 @@
 package com.crosstheborder.game.server;
 
+import com.crosstheborder.game.shared.CrossTheBorderGame;
 import com.crosstheborder.game.shared.network.RMIConstants;
-import com.sstengine.Game;
 import fontyspublisher.RemotePublisher;
 
 import java.rmi.RemoteException;
@@ -21,9 +21,9 @@ public class GamePusher extends TimerTask {
     private String bindingName;
     private RemotePublisher publisher;
 
-    private Game game;
+    private CrossTheBorderGame game;
 
-    public GamePusher(Game game, String bindingName){
+    public GamePusher(CrossTheBorderGame game, String bindingName) {
         this.game = game;
         this.bindingName = bindingName;
 

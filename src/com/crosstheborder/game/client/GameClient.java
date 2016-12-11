@@ -1,13 +1,110 @@
 package com.crosstheborder.game.client;
 
+import com.crosstheborder.game.shared.IGame;
+import com.crosstheborder.game.shared.ui.PlayerEntityUI;
+import com.sstengine.ui.KeyboardKey;
+import com.sstengine.ui.UI;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+import javafx.util.Duration;
+
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * @author Oscar de Leeuw
  */
-public class GameClient {
+public class GameClient extends Application {
+    private static Logger LOGGER = Logger.getLogger(GameClient.class.getName());
+    private static GameInterfacer gameInterfacer;
 
-    private static GameReceiver gameReceiver;
+    private static String ipAddress = "localhost";
+    private static String publisherName = "HenkArieHansPietje";
+    private static String playerName = "Henk";
 
-    public static void main(String[] args) throws Exception {
-        gameReceiver = new GameReceiver("HenkArieHansPietje");
+    private Canvas canvas;
+    private UI ui;
+
+    private Timeline timeline;
+    private List<KeyCode> activeKeys;
+
+    public static void main(String[] args) {
+        //String ipAddress = args[0];
+        //String publisherName = args[1];
+        //playerName = args[2];
+
+        launch(args);
+    }
+
+    @Override
+    public void stop() throws Exception {
+        gameInterfacer.unsubscribeListener();
+        timeline.stop();
+    }
+
+    @Override
+    public void start(Stage primaryStage) {
+
+        try {
+            gameInterfacer = new GameInterfacer(ipAddress, publisherName, this);
+
+            StackPane root = new StackPane();
+            Scene scene = new Scene(root, 800d, 600d);
+
+            canvas = new Canvas(800d, 600d);
+            root.getChildren().add(canvas);
+            scene.setOnKeyPressed(this::handleKeyPress);
+            scene.setOnKeyReleased(this::handleKeyRelease);
+
+            activeKeys = new ArrayList<>();
+            timeline = new Timeline(new KeyFrame(new Duration(1000 / 10), ae -> sendKeys()));
+            timeline.setCycleCount(Animation.INDEFINITE);
+
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (RemoteException e) {
+            LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
+    }
+
+    public void createUI(IGame game) {
+        try {
+            ui = new PlayerEntityUI(new FXPainter(canvas), gameInterfacer.getGame(), playerName);
+            timeline.play();
+        } catch (RemoteException e) {
+            LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
+    }
+
+    public void render() {
+        ui.render();
+    }
+
+    private void sendKeys() {
+        activeKeys.forEach(x -> ui.sendKey(new KeyboardKey<KeyCode>(x)));
+    }
+
+    private void handleKeyPress(KeyEvent event) {
+        KeyCode code = event.getCode();
+
+        if (!activeKeys.contains(code)) {
+            activeKeys.add(code);
+        }
+    }
+
+    private void handleKeyRelease(KeyEvent event) {
+        KeyCode code = event.getCode();
+        activeKeys.removeIf(x -> x == code);
     }
 }

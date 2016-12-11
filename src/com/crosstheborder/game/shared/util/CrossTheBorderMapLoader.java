@@ -3,6 +3,8 @@ package com.crosstheborder.game.shared.util;
 
 import com.crosstheborder.game.shared.factory.ObstacleFactory;
 import com.crosstheborder.game.shared.factory.TileFactory;
+import com.crosstheborder.game.shared.util.enumeration.CrossTheBorderStaticObstacleType;
+import com.crosstheborder.game.shared.util.enumeration.CrossTheBorderTileType;
 import com.sstengine.country.Country;
 import com.sstengine.map.Map;
 import com.sstengine.map.tile.Tile;

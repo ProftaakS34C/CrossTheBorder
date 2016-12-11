@@ -1,8 +1,8 @@
 package com.crosstheborder.game.server;
 
+import com.crosstheborder.game.shared.CrossTheBorderGame;
 import com.crosstheborder.game.shared.factory.MainFactory;
 import com.crosstheborder.game.shared.network.RMIConstants;
-import com.sstengine.Game;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -27,7 +27,7 @@ public class GameServer {
 
     private static Timer timer;
     private static MainFactory mainFactory = new MainFactory();
-    private static Game game;
+    private static CrossTheBorderGame game;
     private static GamePusher pusher;
 
     private static List<String> names;

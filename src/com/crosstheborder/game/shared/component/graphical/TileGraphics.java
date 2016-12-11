@@ -1,13 +1,12 @@
 package com.crosstheborder.game.shared.component.graphical;
 
-import com.crosstheborder.game.shared.util.CrossTheBorderTileType;
 import com.crosstheborder.game.shared.util.ResourceLocator;
+import com.crosstheborder.game.shared.util.enumeration.CrossTheBorderTileType;
 import com.sstengine.component.graphics.GraphicsComponent;
 import com.sstengine.component.graphics.Painter;
 import com.sstengine.map.tile.Tile;
 
 import java.awt.*;
-import java.io.File;
 
 /**
  * @author guillaime
