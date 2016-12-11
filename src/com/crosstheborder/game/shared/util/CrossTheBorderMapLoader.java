@@ -7,8 +7,6 @@ import com.sstengine.country.Country;
 import com.sstengine.map.Map;
 import com.sstengine.map.tile.Tile;
 import com.sstengine.obstacle.Obstacle;
-import com.sstengine.obstacle.staticobstacle.StaticObstacle;
-import crosstheborder.lib.enumeration.ObstacleType;
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -198,6 +196,10 @@ public class CrossTheBorderMapLoader {
 
                 ret[i][j] = tileFactory.createTile(id, tileType, new Point(i,j));
                 ret[i][j].setObstacle(obstacle);
+
+                if (country != null) {
+                    country.addLand(ret[i][j]);
+                }
             }
         }
 
