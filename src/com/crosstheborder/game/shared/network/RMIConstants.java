@@ -8,5 +8,5 @@ public class RMIConstants {
     public static final String GAME_SERVER_LOCATION = "localhost";
 
     public static final int REGISTRY_PORT = 1099;
-    public static final int SOCKET_PORT = 999;
+    public static final int SOCKET_PORT = 24650;
 }

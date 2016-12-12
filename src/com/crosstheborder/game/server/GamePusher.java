@@ -56,8 +56,10 @@ public class GamePusher extends TimerTask {
     @Override
     public void run() {
         try {
-            game.update();
-            updateClients();
+            if (!game.isDone()) {
+                game.update();
+                updateClients();
+            }
         } catch (RemoteException e) {
             LOGGER.log(Level.SEVERE, e.toString(), e);
         }

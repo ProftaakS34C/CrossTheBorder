@@ -74,6 +74,6 @@ public class GameInterfacer
                 client.render()
         );
 
-        LOGGER.log(Level.INFO, "Received new game status!");
+        //LOGGER.log(Level.INFO, "Received new game status!");
     }
 }
