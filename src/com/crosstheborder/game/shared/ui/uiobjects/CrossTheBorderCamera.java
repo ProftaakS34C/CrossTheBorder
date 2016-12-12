@@ -119,6 +119,10 @@ public class CrossTheBorderCamera extends UIObject<Tile> {
         }
     }
 
+    public void refresh() {
+        recalculateCurrentTiles();
+    }
+
     /**
      * Resizes the camera.
      * Recalculates the tiles the camera should display.

@@ -45,9 +45,13 @@ public class PlayerEntityUI extends UI {
         try {
             System.out.println(game.getElapsedTurns() + "");
             System.out.println(((PlayerEntity) game.getPlayers().stream().filter(x -> x.getName().equals("Henk")).findFirst().get().getPlayable()).getLocation() + "");
+            System.out.println("Score of team " + game.getTeams().get(0).getCountry().getTag() + " is " + game.getTeams().get(0).getScore());
+            System.out.println("Score of team " + game.getTeams().get(1).getCountry().getTag() + " is " + game.getTeams().get(1).getScore());
         } catch (RemoteException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.toString(), e);
         }
+
+        camera.refresh();
         super.render();
     }
 

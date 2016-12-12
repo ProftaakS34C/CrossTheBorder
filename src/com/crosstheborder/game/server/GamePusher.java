@@ -30,9 +30,9 @@ public class GamePusher extends TimerTask {
         createRegistry();
     }
 
-    private void createRegistry(){
+    private void createRegistry() {
         // Created a publisher that will push the game
-        try{
+        try {
             publisher = new RemotePublisher();
 
             Registry registry = LocateRegistry.createRegistry(RMIConstants.REGISTRY_PORT);
@@ -45,23 +45,19 @@ public class GamePusher extends TimerTask {
         }
     }
 
-    private void updateClients() throws RemoteException {
-        try{
+    private void updateClients() {
+        try {
             publisher.inform(RMIConstants.GAME_PROPERTY_NAME, null, game);
-        } catch (Exception e) {
+        } catch (RemoteException e) {
             LOGGER.log(Level.SEVERE, e.toString(), e);
         }
     }
 
     @Override
     public void run() {
-        try {
-            if (!game.isDone()) {
-                game.update();
-                updateClients();
-            }
-        } catch (RemoteException e) {
-            LOGGER.log(Level.SEVERE, e.toString(), e);
+        if (!game.isDone()) {
+            game.update();
+            updateClients();
         }
     }
 }
