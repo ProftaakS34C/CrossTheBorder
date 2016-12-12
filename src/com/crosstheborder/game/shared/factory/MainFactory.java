@@ -3,7 +3,6 @@ package com.crosstheborder.game.shared.factory;
 
 import com.crosstheborder.game.shared.CrossTheBorderGame;
 import com.crosstheborder.game.shared.util.CrossTheBorderGameSettings;
-import com.crosstheborder.game.shared.util.CrossTheBorderMapLoader;
 import com.sstengine.country.Country;
 import com.sstengine.map.Map;
 import com.sstengine.player.Player;

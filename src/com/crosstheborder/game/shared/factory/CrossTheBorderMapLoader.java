@@ -1,8 +1,6 @@
-package com.crosstheborder.game.shared.util;
+package com.crosstheborder.game.shared.factory;
 
 
-import com.crosstheborder.game.shared.factory.ObstacleFactory;
-import com.crosstheborder.game.shared.factory.TileFactory;
 import com.crosstheborder.game.shared.util.enumeration.CrossTheBorderStaticObstacleType;
 import com.crosstheborder.game.shared.util.enumeration.CrossTheBorderTileType;
 import com.sstengine.country.Country;
@@ -198,6 +196,7 @@ public class CrossTheBorderMapLoader {
 
                 ret[i][j] = tileFactory.createTile(id, tileType, new Point(i,j));
                 ret[i][j].setObstacle(obstacle);
+                ret[i][j].setCountry(country); //TODO temp till sstengine 0.0.7
 
                 if (country != null) {
                     country.addLand(ret[i][j]);
