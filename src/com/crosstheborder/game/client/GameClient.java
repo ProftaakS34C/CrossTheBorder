@@ -51,6 +51,7 @@ public class GameClient extends Application {
     public void stop() throws Exception {
         gameInterfacer.unsubscribeListener();
         timeline.stop();
+        System.exit(0);
     }
 
     @Override

@@ -3,11 +3,11 @@ package com.crosstheborder.game.shared.ui;
 import com.crosstheborder.game.client.input.PlayerEntityInputConverter;
 import com.crosstheborder.game.client.input.UIAction;
 import com.crosstheborder.game.shared.IGame;
+import com.crosstheborder.game.shared.ui.uiobjects.CrossTheBorderCamera;
 import com.sstengine.component.graphics.Painter;
 import com.sstengine.player.playerentity.PlayerEntity;
 import com.sstengine.ui.KeyboardKey;
 import com.sstengine.ui.UI;
-import com.sstengine.ui.uiobjects.Camera;
 import com.sstengine.util.enumeration.CardinalDirection;
 import javafx.scene.input.KeyCode;
 
@@ -23,18 +23,18 @@ public class PlayerEntityUI extends UI {
     private static final Logger LOGGER = Logger.getLogger(PlayerEntityUI.class.getName());
 
     private IGame game;
-    private PlayerEntity player;
+    private String name;
 
-    private Camera camera;
+    private CrossTheBorderCamera camera;
 
     public PlayerEntityUI(Painter painter, IGame game, String name) throws RemoteException {
         super(painter);
 
         this.game = game;
-        player = (PlayerEntity) game.getPlayers().stream().filter(x -> x.getName().equals(name)).findFirst().get().getPlayable();
+        this.name = name;
 
-        camera = new Camera(game.getMap(), new Point(0, 0), painter.getWidth(), painter.getHeight(), 40);
-        camera.setCenter(player.getLocation());
+        camera = new CrossTheBorderCamera(game, new Point(0, 0), painter.getWidth(), painter.getHeight(), 40);
+        camera.setCenter(getPlayer().getLocation());
         camera.resize(painter.getWidth(), painter.getHeight());
 
         addUIObject(camera);
@@ -59,7 +59,8 @@ public class PlayerEntityUI extends UI {
             handleUIAction(PlayerEntityInputConverter.getUIActionFromCode(code));
         } else {
             try {
-                game.pushInput(player.getId(), PlayerEntityInputConverter.getMoveDirectionFromCode(code));
+                game.pushInput(getPlayer().getId(), PlayerEntityInputConverter.getMoveDirectionFromCode(code));
+                camera.setCenter(getPlayer().getLocation());
             } catch (RemoteException e) {
                 LOGGER.log(Level.SEVERE, e.toString(), e);
             }
@@ -83,5 +84,17 @@ public class PlayerEntityUI extends UI {
                 camera.setCenter(new Point(cameraLoc.x + CardinalDirection.SOUTH.getCartesianRepresentation().x, cameraLoc.y + CardinalDirection.SOUTH.getCartesianRepresentation().y));
                 break;
         }
+    }
+
+    private PlayerEntity getPlayer() {
+        try {
+            return (PlayerEntity) game.getPlayers().stream().filter(x -> x.getName().equals(name)).findFirst().get().getPlayable();
+        } catch (RemoteException e) {
+            LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
+
+        System.out.println("FATALE ERREUR");
+        System.exit(1);
+        return null;
     }
 }
