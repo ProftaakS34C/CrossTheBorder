@@ -245,7 +245,7 @@ public class Room extends UnicastRemoteObject implements IRoom, Serializable{
      */
     @Override
     public void startGame(String mapName) throws RemoteException{
-        Game game = new Game(mapName);
+/*        Game game = new Game(mapName);
         //game.getSettings(settings);
         ArrayList<User> randomList = new ArrayList<>(users);
         Collections.shuffle(randomList);
@@ -257,6 +257,12 @@ public class Room extends UnicastRemoteObject implements IRoom, Serializable{
         }
 
         game.startGame();
-        this.game = game;
+        this.game = game;*/
+
+//todo start new gameserver and give clients the ip and port to join it.
+        //start server
+        //wait for finish
+        //get ip, set gameStarted = true
+        //clients get ip via getGameServerIp
     }
 }

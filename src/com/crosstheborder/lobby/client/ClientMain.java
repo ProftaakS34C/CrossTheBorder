@@ -82,13 +82,20 @@ public class ClientMain extends Application {
         showLobbyMenu();
     }
 
+    @Override
+    public void stop() throws Exception {
+        user.leaveRoom();
+        super.stop();
+        System.exit(0);
+    }
+
     private void connect() {
-        try{
-            InetAddress serverHost = InetAddress.getLocalHost();
-            ipAddress = serverHost.getHostAddress();
-        } catch (UnknownHostException ex) {
-            System.out.println("Cannot get IP address of server: " + ex.getMessage());
-        }
+//        try{
+//            InetAddress serverHost = InetAddress.getLocalHost();
+//            ipAddress = serverHost.getHostAddress();
+//        } catch (UnknownHostException ex) {
+//            System.out.println("Cannot get IP address of server: " + ex.getMessage());
+//        }
 
         // Locate registry
         try{

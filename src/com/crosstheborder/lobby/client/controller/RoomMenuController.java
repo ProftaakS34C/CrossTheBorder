@@ -39,7 +39,9 @@ public class RoomMenuController {
     @FXML
     private Button addAiButton;
     @FXML
-    private TextField mapNameInputTextField;
+    private TextField mapNameInputTextField; //TODO POLISH change into choicebox with all available maps
+    @FXML
+    private Label labelMapName;
 
     private ClientMain instance;
     private IRoom room;
@@ -60,36 +62,34 @@ public class RoomMenuController {
             startGameButton.setVisible(false);
             lobbyPassInputPasswordField.setVisible(false);
             isPrivateCheckBox.setVisible(false);
-
+            mapNameInputTextField.setVisible(false);
+            labelMapName.setVisible(false);
         }
         pullTimer = new Timer();
         pullTimer.scheduleAtFixedRate(new RoomPuller(this), 0,5000);
     }
 
     @FXML
-    private void textBoxIsPrivate_OnAction(ActionEvent event){
-        if(isPrivateCheckBox.isSelected()){
-            if (!lobbyPassInputPasswordField.getText().trim().equals("") && lobbyPassInputPasswordField.getText() != null) {
-                lobbyPassInputPasswordField.setVisible(false);
-                try {
+    private void isPrivateCheckBox_OnAction(ActionEvent event){
+        try{
+            if(isPrivateCheckBox.isSelected()){
+                if (!lobbyPassInputPasswordField.getText().trim().equals("") && lobbyPassInputPasswordField.getText() != null) {
+                    lobbyPassInputPasswordField.setVisible(false);
                     room.setPassword(lobbyPassInputPasswordField.getText());
-                } catch (RemoteException e) {
-                    e.printStackTrace();
+                }
+                else {
+                    isPrivateCheckBox.setSelected(false);
                 }
             }
             else {
-                isPrivateCheckBox.setSelected(false);
-            }
-        }
-        else {
-            lobbyPassInputPasswordField.setText("");
-            try {
+                lobbyPassInputPasswordField.setText("");
                 room.setPassword("");
-            } catch (RemoteException e) {
-                e.printStackTrace();
+                lobbyPassInputPasswordField.setVisible(true);
             }
-            lobbyPassInputPasswordField.setVisible(true);
+        } catch (RemoteException e){
+            e.printStackTrace();
         }
+
     }
 
     @FXML
@@ -99,7 +99,7 @@ public class RoomMenuController {
 
     @FXML
     private void btnStartGame_OnAction(){
-        //TODO POLISH change into choicebox with all available maps
+
         String mapName = mapNameInputTextField.getText();
 
         try {
@@ -107,7 +107,7 @@ public class RoomMenuController {
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-        instance.showGameScreen();
+
     }
 
     @FXML
