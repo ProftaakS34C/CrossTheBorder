@@ -1,6 +1,6 @@
 package com.crosstheborder.game.shared.factory;
 
-import com.crosstheborder.game.shared.component.graphical.TileGraphics;
+import com.crosstheborder.game.shared.component.graphical.tilegraphics.TileGraphics;
 import com.crosstheborder.game.shared.util.enumeration.CrossTheBorderTileType;
 import com.sstengine.map.tile.Tile;
 

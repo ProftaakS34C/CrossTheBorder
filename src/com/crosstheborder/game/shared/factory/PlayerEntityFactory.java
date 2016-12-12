@@ -1,7 +1,7 @@
 package com.crosstheborder.game.shared.factory;
 
-import com.crosstheborder.game.shared.component.graphical.BorderPatrolGraphics;
-import com.crosstheborder.game.shared.component.graphical.MexicanGraphics;
+import com.crosstheborder.game.shared.component.graphical.playergraphics.BorderPatrolGraphics;
+import com.crosstheborder.game.shared.component.graphical.playergraphics.MexicanGraphics;
 import com.crosstheborder.game.shared.component.physical.BorderPatrolPhysical;
 import com.crosstheborder.game.shared.component.physical.MexicanPhysical;
 import com.sstengine.player.playerentity.PlayerEntity;

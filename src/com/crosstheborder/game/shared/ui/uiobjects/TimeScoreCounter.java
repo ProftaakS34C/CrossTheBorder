@@ -1,31 +1,45 @@
 package com.crosstheborder.game.shared.ui.uiobjects;
 
 import com.crosstheborder.game.shared.IGame;
-import com.sstengine.component.graphics.GraphicsComponent;
+import com.crosstheborder.game.shared.component.graphical.uigraphics.TimeScoreCounterGraphics;
+import com.crosstheborder.game.shared.util.enumeration.CrossTheBorderCountryTag;
 import com.sstengine.ui.UIObject;
 
 import java.awt.*;
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Oscar de Leeuw
  */
 public class TimeScoreCounter extends UIObject {
+    private static Logger LOGGER = Logger.getLogger(TimeScoreCounter.class.getName());
+
     private IGame game;
 
-    public TimeScoreCounter(GraphicsComponent graphics, Rectangle area, int priority) {
-        super(graphics, area, priority);
+    public TimeScoreCounter(Rectangle area, int priority, IGame game) {
+        super(new TimeScoreCounterGraphics(), area, priority);
+        constructor(game);
     }
 
-    public TimeScoreCounter(GraphicsComponent graphics, Rectangle area) {
-        super(graphics, area);
+    public TimeScoreCounter(Rectangle area, IGame game) {
+        super(new TimeScoreCounterGraphics(), area);
+        constructor(game);
     }
 
-    public TimeScoreCounter(GraphicsComponent graphics, Point location, int width, int height) {
-        super(graphics, location, width, height);
+    public TimeScoreCounter(Point location, int width, int height, IGame game) {
+        super(new TimeScoreCounterGraphics(), location, width, height);
+        constructor(game);
     }
 
-    public TimeScoreCounter(GraphicsComponent graphics, Point location, int width, int height, int priority) {
-        super(graphics, location, width, height, priority);
+    public TimeScoreCounter(Point location, int width, int height, int priority, IGame game) {
+        super(new TimeScoreCounterGraphics(), location, width, height, priority);
+        constructor(game);
+    }
+
+    private void constructor(IGame game) {
+        this.game = game;
     }
 
     @Override
@@ -33,7 +47,36 @@ public class TimeScoreCounter extends UIObject {
         return null;
     }
 
-    public IGame getGame() {
-        return game;
+    public int scoreUSA() {
+        try {
+            return game.getTeams().stream().filter(x -> x.getCountry().getTag() == CrossTheBorderCountryTag.USA).findFirst().get().getScore();
+        } catch (RemoteException e) {
+            LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
+
+        return 0;
+    }
+
+    public int scoreMEX() {
+        try {
+            return game.getTeams().stream().filter(x -> x.getCountry().getTag() == CrossTheBorderCountryTag.MEX).findFirst().get().getScore();
+        } catch (RemoteException e) {
+            LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
+
+        return 0;
+    }
+
+    public String remainingTime() {
+        String ret = "";
+
+        try {
+            int remainingTicks = game.getRemainingTurns();
+            ret = String.format("%2$d:%1$2d", (remainingTicks / 5) % 60, (remainingTicks / 5) / 60);
+        } catch (RemoteException e) {
+            LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
+
+        return ret;
     }
 }

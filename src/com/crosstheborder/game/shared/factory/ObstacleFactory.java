@@ -1,12 +1,11 @@
 package com.crosstheborder.game.shared.factory;
 
-import com.crosstheborder.game.shared.component.graphical.*;
+import com.crosstheborder.game.shared.component.graphical.obstaclegraphics.*;
 import com.crosstheborder.game.shared.component.physical.WallPhysical;
 import com.crosstheborder.game.shared.strategy.placement.TrapPlacementStrategy;
 import com.crosstheborder.game.shared.strategy.placement.WallPlacementStrategy;
 import com.crosstheborder.game.shared.util.enumeration.CrossTheBorderPlaceableType;
 import com.crosstheborder.game.shared.util.enumeration.CrossTheBorderStaticObstacleType;
-import com.sstengine.obstacle.Obstacle;
 import com.sstengine.obstacle.placeableobstacle.PlaceableObstacle;
 import com.sstengine.obstacle.staticobstacle.StaticObstacle;
 
@@ -29,7 +28,7 @@ public class ObstacleFactory {
 
     int count = 0;
 
-    public Obstacle createPlaceableObstacle(CrossTheBorderPlaceableType type) {
+    public PlaceableObstacle createPlaceableObstacle(CrossTheBorderPlaceableType type) {
         count++;
 
         switch (type){
@@ -41,7 +40,7 @@ public class ObstacleFactory {
         return null;
     }
 
-    public Obstacle createStaticObstacle(CrossTheBorderStaticObstacleType type){
+    public StaticObstacle createStaticObstacle(CrossTheBorderStaticObstacleType type) {
         count++;
 
         switch (type){

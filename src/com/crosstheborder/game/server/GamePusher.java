@@ -4,6 +4,7 @@ import com.crosstheborder.game.shared.CrossTheBorderGame;
 import com.crosstheborder.game.shared.network.RMIConstants;
 import fontyspublisher.RemotePublisher;
 
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -13,6 +14,7 @@ import java.util.logging.Logger;
 
 /**
  * Created by guill on 6-12-2016.
+ *
  * @author Oscar de Leeuw
  */
 public class GamePusher extends TimerTask {
@@ -20,6 +22,7 @@ public class GamePusher extends TimerTask {
 
     private String bindingName;
     private RemotePublisher publisher;
+    private Registry registry;
 
     private CrossTheBorderGame game;
 
@@ -35,7 +38,7 @@ public class GamePusher extends TimerTask {
         try {
             publisher = new RemotePublisher();
 
-            Registry registry = LocateRegistry.createRegistry(RMIConstants.REGISTRY_PORT);
+            registry = LocateRegistry.createRegistry(RMIConstants.REGISTRY_PORT);
             registry.rebind(bindingName, publisher);
 
             publisher.registerProperty(RMIConstants.GAME_PROPERTY_NAME);
@@ -55,9 +58,24 @@ public class GamePusher extends TimerTask {
 
     @Override
     public void run() {
-        if (!game.isDone()) {
-            game.update();
-            updateClients();
+        game.update();
+        updateClients();
+
+        if (game.isDone()) {
+            LOGGER.log(Level.INFO, "Game is done.");
+
+            try {
+                publisher.unregisterProperty(RMIConstants.GAME_PROPERTY_NAME);
+                LOGGER.log(Level.INFO, "Unbound property.");
+                registry.unbind(bindingName);
+                LOGGER.log(Level.INFO, "Unbound registry.");
+            } catch (RemoteException | NotBoundException e) {
+                LOGGER.log(Level.SEVERE, e.toString(), e);
+            }
+
+            cancel();
+            LOGGER.log(Level.INFO, "Canceled timer.");
+            System.exit(0);
         }
     }
 }

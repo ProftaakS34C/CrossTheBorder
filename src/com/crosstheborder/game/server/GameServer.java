@@ -61,6 +61,7 @@ public class GameServer {
         try{
             ServerSocket serverSocket = new ServerSocket(RMIConstants.SOCKET_PORT);
             LOGGER.log(Level.FINE, "Awaiting connection from lobby server.");
+            serverSocket.setSoTimeout(10000);
 
             try (Socket socket = serverSocket.accept()) {
                 LOGGER.log(Level.FINE, "Got a connection from: " + socket.getInetAddress().getHostAddress());
@@ -82,10 +83,14 @@ public class GameServer {
                 mapName = (String) in.readObject();
             } catch (ClassNotFoundException e) {
                 LOGGER.log(Level.SEVERE, e.toString(), e);
+                System.exit(2);
             }
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, e.toString(), e);
+            System.exit(1);
         }
+
+        //System.exit(0);
     }
 
     private static void setupTimer() {

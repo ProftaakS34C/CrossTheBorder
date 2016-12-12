@@ -18,9 +18,10 @@ public class USACountryInteractionStrategy implements InteractionStrategy {
     @Override
     public void execute(Physical physical, PlayerEntity playerEntity, List<Event> list) {
 
-        if(playerEntity.getTeam().getCountry().getTag() == CrossTheBorderCountryTag.MEX){
+        if (playerEntity.getTeam().getCountry().getTag() == CrossTheBorderCountryTag.MEX) {
             list.add(new ChangeTeamScoreEvent(playerEntity.getTeam(), 1));
             list.add(new ChangePlayerEntityTileEvent(playerEntity, playerEntity.getTeam().getRespawnPoint(playerEntity, new Random())));
+            list.add(new ChangePlayerEntityTileEvent(null, playerEntity.getTile()));
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.crosstheborder.game.shared.component.graphical;
+package com.crosstheborder.game.shared.component.graphical.uigraphics;
 
 import com.crosstheborder.game.shared.ui.uiobjects.CrossTheBorderCamera;
 import com.sstengine.component.graphics.GraphicsComponent;
