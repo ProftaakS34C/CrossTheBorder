@@ -7,6 +7,7 @@ import com.crosstheborder.game.client.input.UIAction;
 import com.crosstheborder.game.shared.IGame;
 import com.crosstheborder.game.shared.ui.uiobjects.CenterMarker;
 import com.crosstheborder.game.shared.ui.uiobjects.CrossTheBorderCamera;
+import com.crosstheborder.game.shared.ui.uiobjects.PlaceableTracker;
 import com.crosstheborder.game.shared.ui.uiobjects.TimeScoreCounter;
 import com.crosstheborder.game.shared.util.enumeration.CrossTheBorderPlaceableType;
 import com.sstengine.component.graphics.Painter;
@@ -33,15 +34,13 @@ public class TrumpUI extends UI {
 
     private CrossTheBorderCamera camera;
     private TimeScoreCounter scoreCounter;
-
-    private CrossTheBorderPlaceableType activeType;
+    private PlaceableTracker placeableTracker;
 
     public TrumpUI(Painter painter, IGame game, String name) {
         super(painter);
 
         this.game = game;
         this.name = name;
-        activeType = CrossTheBorderPlaceableType.WALL;
 
         camera = new CrossTheBorderCamera(game, new Point(0, 0), painter.getWidth(), painter.getHeight(), 40);
         camera.setCenter(new Point(10, 10));
@@ -49,11 +48,15 @@ public class TrumpUI extends UI {
         Rectangle timeCounterRectangle = new Rectangle((painter.getWidth() * 40) / 100, 0, (painter.getWidth() * 20 / 100), (painter.getHeight() * 6) / 100);
         scoreCounter = new TimeScoreCounter(timeCounterRectangle, game);
 
+        Rectangle placeableTrackerRectangle = new Rectangle(painter.getWidth() * 2 / 100, painter.getHeight() * 40 / 100, painter.getWidth() * 5 / 100, painter.getHeight() * 10 / 100);
+        placeableTracker = new PlaceableTracker(placeableTrackerRectangle, getLeader());
+
         CenterMarker centerMarker = new CenterMarker(new Point(painter.getWidth() / 2 - 20, painter.getHeight() / 2), 40, 40);
 
         addUIObject(camera);
         addUIObject(scoreCounter);
         addUIObject(centerMarker);
+        addUIObject(placeableTracker);
     }
 
     @Override
@@ -82,6 +85,8 @@ public class TrumpUI extends UI {
         }*/
 
         camera.refresh();
+        placeableTracker.refresh(getLeader());
+
         super.render();
     }
 
@@ -107,14 +112,14 @@ public class TrumpUI extends UI {
     private void handleTrumpAction(TrumpAction action) throws RemoteException {
         switch (action) {
             case PLACE_OBSTACLE:
-                PlayerInput input = new TrumpInput(activeType, game.getMap().getTile(camera.getCenter()));
+                PlayerInput input = new TrumpInput(placeableTracker.getActiveType(), game.getMap().getTile(camera.getCenter()));
                 game.pushInput(getLeader().getId(), input);
                 break;
             case SWITCH_TO_TRAP:
-                activeType = CrossTheBorderPlaceableType.TRAP;
+                placeableTracker.setActiveType(CrossTheBorderPlaceableType.TRAP);
                 break;
             case SWITCH_TO_WALL:
-                activeType = CrossTheBorderPlaceableType.WALL;
+                placeableTracker.setActiveType(CrossTheBorderPlaceableType.WALL);
                 break;
         }
     }
