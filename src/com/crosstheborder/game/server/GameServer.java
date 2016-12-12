@@ -9,6 +9,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
 import java.util.logging.ConsoleHandler;
@@ -46,7 +48,8 @@ public class GameServer {
         fixLoggerForDebugging();
 
         if (args[0].equals("-m")) {
-            bindingName = args[1];
+            names = new ArrayList<>(Arrays.asList(args[1].split(",")));
+            bindingName = String.join("", args[1].split(","));
             mapName = args[2];
         } else {
             awaitLobbyConnection();
