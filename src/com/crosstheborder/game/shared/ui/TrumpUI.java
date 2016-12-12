@@ -43,7 +43,7 @@ public class TrumpUI extends UI {
         activeType = CrossTheBorderPlaceableType.WALL;
 
         camera = new CrossTheBorderCamera(game, new Point(0, 0), painter.getWidth(), painter.getHeight(), 40);
-        scoreCounter = new TimeScoreCounter(new Point(painter.getWidth() / 4, 0), painter.getWidth() / 2, (painter.getHeight() * 8) / 100, game);
+        scoreCounter = new TimeScoreCounter(new Point((painter.getWidth() * 40) / 100, 0), (painter.getWidth() * 20 / 100), (painter.getHeight() * 6) / 100, game);
 
         camera.setCenter(new Point(10, 10));
 

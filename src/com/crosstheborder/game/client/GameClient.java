@@ -64,9 +64,9 @@ public class GameClient extends Application {
             gameInterfacer = new GameInterfacer(ipAddress, publisherName, this);
 
             StackPane root = new StackPane();
-            Scene scene = new Scene(root, 800d, 600d);
+            Scene scene = new Scene(root, 1080d, 720d);
 
-            canvas = new Canvas(800d, 600d);
+            canvas = new Canvas(1080d, 720d);
             root.getChildren().add(canvas);
             scene.setOnKeyPressed(this::handleKeyPress);
             scene.setOnKeyReleased(this::handleKeyRelease);
@@ -96,7 +96,15 @@ public class GameClient extends Application {
     }
 
     public void render() {
-        ui.render();
+        try {
+            if (gameInterfacer.getGame().isDone()) {
+                timeline.stop();
+            } else {
+                ui.render();
+            }
+        } catch (RemoteException e) {
+            LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
     }
 
     private void sendKeys() {
