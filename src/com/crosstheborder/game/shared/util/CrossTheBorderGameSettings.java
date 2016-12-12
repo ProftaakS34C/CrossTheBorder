@@ -22,7 +22,7 @@ public class CrossTheBorderGameSettings implements GameSettings {
 
     @Override
     public int getTimeLimit() {
-        return 300 * 5;
+        return 10 * 5;
     }
 
     @Override

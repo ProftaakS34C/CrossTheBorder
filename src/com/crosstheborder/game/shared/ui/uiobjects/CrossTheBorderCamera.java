@@ -1,7 +1,7 @@
 package com.crosstheborder.game.shared.ui.uiobjects;
 
 import com.crosstheborder.game.shared.IGame;
-import com.crosstheborder.game.shared.component.graphical.CrossTheBorderCameraGraphics;
+import com.crosstheborder.game.shared.component.graphical.uigraphics.CrossTheBorderCameraGraphics;
 import com.sstengine.map.tile.Tile;
 import com.sstengine.ui.UIObject;
 

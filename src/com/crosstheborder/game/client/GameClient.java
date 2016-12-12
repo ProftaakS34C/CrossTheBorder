@@ -1,5 +1,6 @@
 package com.crosstheborder.game.client;
 
+import com.crosstheborder.game.client.painter.FXPainter;
 import com.crosstheborder.game.shared.IGame;
 import com.crosstheborder.game.shared.ui.PlayerEntityUI;
 import com.crosstheborder.game.shared.ui.TrumpUI;

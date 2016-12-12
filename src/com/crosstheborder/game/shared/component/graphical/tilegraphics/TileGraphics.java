@@ -1,4 +1,4 @@
-package com.crosstheborder.game.shared.component.graphical;
+package com.crosstheborder.game.shared.component.graphical.tilegraphics;
 
 import com.crosstheborder.game.shared.util.ResourceLocator;
 import com.crosstheborder.game.shared.util.enumeration.CrossTheBorderTileType;

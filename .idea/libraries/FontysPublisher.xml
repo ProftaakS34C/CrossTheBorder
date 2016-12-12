@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="FontysPublisher">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/FontysPublisher.jar!/" />
+      <root url="jar://$PROJECT_DIR$/SSTEngine-v0.1.0-alpha.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/SSTEngine-v0.1.0-alpha.jar!/javadoc" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>

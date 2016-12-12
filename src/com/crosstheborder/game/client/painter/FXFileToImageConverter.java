@@ -1,4 +1,4 @@
-package com.crosstheborder.game.client;
+package com.crosstheborder.game.client.painter;
 
 
 import javafx.scene.image.Image;

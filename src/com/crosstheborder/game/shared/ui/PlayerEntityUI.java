@@ -4,6 +4,7 @@ import com.crosstheborder.game.client.input.PlayerEntityInputConverter;
 import com.crosstheborder.game.client.input.UIAction;
 import com.crosstheborder.game.shared.IGame;
 import com.crosstheborder.game.shared.ui.uiobjects.CrossTheBorderCamera;
+import com.crosstheborder.game.shared.ui.uiobjects.TimeScoreCounter;
 import com.sstengine.component.graphics.Painter;
 import com.sstengine.player.playerentity.PlayerEntity;
 import com.sstengine.ui.KeyboardKey;
@@ -26,6 +27,7 @@ public class PlayerEntityUI extends UI {
     private String name;
 
     private CrossTheBorderCamera camera;
+    private TimeScoreCounter scoreCounter;
 
     private boolean centerCamera = true;
 
@@ -36,22 +38,22 @@ public class PlayerEntityUI extends UI {
         this.name = name;
 
         camera = new CrossTheBorderCamera(game, new Point(0, 0), painter.getWidth(), painter.getHeight(), 40);
-        camera.setCenter(getPlayer().getLocation());
-        camera.resize(painter.getWidth(), painter.getHeight());
+        scoreCounter = new TimeScoreCounter(new Point(painter.getWidth() / 4, 0), painter.getWidth() / 2, (painter.getHeight() * 8) / 100, game);
 
         addUIObject(camera);
+        addUIObject(scoreCounter);
     }
 
     @Override
     public void render() {
-        try {
+        /*try {
             System.out.println(game.getElapsedTurns() + "");
             System.out.println(((PlayerEntity) game.getPlayers().stream().filter(x -> x.getName().equals(name)).findFirst().get().getPlayable()).getLocation() + "");
             System.out.println("Score of team " + game.getTeams().get(0).getCountry().getTag() + " is " + game.getTeams().get(0).getScore());
             System.out.println("Score of team " + game.getTeams().get(1).getCountry().getTag() + " is " + game.getTeams().get(1).getScore());
         } catch (RemoteException e) {
             LOGGER.log(Level.SEVERE, e.toString(), e);
-        }
+        }*/
 
         if (centerCamera) {
             camera.setCenter(getPlayer().getLocation());
