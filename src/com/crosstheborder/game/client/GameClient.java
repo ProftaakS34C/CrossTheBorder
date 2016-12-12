@@ -34,7 +34,7 @@ public class GameClient extends Application {
 
     private static String ipAddress = "localhost";
     private static String publisherName = "HenkArieHansPietje";
-    private static String playerName = "Hans";
+    private static String playerName = "Henk";
 
     private Canvas canvas;
     private UI ui;

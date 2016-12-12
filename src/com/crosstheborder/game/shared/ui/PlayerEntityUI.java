@@ -38,7 +38,9 @@ public class PlayerEntityUI extends UI {
         this.name = name;
 
         camera = new CrossTheBorderCamera(game, new Point(0, 0), painter.getWidth(), painter.getHeight(), 40);
-        scoreCounter = new TimeScoreCounter(new Point((painter.getWidth() * 40) / 100, 0), (painter.getWidth() * 20 / 100), (painter.getHeight() * 6) / 100, game);
+
+        Rectangle timeCounterRectangle = new Rectangle((painter.getWidth() * 40) / 100, 0, (painter.getWidth() * 20 / 100), (painter.getHeight() * 6) / 100);
+        scoreCounter = new TimeScoreCounter(timeCounterRectangle, game);
 
         addUIObject(camera);
         addUIObject(scoreCounter);

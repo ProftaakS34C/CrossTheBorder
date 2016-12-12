@@ -5,6 +5,7 @@ import com.crosstheborder.game.client.input.TrumpInput;
 import com.crosstheborder.game.client.input.TrumpInputConverter;
 import com.crosstheborder.game.client.input.UIAction;
 import com.crosstheborder.game.shared.IGame;
+import com.crosstheborder.game.shared.ui.uiobjects.CenterMarker;
 import com.crosstheborder.game.shared.ui.uiobjects.CrossTheBorderCamera;
 import com.crosstheborder.game.shared.ui.uiobjects.TimeScoreCounter;
 import com.crosstheborder.game.shared.util.enumeration.CrossTheBorderPlaceableType;
@@ -43,12 +44,16 @@ public class TrumpUI extends UI {
         activeType = CrossTheBorderPlaceableType.WALL;
 
         camera = new CrossTheBorderCamera(game, new Point(0, 0), painter.getWidth(), painter.getHeight(), 40);
-        scoreCounter = new TimeScoreCounter(new Point((painter.getWidth() * 40) / 100, 0), (painter.getWidth() * 20 / 100), (painter.getHeight() * 6) / 100, game);
-
         camera.setCenter(new Point(10, 10));
+
+        Rectangle timeCounterRectangle = new Rectangle((painter.getWidth() * 40) / 100, 0, (painter.getWidth() * 20 / 100), (painter.getHeight() * 6) / 100);
+        scoreCounter = new TimeScoreCounter(timeCounterRectangle, game);
+
+        CenterMarker centerMarker = new CenterMarker(new Point(painter.getWidth() / 2 - 20, painter.getHeight() / 2), 40, 40);
 
         addUIObject(camera);
         addUIObject(scoreCounter);
+        addUIObject(centerMarker);
     }
 
     @Override
