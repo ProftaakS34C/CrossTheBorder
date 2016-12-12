@@ -27,6 +27,8 @@ public class PlayerEntityUI extends UI {
 
     private CrossTheBorderCamera camera;
 
+    private boolean centerCamera = true;
+
     public PlayerEntityUI(Painter painter, IGame game, String name) throws RemoteException {
         super(painter);
 
@@ -51,7 +53,11 @@ public class PlayerEntityUI extends UI {
             LOGGER.log(Level.SEVERE, e.toString(), e);
         }
 
+        if (centerCamera) {
+            camera.setCenter(getPlayer().getLocation());
+        }
         camera.refresh();
+
         super.render();
     }
 
@@ -64,7 +70,7 @@ public class PlayerEntityUI extends UI {
         } else {
             try {
                 game.pushInput(getPlayer().getId(), PlayerEntityInputConverter.getMoveDirectionFromCode(code));
-                camera.setCenter(getPlayer().getLocation());
+                centerCamera = true;
             } catch (RemoteException e) {
                 LOGGER.log(Level.SEVERE, e.toString(), e);
             }
@@ -77,15 +83,19 @@ public class PlayerEntityUI extends UI {
         switch (action) {
             case CAMERA_UP:
                 camera.setCenter(new Point(cameraLoc.x + CardinalDirection.NORTH.getCartesianRepresentation().x, cameraLoc.y + CardinalDirection.NORTH.getCartesianRepresentation().y));
+                centerCamera = false;
                 break;
             case CAMERA_LEFT:
                 camera.setCenter(new Point(cameraLoc.x + CardinalDirection.WEST.getCartesianRepresentation().x, cameraLoc.y + CardinalDirection.WEST.getCartesianRepresentation().y));
+                centerCamera = false;
                 break;
             case CAMERA_RIGHT:
                 camera.setCenter(new Point(cameraLoc.x + CardinalDirection.EAST.getCartesianRepresentation().x, cameraLoc.y + CardinalDirection.EAST.getCartesianRepresentation().y));
+                centerCamera = false;
                 break;
             case CAMERA_DOWN:
                 camera.setCenter(new Point(cameraLoc.x + CardinalDirection.SOUTH.getCartesianRepresentation().x, cameraLoc.y + CardinalDirection.SOUTH.getCartesianRepresentation().y));
+                centerCamera = false;
                 break;
         }
     }
