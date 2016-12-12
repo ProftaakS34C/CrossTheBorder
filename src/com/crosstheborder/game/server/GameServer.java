@@ -41,10 +41,16 @@ public class GameServer {
         LOGGER.fine("THIS IS ONLY FOR DEBUGGING. SHOULD NOT BE PRESENT IN PRODUCTION CODE.");
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
+        timer = new Timer();
         fixLoggerForDebugging();
 
-        awaitLobbyConnection();
+        if (args[0].equals("-m")) {
+            bindingName = args[1];
+            mapName = args[2];
+        } else {
+            awaitLobbyConnection();
+        }
 
         // Creating new game
         LOGGER.log(Level.FINE, "Creating game...");
@@ -94,7 +100,6 @@ public class GameServer {
     }
 
     private static void setupTimer() {
-        timer = new Timer();
         timer.scheduleAtFixedRate(pusher, 0, 200);
     }
 }

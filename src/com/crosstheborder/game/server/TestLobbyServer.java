@@ -18,7 +18,7 @@ public class TestLobbyServer {
     private static String gameServerBindingName;
     private static String mapName = "mainmap";
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 
         List<String> names = new ArrayList<>();
         names.add("Henk");
@@ -27,6 +27,8 @@ public class TestLobbyServer {
         names.add("Pietje");
 
         try{
+            new Thread(() -> GameServer.main(null)).start();
+
             // Connect to the GameServer
             Socket incoming = new Socket(RMIConstants.GAME_SERVER_LOCATION, RMIConstants.SOCKET_PORT);
             System.out.println("Connected");
@@ -46,6 +48,8 @@ public class TestLobbyServer {
                 // Writing mapName
                 out.writeObject(mapName);
 
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
             } finally {
                 incoming.close();
             }

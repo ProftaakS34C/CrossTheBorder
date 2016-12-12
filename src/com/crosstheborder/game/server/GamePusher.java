@@ -45,6 +45,7 @@ public class GamePusher extends TimerTask {
 
         } catch (RemoteException e) {
             LOGGER.log(Level.SEVERE, e.toString(), e);
+            System.exit(3);
         }
     }
 
