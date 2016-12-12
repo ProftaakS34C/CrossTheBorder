@@ -38,7 +38,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Main class of the application
+ * GameClient class of the application
  */
 public class ClientMain extends Application {
 

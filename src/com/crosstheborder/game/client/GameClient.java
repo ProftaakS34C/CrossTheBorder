@@ -1,41 +1,117 @@
 package com.crosstheborder.game.client;
 
-import com.crosstheborder.game.shared.network.Network;
-import com.crosstheborder.game.shared.network.Packet;
-import com.esotericsoftware.kryonet.Client;
-import com.esotericsoftware.kryonet.Connection;
+import com.crosstheborder.game.shared.IGame;
+import com.crosstheborder.game.shared.ui.PlayerEntityUI;
+import com.crosstheborder.game.shared.ui.TrumpUI;
+import com.sstengine.player.leader.Leader;
+import com.sstengine.ui.KeyboardKey;
+import com.sstengine.ui.UI;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+import javafx.util.Duration;
 
-import java.io.IOException;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Oscar de Leeuw
  */
-public class GameClient {
-    private String ipAdress;
+public class GameClient extends Application {
+    private static Logger LOGGER = Logger.getLogger(GameClient.class.getName());
+    private static GameInterfacer gameInterfacer;
 
-    private Client client;
-    private ClientListener listener;
+    private static String ipAddress = "localhost";
+    private static String publisherName = "HenkArieHansPietje";
+    private static String playerName = "Hans";
 
-    public GameClient(String ipAdress) throws IOException {
-        this.client = new Client();
-        this.ipAdress = ipAdress;
-        this.listener = new ClientListener(this);
+    private Canvas canvas;
+    private UI ui;
 
-        Network.register(client);
-        client.start();
+    private Timeline timeline;
+    private List<KeyCode> activeKeys;
 
-        client.connect(5000, ipAdress, Network.DEFAULT_PORT, Network.DEFAULT_PORT);
+    public static void main(String[] args) {
+        //String ipAddress = args[0];
+        //String publisherName = args[1];
+        //playerName = args[2];
 
-        client.addListener(listener);
+        launch(args);
     }
 
-    public synchronized void sendPacket(Packet packet) {
-        System.out.println("Sending a packet to the server.");
-        client.sendTCP(packet);
+    @Override
+    public void stop() throws Exception {
+        gameInterfacer.unsubscribeListener();
+        timeline.stop();
+        System.exit(0);
     }
 
-    public synchronized void receivePacket(Connection conn, Packet packet) {
-        System.out.println("Got a packet from " + conn.getRemoteAddressTCP().getHostString());
-        System.out.println(packet);
+    @Override
+    public void start(Stage primaryStage) {
+
+        try {
+            gameInterfacer = new GameInterfacer(ipAddress, publisherName, this);
+
+            StackPane root = new StackPane();
+            Scene scene = new Scene(root, 800d, 600d);
+
+            canvas = new Canvas(800d, 600d);
+            root.getChildren().add(canvas);
+            scene.setOnKeyPressed(this::handleKeyPress);
+            scene.setOnKeyReleased(this::handleKeyRelease);
+
+            activeKeys = new ArrayList<>();
+            timeline = new Timeline(new KeyFrame(new Duration(1000 / 10), ae -> sendKeys()));
+            timeline.setCycleCount(Animation.INDEFINITE);
+
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (RemoteException e) {
+            LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
+    }
+
+    public void createUI(IGame game) {
+        try {
+            if (game.getPlayers().stream().filter(x -> x.getName().equals(playerName)).findFirst().get().getPlayable() instanceof Leader) {
+                ui = new TrumpUI(new FXPainter(canvas), game, playerName);
+            } else {
+                ui = new PlayerEntityUI(new FXPainter(canvas), game, playerName);
+            }
+            timeline.play();
+        } catch (RemoteException e) {
+            LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
+    }
+
+    public void render() {
+        ui.render();
+    }
+
+    private void sendKeys() {
+        activeKeys.forEach(x -> ui.sendKey(new KeyboardKey<KeyCode>(x)));
+    }
+
+    private void handleKeyPress(KeyEvent event) {
+        KeyCode code = event.getCode();
+
+        if (!activeKeys.contains(code)) {
+            activeKeys.add(code);
+        }
+    }
+
+    private void handleKeyRelease(KeyEvent event) {
+        KeyCode code = event.getCode();
+        activeKeys.removeIf(x -> x == code);
     }
 }

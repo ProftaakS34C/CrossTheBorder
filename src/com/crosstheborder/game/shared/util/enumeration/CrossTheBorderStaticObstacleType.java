@@ -1,4 +1,4 @@
-package com.crosstheborder.game.shared.util;
+package com.crosstheborder.game.shared.util.enumeration;
 
 import com.sstengine.obstacle.staticobstacle.StaticObstacleType;
 

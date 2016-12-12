@@ -1,9 +1,8 @@
 package com.crosstheborder.game.shared.factory;
 
 
+import com.crosstheborder.game.shared.CrossTheBorderGame;
 import com.crosstheborder.game.shared.util.CrossTheBorderGameSettings;
-import com.crosstheborder.game.shared.util.CrossTheBorderMapLoader;
-import com.sstengine.Game;
 import com.sstengine.country.Country;
 import com.sstengine.map.Map;
 import com.sstengine.player.Player;
@@ -12,7 +11,6 @@ import com.sstengine.team.Team;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 /**
  * @author Oscar de Leeuw
@@ -27,7 +25,7 @@ public class MainFactory {
 
     CrossTheBorderGameSettings settings = new CrossTheBorderGameSettings();
 
-    List<Team> teams;
+    List<Team> teams = new ArrayList<>();
 
     Team usaTeam;
     Team mexTeam;
@@ -37,7 +35,7 @@ public class MainFactory {
 
     Map map;
 
-    public Game createGame(String mapName, List<String> names){
+    public CrossTheBorderGame createGame(String mapName, List<String> names) {
 
         // Creating USA team
         USACountry = countryFactory.createUSA();
@@ -52,8 +50,9 @@ public class MainFactory {
         // Building Map
         map = CrossTheBorderMapLoader.getInstance().buildMap(mapName, USACountry, MEXCountry, obstacleFactory, tileFactory);
 
-        Game game = new Game(settings, map, teams);
+        CrossTheBorderGame game = new CrossTheBorderGame(settings, map, teams);
         createAllPlayers(names).forEach(game::addPlayer);
+        game.respawnAllPlayers();
         return game;
     }
 
