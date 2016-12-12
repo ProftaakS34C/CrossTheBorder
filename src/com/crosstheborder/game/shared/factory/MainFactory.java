@@ -59,7 +59,7 @@ public class MainFactory {
     public Player createNewPlayer(String name, PlayerType type) {
         switch (type) {
             case Trump:
-                //return playerFactory.createUsaLeader(name, usaTeam);
+                return playerFactory.createUsaLeader(name, usaTeam);
             case Mexican:
                 return playerFactory.createMexicanPlayerEntity(name, mexTeam);
             case BorderPatrol:

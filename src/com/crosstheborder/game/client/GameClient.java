@@ -2,6 +2,8 @@ package com.crosstheborder.game.client;
 
 import com.crosstheborder.game.shared.IGame;
 import com.crosstheborder.game.shared.ui.PlayerEntityUI;
+import com.crosstheborder.game.shared.ui.TrumpUI;
+import com.sstengine.player.leader.Leader;
 import com.sstengine.ui.KeyboardKey;
 import com.sstengine.ui.UI;
 import javafx.animation.Animation;
@@ -31,7 +33,7 @@ public class GameClient extends Application {
 
     private static String ipAddress = "localhost";
     private static String publisherName = "HenkArieHansPietje";
-    private static String playerName = "Henk";
+    private static String playerName = "Hans";
 
     private Canvas canvas;
     private UI ui;
@@ -81,7 +83,11 @@ public class GameClient extends Application {
 
     public void createUI(IGame game) {
         try {
-            ui = new PlayerEntityUI(new FXPainter(canvas), gameInterfacer.getGame(), playerName);
+            if (game.getPlayers().stream().filter(x -> x.getName().equals(playerName)).findFirst().get().getPlayable() instanceof Leader) {
+                ui = new TrumpUI(new FXPainter(canvas), game, playerName);
+            } else {
+                ui = new PlayerEntityUI(new FXPainter(canvas), game, playerName);
+            }
             timeline.play();
         } catch (RemoteException e) {
             LOGGER.log(Level.SEVERE, e.toString(), e);
