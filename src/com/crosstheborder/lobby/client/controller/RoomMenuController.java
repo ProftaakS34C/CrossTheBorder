@@ -1,22 +1,26 @@
-package crosstheborder.client.controller;
+package com.crosstheborder.lobby.client.controller;
 
 
-import crosstheborder.client.ClientMain;
-import crosstheborder.lib.Lobby;
+import com.crosstheborder.lobby.client.ClientMain;
+import com.crosstheborder.lobby.client.RoomPuller;
 import crosstheborder.lib.Message;
 import crosstheborder.lib.User;
+import com.crosstheborder.lobby.shared.IRoom;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import java.rmi.RemoteException;
+import java.util.Timer;
+
 /**
- * The controller class of the lobby menu
+ * The controller class of the room menu
  *
  * @author Yannic
  * @author Oscar de Leeuw
  */
-public class LobbyMenuController {
+public class RoomMenuController {
 
     @FXML
     private Button startGameButton;
@@ -38,9 +42,9 @@ public class LobbyMenuController {
     private TextField mapNameInputTextField;
 
     private ClientMain instance;
-    private Lobby lobby;
+    private IRoom room;
     private User user;
-
+    private Timer pullTimer;
     /**
      * This method is used for first time setup of the controller, if the initialize method cannot be used.
      * Sets the main class this controller uses for functions
@@ -50,17 +54,16 @@ public class LobbyMenuController {
     public void setUp(ClientMain instance) {
         this.instance = instance;
         this.user = instance.getUser();
-        this.lobby = this.user.getLobby();
+        this.room = this.user.getRoom();
 
         if (!user.isOwnerOfLobby()) {
             startGameButton.setVisible(false);
             lobbyPassInputPasswordField.setVisible(false);
             isPrivateCheckBox.setVisible(false);
-            addAiButton.setVisible(false);
-        }
 
-        refreshUsersTableView();
-        refreshChatListView();
+        }
+        pullTimer = new Timer();
+        pullTimer.scheduleAtFixedRate(new RoomPuller(this), 0,5000);
     }
 
     @FXML
@@ -68,7 +71,11 @@ public class LobbyMenuController {
         if(isPrivateCheckBox.isSelected()){
             if (!lobbyPassInputPasswordField.getText().trim().equals("") && lobbyPassInputPasswordField.getText() != null) {
                 lobbyPassInputPasswordField.setVisible(false);
-                lobby.setPassword(lobbyPassInputPasswordField.getText());
+                try {
+                    room.setPassword(lobbyPassInputPasswordField.getText());
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
             }
             else {
                 isPrivateCheckBox.setSelected(false);
@@ -76,14 +83,18 @@ public class LobbyMenuController {
         }
         else {
             lobbyPassInputPasswordField.setText("");
-            lobby.setPassword("");
+            try {
+                room.setPassword("");
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
             lobbyPassInputPasswordField.setVisible(true);
         }
     }
 
     @FXML
     private void leaveLobbyButton_OnAction(){
-        leaveLobby();
+        leaveRoom();
     }
 
     @FXML
@@ -91,49 +102,56 @@ public class LobbyMenuController {
         //TODO POLISH change into choicebox with all available maps
         String mapName = mapNameInputTextField.getText();
 
-        lobby.startGame(mapName);
+        try {
+            room.startGame(mapName);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
         instance.showGameScreen();
-    }
-
-    @FXML
-    private void addAiButton_OnAction() {
-        lobby.addAI();
-        refreshUsersTableView();
     }
 
     @FXML
     private void btnChat_OnAction(){
         String chatText = chatInputTextField.getText();
 
-        if (chatText.matches("(<script>alert\\((\\d*|\".*\")\\)</script>)")) {
-            Alert popup = new Alert(Alert.AlertType.INFORMATION);
-            popup.setContentText(chatText.substring(chatText.indexOf('(') + 1, chatText.lastIndexOf(')')).replace('"', '\u0000'));
-            popup.showAndWait();
-        } else {
             Message message = new Message(user, chatText);
-            lobby.addMessage(message);
-        }
+            try {
+                room.addMessage(message);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
 
         chatInputTextField.clear();
         refreshChatListView();
     }
 
     /**
-     * Leaves the current lobby.
+     * Leaves the current room.
      */
-    private void leaveLobby() {
-        user.leaveLobby();
-        instance.showMainMenu();
+    private void leaveRoom() {
+
+        try {
+            room.removeUser(user);
+            user.leaveRoom();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+
+        instance.showLobbyMenu();
     }
 
-    private void refreshChatListView() {
+    public void refreshChatListView() {
         chatListView.getItems().clear();
-        for (Message message : lobby.getMessages()) {
-            chatListView.getItems().add(message);
+        try {
+            for (Message message : room.getMessages()) {
+                chatListView.getItems().add(message);
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
         }
     }
 
-    private void refreshUsersTableView() {
+    public void refreshUsersTableView() {
         usersTableView.getItems().clear();
 
         TableColumn nameColumn = usersTableView.getColumns().get(0);
@@ -142,10 +160,14 @@ public class LobbyMenuController {
 
         nameColumn.setCellValueFactory(new PropertyValueFactory<User, String>("name"));
         ownerColumn.setCellValueFactory(new PropertyValueFactory<User, Boolean>("owner"));
-        computerColumn.setCellValueFactory(new PropertyValueFactory<User, Boolean>("computer"));
+        //computerColumn.setCellValueFactory(new PropertyValueFactory<User, Boolean>("computer"));
 
-        for (User user : lobby.getUsers()) {
-            usersTableView.getItems().add(user);
+        try {
+            for (User user : room.getUsers()) {
+                usersTableView.getItems().add(user);
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
         }
     }
 }

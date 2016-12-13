@@ -1,4 +1,4 @@
-package crosstheborder.client.dialog;
+package com.crosstheborder.lobby.client.dialog;
 
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -35,7 +35,7 @@ public class CreateLobbyDialog {
         TextField playerAmountInput = new TextField();
         playerAmountInput.setPromptText("8");
 
-        gridPane.add(new Label("Lobby Name"), 0, 0);
+        gridPane.add(new Label("Room Name"), 0, 0);
         gridPane.add(lobbyNameInput, 1, 0);
         gridPane.add(new Label("Max Players"), 0, 1);
         gridPane.add(playerAmountInput, 1, 1);

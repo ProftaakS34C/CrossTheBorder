@@ -1,4 +1,4 @@
-package crosstheborder.client;
+package com.crosstheborder.lobby.client;
 
 import crosstheborder.lib.enumeration.MoveDirection;
 import javafx.scene.input.KeyCode;

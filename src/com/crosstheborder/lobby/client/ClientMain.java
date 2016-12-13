@@ -1,16 +1,17 @@
-package crosstheborder.client;
+package com.crosstheborder.lobby.client;
 
 /**
  * @author Oscar
- * @autor Yannic
+ * @author Yannic
  *
  */
 
-import crosstheborder.client.controller.GameScreenController;
-import crosstheborder.client.controller.LayoutController;
-import crosstheborder.client.controller.LobbyMenuController;
-import crosstheborder.client.controller.MainMenuController;
-import crosstheborder.lib.Lobby;
+import com.crosstheborder.lobby.client.controller.GameScreenController;
+import com.crosstheborder.lobby.client.controller.LayoutController;
+import com.crosstheborder.lobby.client.controller.RoomMenuController;
+import com.crosstheborder.lobby.client.controller.LobbyMenuController;
+import com.crosstheborder.lobby.shared.ILobby;
+import com.crosstheborder.lobby.shared.IRoom;
 import crosstheborder.lib.Map;
 import crosstheborder.lib.User;
 import javafx.application.Application;
@@ -24,6 +25,12 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -40,7 +47,10 @@ public class ClientMain extends Application {
     private Stage primaryStage;
     private BorderPane root;
     private User user;
-    private List<Lobby> lobbies = new ArrayList<>();
+    private ILobby lobby;
+    private String ipAddress = "localhost";
+    private Registry registry;
+    private static final String bindingName = "lobby";
 
     /**
      * The main method for the class
@@ -63,10 +73,44 @@ public class ClientMain extends Application {
         initLayout();
         String userName = askForUserName();
         this.user = new User(userName);
+        connect();
+        try {
+            user.setID(lobby.addUser(user));
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        showLobbyMenu();
+    }
 
-        lobbies.add(new Lobby(new User("Henk"), "Mexicaantjes", 6));
+    private void connect() {
+        try{
+            InetAddress serverHost = InetAddress.getLocalHost();
+            ipAddress = serverHost.getHostAddress();
+        } catch (UnknownHostException ex) {
+            System.out.println("Cannot get IP address of server: " + ex.getMessage());
+        }
 
-        showMainMenu();
+        // Locate registry
+        try{
+            registry = LocateRegistry.getRegistry(ipAddress, 1099);
+            System.out.println("Registry found");
+        } catch (RemoteException e) {
+            System.out.println("Cannot locate registry");
+            registry = null;
+        }
+        if(registry != null){
+            try {
+                lobby = (ILobby) registry.lookup(bindingName);
+            } catch (RemoteException e) {
+                lobby = null;
+                e.printStackTrace();
+            } catch (NotBoundException e) {
+                lobby = null;
+                e.printStackTrace();
+            } catch (Exception ex) {
+                System.out.println("Failed Getting lobby!");
+            }
+        }
     }
 
     /**
@@ -76,10 +120,6 @@ public class ClientMain extends Application {
      */
     public User getUser() {
         return user;
-    }
-
-    public List<Lobby> getLobbies() {
-        return new ArrayList<>(lobbies);
     }
 
     /**
@@ -131,13 +171,14 @@ public class ClientMain extends Application {
     /**
      * loads the main menu into the layout
      */
-    public void showMainMenu(){
+    public void showLobbyMenu(){
         Pane menuRoot;
         try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/MainMenu.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/LobbyMenu.fxml"));
             menuRoot = loader.load();
-            MainMenuController controller = loader.getController();
+            LobbyMenuController controller = loader.getController();
             controller.setUp(this);
+            controller.setLobby(lobby);
             root.setCenter(menuRoot);
             primaryStage.setTitle("Main Menu");
         }
@@ -150,15 +191,15 @@ public class ClientMain extends Application {
     /**
      * loads the lobby menu onto the layout
      */
-    public void showLobbyMenu(){
+    public void showRoomMenu(){
         Pane lobbyRoot;
         try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/LobbyMenu.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/RoomMenu.fxml"));
             lobbyRoot = loader.load();
-            LobbyMenuController controller = loader.getController();
+            RoomMenuController controller = loader.getController();
             controller.setUp(this);
             root.setCenter(lobbyRoot);
-            primaryStage.setTitle("Lobby menu");
+            primaryStage.setTitle("Room menu");
         }
         catch (IOException x){
             System.err.println("could not load lobby menu fxml");

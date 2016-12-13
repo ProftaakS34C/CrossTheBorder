@@ -1,6 +1,6 @@
-package crosstheborder.client.controller;
+package com.crosstheborder.lobby.client.controller;
 
-import crosstheborder.client.ClientMain;
+import com.crosstheborder.lobby.client.ClientMain;
 import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -41,17 +41,17 @@ public class LayoutController {
 
     }
     /**
-     * Shows the lobby menu screen, see showLobbyMenu in ClientMain.
+     * Shows the lobby menu screen, see showRoomMenu in ClientMain.
      */
     public void showLobbyScreen(){
-        instance.showLobbyMenu();
+        instance.showRoomMenu();
     }
 
     /**
-     * Shows the main screen, see showMainMenu in ClientMain.
+     * Shows the main screen, see showLobbyMenu in ClientMain.
      */
     public void showMainScreen(){
-        instance.showMainMenu();
+        instance.showLobbyMenu();
     }
 
     /**

@@ -1,8 +1,8 @@
-package crosstheborder.client.controller;
+package com.crosstheborder.lobby.client.controller;
 
-import crosstheborder.client.ClientMain;
-import crosstheborder.client.FXPainter;
-import crosstheborder.client.InputConverter;
+import com.crosstheborder.lobby.client.ClientMain;
+import com.crosstheborder.lobby.client.FXPainter;
+import com.crosstheborder.lobby.client.InputConverter;
 import crosstheborder.lib.Player;
 import crosstheborder.lib.enumeration.MoveDirection;
 import crosstheborder.lib.interfaces.Camera;
@@ -78,8 +78,9 @@ public class GameScreenController {
      * This method is used for first time setup of the controller, if the initialize method cannot be used.
      */
     public void setUp(ClientMain main) {
-        this.game = main.getUser().getLobby().getGame();
-        this.player = main.getUser().getPlayer();
+        //this.game = main.getUser().getRoom().getGame();
+//        this.player = main.getUser().getPlayer();
+        //todo get player to get location and stuff from
         start();
     }
 
@@ -91,7 +92,7 @@ public class GameScreenController {
 
     private void stop() {
         timeline.stop();
-        main.showLobbyMenu();
+        main.showRoomMenu();
     }
 
     private void runGame() {
@@ -100,7 +101,7 @@ public class GameScreenController {
     }
 
     private void draw() {
-        Camera cam = game.getCamera(player.getCameraLocation(), 40, (int) gameCanvas.getWidth(), (int) gameCanvas.getHeight());
-        cam.draw(painter);
+       Camera cam = game.getCamera(player.getCameraLocation(), 40, (int) gameCanvas.getWidth(), (int) gameCanvas.getHeight());
+       cam.draw(painter);
     }
 }

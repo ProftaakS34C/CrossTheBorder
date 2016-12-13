@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.Pane?>
 <Pane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
       minWidth="-Infinity" prefHeight="435.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/8"
-      fx:controller="crosstheborder.client.controller.LobbyMenuController">
+      fx:controller="com.crosstheborder.lobby.client.controller.RoomMenuController">
    <children>
        <ListView fx:id="chatListView" layoutX="385.0" layoutY="178.0" prefHeight="200.0" prefWidth="252.0"/>
        <TableView fx:id="usersTableView" layoutX="14.0" layoutY="13.0" prefHeight="398.0" prefWidth="252.0">
@@ -22,9 +22,7 @@
        <Button fx:id="startGameButton" layoutX="281.0" layoutY="177.0" mnemonicParsing="false"
                onAction="#btnStartGame_OnAction" prefHeight="81.0" prefWidth="88.0" text="Start game"/>
        <Button fx:id="leaveLobbyButton" layoutX="529.0" layoutY="13.0" mnemonicParsing="false"
-               onAction="#leaveLobbyButton_OnAction" prefHeight="25.0" prefWidth="109.0" text="Leave lobby"/>
-       <Button fx:id="addAiButton" layoutX="271.0" layoutY="13.0" mnemonicParsing="false"
-               onAction="#addAiButton_OnAction" text="Add AI"/>
+               onAction="#leaveLobbyButton_OnAction" prefHeight="25.0" prefWidth="109.0" text="Leave room"/>
        <TextField fx:id="mapNameInputTextField" layoutX="271.0" layoutY="70.0"/>
        <Label layoutX="270.0" layoutY="53.0" text="Map name:"/>
    </children>
