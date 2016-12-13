@@ -34,7 +34,7 @@ public class GameClient extends Application {
 
     private static String ipAddress = "localhost";
     private static String publisherName = "HenkArieHansPietje";
-    private static String playerName = "Hans";
+    private static String playerName = "Henk";
 
     private Canvas canvas;
     private UI ui;
@@ -43,9 +43,11 @@ public class GameClient extends Application {
     private List<KeyCode> activeKeys;
 
     public static void main(String[] args) {
-        //String ipAddress = args[0];
-        //String publisherName = args[1];
-        //playerName = args[2];
+        if (args.length > 2) {
+            ipAddress = args[0];
+            publisherName = args[1];
+            playerName = args[2];
+        }
 
         launch(args);
     }
