@@ -102,4 +102,17 @@ public interface IRoom extends Remote{
      */
     boolean checkPassword(String pswd) throws RemoteException;
 
+    /**
+     * This method returns if the game has started on the server
+     * @return a boolean, true if the game has started, false if not.
+     * @throws RemoteException gets thrown when something goes worng remotely.
+     */
+    boolean getGameStarted() throws RemoteException;
+
+    /**
+     * This method gets the data required to connect to the game server, only if the game server is running
+     * @return 2 strings: 1, the ip address and second the binding name for RMI.
+     * @throws RemoteException gets thrown when something goes worng remotely.
+     */
+    String[] getConnectData() throws RemoteException;
 }

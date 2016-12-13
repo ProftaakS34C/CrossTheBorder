@@ -43,9 +43,9 @@ public class GameClient extends Application {
     private List<KeyCode> activeKeys;
 
     public static void main(String[] args) {
-        //String ipAddress = args[0];
-        //String publisherName = args[1];
-        //playerName = args[2];
+        ipAddress = args[0];
+        publisherName = args[1];
+        playerName = args[2];
 
         launch(args);
     }

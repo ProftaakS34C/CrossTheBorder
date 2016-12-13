@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Timer;
 
 /**
@@ -169,5 +170,19 @@ public class RoomMenuController {
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+    }
+
+    public void checkForGameStart() {
+        try{
+            if(room.getGameStarted()){
+                String[] a = room.getConnectData();
+                String[] b = new String[]{a[0], a[1], user.getName()};
+                instance.runGame(b);
+                pullTimer.cancel();
+            }
+        }catch (RemoteException e){
+            e.printStackTrace();
+        }
+
     }
 }

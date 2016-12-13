@@ -6,6 +6,7 @@ package com.crosstheborder.lobby.client;
  *
  */
 
+import com.crosstheborder.game.client.GameClient;
 import com.crosstheborder.lobby.client.controller.GameScreenController;
 import com.crosstheborder.lobby.client.controller.LayoutController;
 import com.crosstheborder.lobby.client.controller.RoomMenuController;
@@ -233,5 +234,15 @@ public class ClientMain extends Application {
             System.err.println("Could not load game screen FXML.");
             LOGGER.log(Level.SEVERE, x.toString(), x);
         }
+    }
+
+    public void runGame(String[] b) {
+        new Thread(() -> {
+            try {
+                GameClient.main(b);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 }

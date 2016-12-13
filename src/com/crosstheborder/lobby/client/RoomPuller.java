@@ -23,6 +23,7 @@ public class RoomPuller extends TimerTask {
         Platform.runLater(() -> {
             controller.refreshChatListView();
             controller.refreshUsersTableView();
+            controller.checkForGameStart();
         });
     }
 }
