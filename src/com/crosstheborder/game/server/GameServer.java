@@ -9,6 +9,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
 import java.util.logging.ConsoleHandler;
@@ -41,10 +43,17 @@ public class GameServer {
         LOGGER.fine("THIS IS ONLY FOR DEBUGGING. SHOULD NOT BE PRESENT IN PRODUCTION CODE.");
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
+        timer = new Timer();
         fixLoggerForDebugging();
 
-        awaitLobbyConnection();
+        if (args[0].equals("-m")) {
+            names = new ArrayList<>(Arrays.asList(args[1].split(",")));
+            bindingName = String.join("", args[1].split(","));
+            mapName = args[2];
+        } else {
+            awaitLobbyConnection();
+        }
 
         // Creating new game
         LOGGER.log(Level.FINE, "Creating game...");
@@ -94,7 +103,6 @@ public class GameServer {
     }
 
     private static void setupTimer() {
-        timer = new Timer();
         timer.scheduleAtFixedRate(pusher, 0, 200);
     }
 }

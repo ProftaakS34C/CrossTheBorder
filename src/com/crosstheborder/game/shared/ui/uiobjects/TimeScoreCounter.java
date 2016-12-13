@@ -72,7 +72,7 @@ public class TimeScoreCounter extends UIObject {
 
         try {
             int remainingTicks = game.getRemainingTurns();
-            ret = String.format("%2$d:%1$2d", (remainingTicks / 5) % 60, (remainingTicks / 5) / 60);
+            ret = String.format("%1$d:%2$02d", (remainingTicks / 5) / 60, (remainingTicks / 5) % 60);
         } catch (RemoteException e) {
             LOGGER.log(Level.SEVERE, e.toString(), e);
         }

@@ -38,7 +38,9 @@ public class PlayerEntityUI extends UI {
         this.name = name;
 
         camera = new CrossTheBorderCamera(game, new Point(0, 0), painter.getWidth(), painter.getHeight(), 40);
-        scoreCounter = new TimeScoreCounter(new Point(painter.getWidth() / 4, 0), painter.getWidth() / 2, (painter.getHeight() * 8) / 100, game);
+
+        Rectangle timeCounterRectangle = new Rectangle((painter.getWidth() * 40) / 100, 0, (painter.getWidth() * 20 / 100), (painter.getHeight() * 6) / 100);
+        scoreCounter = new TimeScoreCounter(timeCounterRectangle, game);
 
         addUIObject(camera);
         addUIObject(scoreCounter);
@@ -46,15 +48,6 @@ public class PlayerEntityUI extends UI {
 
     @Override
     public void render() {
-        /*try {
-            System.out.println(game.getElapsedTurns() + "");
-            System.out.println(((PlayerEntity) game.getPlayers().stream().filter(x -> x.getName().equals(name)).findFirst().get().getPlayable()).getLocation() + "");
-            System.out.println("Score of team " + game.getTeams().get(0).getCountry().getTag() + " is " + game.getTeams().get(0).getScore());
-            System.out.println("Score of team " + game.getTeams().get(1).getCountry().getTag() + " is " + game.getTeams().get(1).getScore());
-        } catch (RemoteException e) {
-            LOGGER.log(Level.SEVERE, e.toString(), e);
-        }*/
-
         if (centerCamera) {
             camera.setCenter(getPlayer().getLocation());
         }

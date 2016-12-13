@@ -1,11 +1,5 @@
 package com.crosstheborder.game.server;
 
-import com.crosstheborder.game.shared.network.RMIConstants;
-
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,10 +9,10 @@ import java.util.List;
  */
 public class TestLobbyServer {
 
-    private static String gameServerBindingName;
+    private static String gameServerBindingName = "Henk,Arie,Hans,Pietje";
     private static String mapName = "mainmap";
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 
         List<String> names = new ArrayList<>();
         names.add("Henk");
@@ -26,7 +20,11 @@ public class TestLobbyServer {
         names.add("Hans");
         names.add("Pietje");
 
-        try{
+        new Thread(() -> GameServer.main(new String[]{"-m", gameServerBindingName, mapName})).start();
+
+        /*try{
+
+
             // Connect to the GameServer
             Socket incoming = new Socket(RMIConstants.GAME_SERVER_LOCATION, RMIConstants.SOCKET_PORT);
             System.out.println("Connected");
@@ -46,12 +44,14 @@ public class TestLobbyServer {
                 // Writing mapName
                 out.writeObject(mapName);
 
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
             } finally {
                 incoming.close();
             }
 
         }catch (IOException e){
             e.printStackTrace();
-        }
+        }*/
     }
 }

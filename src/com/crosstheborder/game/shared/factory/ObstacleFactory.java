@@ -1,6 +1,7 @@
 package com.crosstheborder.game.shared.factory;
 
 import com.crosstheborder.game.shared.component.graphical.obstaclegraphics.*;
+import com.crosstheborder.game.shared.component.physical.TrapPhysical;
 import com.crosstheborder.game.shared.component.physical.WallPhysical;
 import com.crosstheborder.game.shared.strategy.placement.TrapPlacementStrategy;
 import com.crosstheborder.game.shared.strategy.placement.WallPlacementStrategy;
@@ -15,6 +16,7 @@ import com.sstengine.obstacle.staticobstacle.StaticObstacle;
  */
 public class ObstacleFactory {
     WallPhysical wallPhysical = new WallPhysical();
+    TrapPhysical trapPhysical = new TrapPhysical();
 
     WallPlacementStrategy wall = new WallPlacementStrategy();
     WallGraphics wallGraphics = new WallGraphics();
@@ -35,7 +37,7 @@ public class ObstacleFactory {
             case WALL:
                 return new PlaceableObstacle(count, wallPhysical, wallGraphics, wall, type);
             case TRAP:
-                return new PlaceableObstacle(count, wallPhysical, trapGraphics, trap, type);
+                return new PlaceableObstacle(count, trapPhysical, trapGraphics, trap, type);
         }
         return null;
     }

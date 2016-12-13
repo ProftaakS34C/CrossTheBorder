@@ -34,7 +34,7 @@ public class GameClient extends Application {
 
     private static String ipAddress = "localhost";
     private static String publisherName = "HenkArieHansPietje";
-    private static String playerName = "Hans";
+    private static String playerName = "Henk";
 
     private Canvas canvas;
     private UI ui;
@@ -43,9 +43,11 @@ public class GameClient extends Application {
     private List<KeyCode> activeKeys;
 
     public static void main(String[] args) {
-        ipAddress = args[0];
-        publisherName = args[1];
-        playerName = args[2];
+        if (args.length > 2) {
+            ipAddress = args[0];
+            publisherName = args[1];
+            playerName = args[2];
+        }
 
         launch(args);
     }
@@ -64,9 +66,9 @@ public class GameClient extends Application {
             gameInterfacer = new GameInterfacer(ipAddress, publisherName, this);
 
             StackPane root = new StackPane();
-            Scene scene = new Scene(root, 800d, 600d);
+            Scene scene = new Scene(root, 1080d, 720d);
 
-            canvas = new Canvas(800d, 600d);
+            canvas = new Canvas(1080d, 720d);
             root.getChildren().add(canvas);
             scene.setOnKeyPressed(this::handleKeyPress);
             scene.setOnKeyReleased(this::handleKeyRelease);
@@ -96,7 +98,15 @@ public class GameClient extends Application {
     }
 
     public void render() {
-        ui.render();
+        try {
+            if (gameInterfacer.getGame().isDone()) {
+                timeline.stop();
+            } else {
+                ui.render();
+            }
+        } catch (RemoteException e) {
+            LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
     }
 
     private void sendKeys() {

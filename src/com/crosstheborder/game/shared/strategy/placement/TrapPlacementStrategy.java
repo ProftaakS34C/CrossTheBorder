@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class TrapPlacementStrategy implements PlacementStrategy {
     @Override
-    public boolean execute(PlaceableObstacle placeableObstacle, Map<OrdinalDirection, Tile> map, Tile tile) {
-        return true;
+    public boolean execute(PlaceableObstacle caller, Map<OrdinalDirection, Tile> map, Tile tile) {
+        return tile.getObstacle() == null && tile.getPlayerEntity() == null && tile.getCountry() == null;
     }
 }
