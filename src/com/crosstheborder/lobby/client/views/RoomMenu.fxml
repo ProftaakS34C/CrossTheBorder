@@ -1,29 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.Pane?>
-<Pane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-      minWidth="-Infinity" prefHeight="435.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/8"
-      fx:controller="com.crosstheborder.lobby.client.controller.RoomMenuController">
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="435.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.crosstheborder.lobby.client.controller.RoomMenuController">
    <children>
-       <ListView fx:id="chatListView" layoutX="385.0" layoutY="178.0" prefHeight="200.0" prefWidth="252.0"/>
+       <ListView fx:id="chatListView" layoutX="385.0" layoutY="178.0" prefHeight="200.0" prefWidth="252.0" />
        <TableView fx:id="usersTableView" layoutX="14.0" layoutY="13.0" prefHeight="398.0" prefWidth="252.0">
         <columns>
-            <TableColumn prefWidth="123.0" text="Name"/>
-            <TableColumn prefWidth="61.0" text="Owner"/>
-            <TableColumn prefWidth="66.0" text="Computer"/>
+            <TableColumn prefWidth="123.0" text="Name" />
+            <TableColumn prefWidth="61.0" text="Owner" />
+            <TableColumn prefWidth="66.0" text="Computer" />
         </columns>
       </TableView>
-       <TextField fx:id="chatInputTextField" layoutX="385.0" layoutY="386.0" prefHeight="25.0" prefWidth="192.0"/>
-       <CheckBox fx:id="isPrivateCheckBox" layoutX="271.0" layoutY="114.0" mnemonicParsing="false"
-                 onAction="#textBoxIsPrivate_OnAction" text="Set Private"/>
-       <PasswordField fx:id="lobbyPassInputPasswordField" layoutX="271.0" layoutY="131.0"/>
+       <TextField fx:id="chatInputTextField" layoutX="385.0" layoutY="386.0" prefHeight="25.0" prefWidth="192.0" />
+       <CheckBox fx:id="isPrivateCheckBox" layoutX="271.0" layoutY="114.0" mnemonicParsing="false" onAction="#isPrivateCheckBox_OnAction" text="Set Private" />
+       <PasswordField fx:id="lobbyPassInputPasswordField" layoutX="271.0" layoutY="131.0" />
       <Button fx:id="chatButton" layoutX="583.0" layoutY="386.0" mnemonicParsing="false" onAction="#btnChat_OnAction" prefHeight="25.0" prefWidth="51.0" text="Chat" />
-       <Button fx:id="startGameButton" layoutX="281.0" layoutY="177.0" mnemonicParsing="false"
-               onAction="#btnStartGame_OnAction" prefHeight="81.0" prefWidth="88.0" text="Start game"/>
-       <Button fx:id="leaveLobbyButton" layoutX="529.0" layoutY="13.0" mnemonicParsing="false"
-               onAction="#leaveLobbyButton_OnAction" prefHeight="25.0" prefWidth="109.0" text="Leave room"/>
-       <TextField fx:id="mapNameInputTextField" layoutX="271.0" layoutY="70.0"/>
-       <Label layoutX="270.0" layoutY="53.0" text="Map name:"/>
+       <Button fx:id="startGameButton" layoutX="281.0" layoutY="177.0" mnemonicParsing="false" onAction="#btnStartGame_OnAction" prefHeight="81.0" prefWidth="88.0" text="Start game" />
+       <Button fx:id="leaveLobbyButton" layoutX="529.0" layoutY="13.0" mnemonicParsing="false" onAction="#leaveLobbyButton_OnAction" prefHeight="25.0" prefWidth="109.0" text="Leave room" />
+       <TextField fx:id="mapNameInputTextField" layoutX="271.0" layoutY="70.0" />
+       <Label fx:id="labelMapName" layoutX="270.0" layoutY="53.0" text="Map name:" />
    </children>
 </Pane>

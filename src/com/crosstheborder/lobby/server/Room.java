@@ -1,12 +1,15 @@
 package com.crosstheborder.lobby.server;
 
+import com.crosstheborder.game.server.GameServer;
+import com.crosstheborder.game.shared.network.RMIConstants;
 import crosstheborder.lib.Game;
 import crosstheborder.lib.Message;
 import crosstheborder.lib.User;
 import crosstheborder.lib.interfaces.GameSettings;
 import com.crosstheborder.lobby.shared.IRoom;
 
-import java.io.Serializable;
+import java.io.*;
+import java.net.Socket;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
@@ -34,6 +37,8 @@ public class Room extends UnicastRemoteObject implements IRoom, Serializable{
     private Game game;
     private GameSettings settings;
 
+    private String bindingName;
+    private boolean gameStarted;
 
     /**
      * This is the constructor method of the class "Room"
@@ -145,6 +150,14 @@ public class Room extends UnicastRemoteObject implements IRoom, Serializable{
         maxPlayers = value;
     }
 
+    public boolean getGameStarted(){
+        return gameStarted;
+    }
+
+    public String[] getConnectData(){
+        return new String[]{RMIConstants.GAME_SERVER_LOCATION, bindingName};
+    }
+
     /**
      * Adds a user to the array list of users in the room
      *
@@ -245,18 +258,37 @@ public class Room extends UnicastRemoteObject implements IRoom, Serializable{
      */
     @Override
     public void startGame(String mapName) throws RemoteException{
-        Game game = new Game(mapName);
-        //game.getSettings(settings);
-        ArrayList<User> randomList = new ArrayList<>(users);
-        Collections.shuffle(randomList);
 
-        game.addPlayer(new User("Trump")); //TODO TESTING CODE.
+        //TODO START SERVER
 
-        for (User u : randomList) {
-            game.addPlayer(u);
+            //args[0] = -m
+            //args[1] = names with comma
+            //args[2] = mapname
+
+            String names = "";
+            bindingName = "";
+            int i = 1;
+            for (User u: users) {
+                names += u.getName();
+                bindingName += u.getName();
+                if(i < users.size()){
+                    names += ",";
+                }
+                i++;
+            }
+
+            String[] connectString = new String[]{"-m", names, mapName};
+            new Thread(() -> {
+                try {
+                    GameServer.main(connectString);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }).start();
+
+        if (bindingName != null) {
+            gameStarted = true;
         }
 
-        game.startGame();
-        this.game = game;
     }
 }

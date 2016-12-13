@@ -44,6 +44,9 @@ public class GameServer {
     }
 
     public static void main(String[] args) {
+        //args[0] = -m
+        //args[1] = names with comma
+        //args[2] = mapname
         timer = new Timer();
         fixLoggerForDebugging();
 

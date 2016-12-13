@@ -1,17 +1,20 @@
 package com.crosstheborder.lobby.client.controller;
 
 
+import com.crosstheborder.game.client.GameClient;
 import com.crosstheborder.lobby.client.ClientMain;
 import com.crosstheborder.lobby.client.RoomPuller;
 import crosstheborder.lib.Message;
 import crosstheborder.lib.User;
 import com.crosstheborder.lobby.shared.IRoom;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Timer;
 
 /**
@@ -39,12 +42,16 @@ public class RoomMenuController {
     @FXML
     private Button addAiButton;
     @FXML
-    private TextField mapNameInputTextField;
+    private TextField mapNameInputTextField; //TODO POLISH change into choicebox with all available maps
+    @FXML
+    private Label labelMapName;
 
     private ClientMain instance;
     private IRoom room;
     private User user;
     private Timer pullTimer;
+    private boolean hasStarted;
+
     /**
      * This method is used for first time setup of the controller, if the initialize method cannot be used.
      * Sets the main class this controller uses for functions
@@ -60,36 +67,34 @@ public class RoomMenuController {
             startGameButton.setVisible(false);
             lobbyPassInputPasswordField.setVisible(false);
             isPrivateCheckBox.setVisible(false);
-
+            mapNameInputTextField.setVisible(false);
+            labelMapName.setVisible(false);
         }
         pullTimer = new Timer();
         pullTimer.scheduleAtFixedRate(new RoomPuller(this), 0,5000);
     }
 
     @FXML
-    private void textBoxIsPrivate_OnAction(ActionEvent event){
-        if(isPrivateCheckBox.isSelected()){
-            if (!lobbyPassInputPasswordField.getText().trim().equals("") && lobbyPassInputPasswordField.getText() != null) {
-                lobbyPassInputPasswordField.setVisible(false);
-                try {
+    private void isPrivateCheckBox_OnAction(ActionEvent event){
+        try{
+            if(isPrivateCheckBox.isSelected()){
+                if (!lobbyPassInputPasswordField.getText().trim().equals("") && lobbyPassInputPasswordField.getText() != null) {
+                    lobbyPassInputPasswordField.setVisible(false);
                     room.setPassword(lobbyPassInputPasswordField.getText());
-                } catch (RemoteException e) {
-                    e.printStackTrace();
+                }
+                else {
+                    isPrivateCheckBox.setSelected(false);
                 }
             }
             else {
-                isPrivateCheckBox.setSelected(false);
-            }
-        }
-        else {
-            lobbyPassInputPasswordField.setText("");
-            try {
+                lobbyPassInputPasswordField.setText("");
                 room.setPassword("");
-            } catch (RemoteException e) {
-                e.printStackTrace();
+                lobbyPassInputPasswordField.setVisible(true);
             }
-            lobbyPassInputPasswordField.setVisible(true);
+        } catch (RemoteException e){
+            e.printStackTrace();
         }
+
     }
 
     @FXML
@@ -99,7 +104,7 @@ public class RoomMenuController {
 
     @FXML
     private void btnStartGame_OnAction(){
-        //TODO POLISH change into choicebox with all available maps
+
         String mapName = mapNameInputTextField.getText();
 
         try {
@@ -107,7 +112,7 @@ public class RoomMenuController {
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-        instance.showGameScreen();
+
     }
 
     @FXML
@@ -170,4 +175,32 @@ public class RoomMenuController {
             e.printStackTrace();
         }
     }
+
+    public void checkForGameStart() {
+        try{
+            if(room.getGameStarted() && !hasStarted){
+                String[] connectData = room.getConnectData();
+                String[] gameClientStartup = new String[]{connectData[0], connectData[1], user.getName()};
+                runGame(gameClientStartup);
+                hasStarted = true;
+                pullTimer.purge();
+            }
+        }catch (RemoteException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public void runGame(String[] b) {
+        new Thread(() -> {
+            try {
+                Runtime runtime = Runtime.getRuntime();
+                runtime.exec("out/artifacts/CrossTheBorder_jar2/GameClient.jar");
+                //Platform.runLater(() ->  GameClient.main(b));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
 }

@@ -42,7 +42,12 @@ public class GamePusher extends TimerTask {
         try {
             publisher = new RemotePublisher();
 
-            registry = LocateRegistry.createRegistry(RMIConstants.REGISTRY_PORT);
+            try {
+                registry = LocateRegistry.getRegistry(RMIConstants.REGISTRY_PORT);
+            } catch (RemoteException e) {
+                registry = LocateRegistry.createRegistry(RMIConstants.REGISTRY_PORT);
+            }
+
             registry.rebind(bindingName, publisher);
 
             publisher.registerProperty(RMIConstants.GAME_PROPERTY_NAME);

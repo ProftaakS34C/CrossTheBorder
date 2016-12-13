@@ -6,6 +6,7 @@ package com.crosstheborder.lobby.client;
  *
  */
 
+import com.crosstheborder.game.client.GameClient;
 import com.crosstheborder.lobby.client.controller.GameScreenController;
 import com.crosstheborder.lobby.client.controller.LayoutController;
 import com.crosstheborder.lobby.client.controller.RoomMenuController;
@@ -82,13 +83,20 @@ public class ClientMain extends Application {
         showLobbyMenu();
     }
 
+    @Override
+    public void stop() throws Exception {
+        user.leaveRoom();
+        super.stop();
+        System.exit(0);
+    }
+
     private void connect() {
-        try{
-            InetAddress serverHost = InetAddress.getLocalHost();
-            ipAddress = serverHost.getHostAddress();
-        } catch (UnknownHostException ex) {
-            System.out.println("Cannot get IP address of server: " + ex.getMessage());
-        }
+//        try{
+//            InetAddress serverHost = InetAddress.getLocalHost();
+//            ipAddress = serverHost.getHostAddress();
+//        } catch (UnknownHostException ex) {
+//            System.out.println("Cannot get IP address of server: " + ex.getMessage());
+//        }
 
         // Locate registry
         try{
@@ -227,4 +235,5 @@ public class ClientMain extends Application {
             LOGGER.log(Level.SEVERE, x.toString(), x);
         }
     }
+
 }

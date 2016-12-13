@@ -1,12 +1,9 @@
 <component name="libraryTable">
   <library name="FontysPublisher">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/FontysPublisher.jar!/" />
-      <root url="jar://$PROJECT_DIR$/SSTEngine-v0.1.0-alpha.jar!/" />
+      <root url="jar://$USER_HOME$/Dropbox/S3/Game/FontysPublisher.jar!/" />
     </CLASSES>
-    <JAVADOC>
-      <root url="jar://$PROJECT_DIR$/SSTEngine-v0.1.0-alpha.jar!/javadoc" />
-    </JAVADOC>
+    <JAVADOC />
     <SOURCES />
   </library>
 </component>
