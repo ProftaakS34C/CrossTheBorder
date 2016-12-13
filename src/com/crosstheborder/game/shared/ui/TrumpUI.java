@@ -11,6 +11,7 @@ import com.crosstheborder.game.shared.ui.uiobjects.PlaceableTracker;
 import com.crosstheborder.game.shared.ui.uiobjects.TimeScoreCounter;
 import com.crosstheborder.game.shared.util.enumeration.CrossTheBorderPlaceableType;
 import com.sstengine.component.graphics.Painter;
+import com.sstengine.map.Map;
 import com.sstengine.player.PlayerInput;
 import com.sstengine.player.leader.Leader;
 import com.sstengine.ui.KeyboardKey;
@@ -30,19 +31,21 @@ public class TrumpUI extends UI {
     private static Logger LOGGER = Logger.getLogger(TrumpUI.class.getName());
 
     private IGame game;
+    private Map map;
     private String name;
 
     private CrossTheBorderCamera camera;
     private TimeScoreCounter scoreCounter;
     private PlaceableTracker placeableTracker;
 
-    public TrumpUI(Painter painter, IGame game, String name) {
+    public TrumpUI(Painter painter, IGame game, String name) throws RemoteException {
         super(painter);
 
         this.game = game;
+        this.map = game.getMap();
         this.name = name;
 
-        camera = new CrossTheBorderCamera(game, new Point(0, 0), painter.getWidth(), painter.getHeight(), 40);
+        camera = new CrossTheBorderCamera(map, new Point(0, 0), painter.getWidth(), painter.getHeight(), 40);
         camera.setCenter(new Point(10, 10));
 
         Rectangle timeCounterRectangle = new Rectangle((painter.getWidth() * 40) / 100, 0, (painter.getWidth() * 20 / 100), (painter.getHeight() * 6) / 100);
@@ -76,15 +79,13 @@ public class TrumpUI extends UI {
 
     @Override
     public void render() {
-        /*try {
-            System.out.println(game.getElapsedTurns() + "");
-            System.out.println("Score of team " + game.getTeams().get(0).getCountry().getTag() + " is " + game.getTeams().get(0).getScore());
-            System.out.println("Score of team " + game.getTeams().get(1).getCountry().getTag() + " is " + game.getTeams().get(1).getScore());
+        try {
+            map = game.getMap();
         } catch (RemoteException e) {
             LOGGER.log(Level.SEVERE, e.toString(), e);
-        }*/
+        }
 
-        camera.refresh();
+        camera.refresh(map);
         placeableTracker.refresh(getLeader());
 
         super.render();

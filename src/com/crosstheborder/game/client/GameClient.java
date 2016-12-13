@@ -54,8 +54,14 @@ public class GameClient extends Application {
 
     @Override
     public void stop() throws Exception {
-        gameInterfacer.unsubscribeListener();
-        timeline.stop();
+        try {
+            gameInterfacer.unsubscribeListener();
+            timeline.stop();
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, e.toString(), e);
+            System.exit(1);
+        }
+
         System.exit(0);
     }
 

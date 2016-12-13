@@ -6,6 +6,7 @@ import com.crosstheborder.game.shared.IGame;
 import com.crosstheborder.game.shared.ui.uiobjects.CrossTheBorderCamera;
 import com.crosstheborder.game.shared.ui.uiobjects.TimeScoreCounter;
 import com.sstengine.component.graphics.Painter;
+import com.sstengine.map.Map;
 import com.sstengine.player.playerentity.PlayerEntity;
 import com.sstengine.ui.KeyboardKey;
 import com.sstengine.ui.UI;
@@ -24,6 +25,7 @@ public class PlayerEntityUI extends UI {
     private static final Logger LOGGER = Logger.getLogger(PlayerEntityUI.class.getName());
 
     private IGame game;
+    private Map map;
     private String name;
 
     private CrossTheBorderCamera camera;
@@ -35,9 +37,10 @@ public class PlayerEntityUI extends UI {
         super(painter);
 
         this.game = game;
+        this.map = game.getMap();
         this.name = name;
 
-        camera = new CrossTheBorderCamera(game, new Point(0, 0), painter.getWidth(), painter.getHeight(), 40);
+        camera = new CrossTheBorderCamera(map, new Point(0, 0), painter.getWidth(), painter.getHeight(), 40);
 
         Rectangle timeCounterRectangle = new Rectangle((painter.getWidth() * 40) / 100, 0, (painter.getWidth() * 20 / 100), (painter.getHeight() * 6) / 100);
         scoreCounter = new TimeScoreCounter(timeCounterRectangle, game);
@@ -48,10 +51,17 @@ public class PlayerEntityUI extends UI {
 
     @Override
     public void render() {
+        try {
+            map = game.getMap();
+        } catch (RemoteException e) {
+            LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
+
         if (centerCamera) {
             camera.setCenter(getPlayer().getLocation());
         }
-        camera.refresh();
+
+        camera.refresh(map);
 
         super.render();
     }

@@ -4,6 +4,10 @@ import com.crosstheborder.game.shared.CrossTheBorderGame;
 import com.crosstheborder.game.shared.network.RMIConstants;
 import fontyspublisher.RemotePublisher;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -78,5 +82,25 @@ public class GamePusher extends TimerTask {
             LOGGER.log(Level.INFO, "Canceled timer.");
             System.exit(0);
         }
+
+        //testSize(game.getMap(), "the map");
+        //testSize(game.getMap().getTile(20,20), "a tile");
+        //testSize(game.getMap().getTile(0,0).getObstacle(), "an obstacle");
+    }
+
+    private void testSize(Object object, String message) {
+        File temp = new File("temp.dat");
+        temp.deleteOnExit();
+
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(temp))) {
+            oos.writeObject(object);
+
+            LOGGER.log(Level.INFO, "Amount of bytes for " + message + ": " + temp.length());
+            oos.close();
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
+
+        temp.delete();
     }
 }

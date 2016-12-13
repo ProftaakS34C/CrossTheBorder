@@ -9,6 +9,7 @@ import java.awt.*;
  * @author Oscar de Leeuw
  */
 public class CenterMarker extends UIObject {
+
     public CenterMarker(Rectangle area, int priority) {
         super(new CenterMarkerGraphics(), area, priority);
     }

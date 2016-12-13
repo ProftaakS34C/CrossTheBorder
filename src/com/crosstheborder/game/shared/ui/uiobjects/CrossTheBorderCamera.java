@@ -1,15 +1,13 @@
 package com.crosstheborder.game.shared.ui.uiobjects;
 
-import com.crosstheborder.game.shared.IGame;
 import com.crosstheborder.game.shared.component.graphical.uigraphics.CrossTheBorderCameraGraphics;
+import com.sstengine.map.Map;
 import com.sstengine.map.tile.Tile;
 import com.sstengine.ui.UIObject;
 
 import java.awt.*;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -22,7 +20,7 @@ import java.util.logging.Logger;
 public class CrossTheBorderCamera extends UIObject<Tile> {
     private static final Logger LOGGER = Logger.getLogger(CrossTheBorderCamera.class.getName());
 
-    private IGame game;
+    private Map map;
     private Point center;
     private int tileWidth;
 
@@ -40,12 +38,12 @@ public class CrossTheBorderCamera extends UIObject<Tile> {
      * @param location     The location where the Camera will be made.
      * @param cameraWidth  The width of the camera in pixels.
      * @param cameraHeight The height of the camera in pixels.
-     * @param game         The map of the game.
+     * @param map          The map of the game.
      */
-    public CrossTheBorderCamera(IGame game, Point location, int cameraWidth, int cameraHeight, int tileWidth) {
+    public CrossTheBorderCamera(Map map, Point location, int cameraWidth, int cameraHeight, int tileWidth) {
         super(new CrossTheBorderCameraGraphics(), location, cameraWidth, cameraHeight);
         this.tileWidth = tileWidth;
-        this.game = game;
+        this.map = map;
         this.currentTiles = new ArrayList<>();
 
         setCenter(new Point(0, 0));
@@ -103,11 +101,7 @@ public class CrossTheBorderCamera extends UIObject<Tile> {
 
         Tile[][] tiles = new Tile[0][];
 
-        try {
-            tiles = game.getMap().getAllTiles();
-        } catch (RemoteException e) {
-            LOGGER.log(Level.SEVERE, e.toString(), e);
-        }
+        tiles = map.getAllTiles();
 
         currentTiles.clear();
 
@@ -119,7 +113,8 @@ public class CrossTheBorderCamera extends UIObject<Tile> {
         }
     }
 
-    public void refresh() {
+    public void refresh(Map map) {
+        this.map = map;
         recalculateCurrentTiles();
     }
 
@@ -153,13 +148,8 @@ public class CrossTheBorderCamera extends UIObject<Tile> {
         int xOffset = x / tileWidth;
         int yOffset = y / tileWidth;
 
-        try {
-            return game.getMap().getTile(xStart + xOffset, yStart + yOffset);
-        } catch (RemoteException e) {
-            LOGGER.log(Level.SEVERE, e.toString(), e);
-        }
 
-        return null;
+        return map.getTile(xStart + xOffset, yStart + yOffset);
     }
 }
 
