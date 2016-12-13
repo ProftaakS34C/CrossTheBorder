@@ -236,13 +236,4 @@ public class ClientMain extends Application {
         }
     }
 
-    public void runGame(String[] b) {
-        new Thread(() -> {
-            try {
-                GameClient.main(b);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();
-    }
 }

@@ -258,69 +258,37 @@ public class Room extends UnicastRemoteObject implements IRoom, Serializable{
      */
     @Override
     public void startGame(String mapName) throws RemoteException{
-/*        Game game = new Game(mapName);
-        //game.getSettings(settings);
-        ArrayList<User> randomList = new ArrayList<>(users);
-        Collections.shuffle(randomList);
-
-        game.addPlayer(new User("Trump")); //TODO TESTING CODE.
-
-        for (User u : randomList) {
-            game.addPlayer(u);
-        }
-
-        game.startGame();
-        this.game = game;*/
 
         //TODO START SERVER
-        // Connecting to gameServer with sockets
-        try {
-//            ProcessBuilder pb = new ProcessBuilder("java", "-jar", "/out/artifacts/CrossTheBorder_jar/GameServer.jar");
-//            pb.directory(new File("out/artifacts/server"));
-//            Process process = pb.start();
-//            if(process.isAlive()){
-//                System.out.println("game server running");
-//            }
+
+            //args[0] = -m
+            //args[1] = names with comma
+            //args[2] = mapname
+
+            String names = "";
+            bindingName = "";
+            int i = 1;
+            for (User u: users) {
+                names += u.getName();
+                bindingName += u.getName();
+                if(i < users.size()){
+                    names += ",";
+                }
+                i++;
+            }
+
+            String[] connectString = new String[]{"-m", names, mapName};
             new Thread(() -> {
                 try {
-                    GameServer.main(null);
+                    GameServer.main(connectString);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }).start();
-            //Process process = Runtime.getRuntime().exec("java -jar /out/artifacts/CrossTheBorder_jar2/GameServer.jar");
-            Socket socket = new Socket(RMIConstants.GAME_SERVER_LOCATION, RMIConstants.SOCKET_PORT);
-
-            try {
-                // Creating output + input stream
-                ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-
-                // Put names in a list
-                List<String> names = users.stream().map(User::getName).collect(Collectors.toList());
-
-                // Sending names
-                out.writeObject(names);
-
-                // Getting bindingName
-                bindingName = (String) in.readObject();
-
-                // Sending mapname
-                out.writeObject(mapName);
-            } finally {
-                socket.close();
-            }
-        }catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
 
         if (bindingName != null) {
             gameStarted = true;
         }
-
-        //get ip, set gameStarted = true
-        //clients get ip via getGameServerIp
-
 
     }
 }

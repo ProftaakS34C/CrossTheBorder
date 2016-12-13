@@ -1,11 +1,13 @@
 package com.crosstheborder.lobby.client.controller;
 
 
+import com.crosstheborder.game.client.GameClient;
 import com.crosstheborder.lobby.client.ClientMain;
 import com.crosstheborder.lobby.client.RoomPuller;
 import crosstheborder.lib.Message;
 import crosstheborder.lib.User;
 import com.crosstheborder.lobby.shared.IRoom;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -48,6 +50,8 @@ public class RoomMenuController {
     private IRoom room;
     private User user;
     private Timer pullTimer;
+    private boolean hasStarted;
+
     /**
      * This method is used for first time setup of the controller, if the initialize method cannot be used.
      * Sets the main class this controller uses for functions
@@ -174,15 +178,29 @@ public class RoomMenuController {
 
     public void checkForGameStart() {
         try{
-            if(room.getGameStarted()){
-                String[] a = room.getConnectData();
-                String[] b = new String[]{a[0], a[1], user.getName()};
-                instance.runGame(b);
-                pullTimer.cancel();
+            if(room.getGameStarted() && !hasStarted){
+                String[] connectData = room.getConnectData();
+                String[] gameClientStartup = new String[]{connectData[0], connectData[1], user.getName()};
+                runGame(gameClientStartup);
+                hasStarted = true;
+                pullTimer.purge();
             }
         }catch (RemoteException e){
             e.printStackTrace();
         }
 
     }
+
+    public void runGame(String[] b) {
+        new Thread(() -> {
+            try {
+                Runtime runtime = Runtime.getRuntime();
+                runtime.exec("out/artifacts/CrossTheBorder_jar2/GameClient.jar");
+                //Platform.runLater(() ->  GameClient.main(b));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
 }
