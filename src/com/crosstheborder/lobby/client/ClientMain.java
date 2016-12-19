@@ -13,6 +13,7 @@ import com.crosstheborder.lobby.client.controller.RoomMenuController;
 import com.crosstheborder.lobby.client.controller.LobbyMenuController;
 import com.crosstheborder.lobby.shared.ILobby;
 import com.crosstheborder.lobby.shared.IRoom;
+import com.crosstheborder.lobby.shared.RMIConstants;
 import crosstheborder.lib.Map;
 import crosstheborder.lib.User;
 import javafx.application.Application;
@@ -49,9 +50,7 @@ public class ClientMain extends Application {
     private BorderPane root;
     private User user;
     private ILobby lobby;
-    private String ipAddress = "localhost";
     private Registry registry;
-    private static final String bindingName = "lobby";
 
     /**
      * The main method for the class
@@ -91,16 +90,10 @@ public class ClientMain extends Application {
     }
 
     private void connect() {
-//        try{
-//            InetAddress serverHost = InetAddress.getLocalHost();
-//            ipAddress = serverHost.getHostAddress();
-//        } catch (UnknownHostException ex) {
-//            System.out.println("Cannot get IP address of server: " + ex.getMessage());
-//        }
 
         // Locate registry
         try{
-            registry = LocateRegistry.getRegistry(ipAddress, 1099);
+            registry = LocateRegistry.getRegistry(RMIConstants.LOBBY_SERVER_LOCATION, 1099);
             System.out.println("Registry found");
         } catch (RemoteException e) {
             System.out.println("Cannot locate registry");
@@ -108,7 +101,7 @@ public class ClientMain extends Application {
         }
         if(registry != null){
             try {
-                lobby = (ILobby) registry.lookup(bindingName);
+                lobby = (ILobby) registry.lookup(RMIConstants.LOBBY_PROPERTY_NAME);
             } catch (RemoteException e) {
                 lobby = null;
                 e.printStackTrace();
