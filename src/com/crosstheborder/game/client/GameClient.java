@@ -32,9 +32,9 @@ public class GameClient extends Application {
     private static Logger LOGGER = Logger.getLogger(GameClient.class.getName());
     private static GameInterfacer gameInterfacer;
 
-    private static String ipAddress = "localhost";
-    private static String publisherName = "HenkArieHansPietje";
-    private static String playerName = "Henk";
+    private static String ipAddress;
+    private static String publisherName;
+    private static String playerName;
 
     private Canvas canvas;
     private UI ui;
@@ -43,16 +43,12 @@ public class GameClient extends Application {
     private List<KeyCode> activeKeys;
 
     public static void main(String[] args) {
-        if (args.length > 2) {
-            ipAddress = args[0];
-            publisherName = args[1];
-            playerName = args[2];
-        }
+        setup(args);
 
         launch(args);
     }
 
-    public void setup(String[] args){
+    public static void setup(String[] args){
         if (args.length > 2) {
             ipAddress = args[0];
             publisherName = args[1];
