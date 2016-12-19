@@ -93,7 +93,7 @@ public class ClientMain extends Application {
 
         // Locate registry
         try{
-            registry = LocateRegistry.getRegistry(RMIConstants.LOBBY_SERVER_LOCATION, 1099);
+            registry = LocateRegistry.getRegistry(RMIConstants.LOBBY_SERVER_LOCATION, RMIConstants.REGISTRY_PORT);
             System.out.println("Registry found");
         } catch (RemoteException e) {
             System.out.println("Cannot locate registry");
