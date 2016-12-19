@@ -52,6 +52,15 @@ public class GameClient extends Application {
         launch(args);
     }
 
+    public void setup(String[] args){
+        if (args.length > 2) {
+            ipAddress = args[0];
+            publisherName = args[1];
+            playerName = args[2];
+        }
+
+    }
+
     @Override
     public void stop() throws Exception {
         try {

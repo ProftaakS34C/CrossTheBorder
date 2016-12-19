@@ -7,11 +7,13 @@ import com.crosstheborder.lobby.client.RoomPuller;
 import crosstheborder.lib.Message;
 import crosstheborder.lib.User;
 import com.crosstheborder.lobby.shared.IRoom;
+import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -181,9 +183,10 @@ public class RoomMenuController {
             if(room.getGameStarted() && !hasStarted){
                 String[] connectData = room.getConnectData();
                 String[] gameClientStartup = new String[]{connectData[0], connectData[1], user.getName()};
+                pullTimer.purge();
                 runGame(gameClientStartup);
                 hasStarted = true;
-                pullTimer.purge();
+
             }
         }catch (RemoteException e){
             e.printStackTrace();
@@ -192,15 +195,19 @@ public class RoomMenuController {
     }
 
     public void runGame(String[] b) {
-        new Thread(() -> {
+        //new Thread(() -> {
             try {
-                Runtime runtime = Runtime.getRuntime();
-                runtime.exec("out/artifacts/CrossTheBorder_jar2/GameClient.jar");
+                //Runtime runtime = Runtime.getRuntime();
+                //runtime.exec("out/artifacts/CrossTheBorder_jar2/GameClient.jar");
                 //Platform.runLater(() ->  GameClient.main(b));
+                //Application.launch(GameClient.class, b);
+                GameClient gc = new GameClient();
+                gc.setup(b);
+                gc.start(new Stage());
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }).start();
+        //}).start();
     }
 
 }
