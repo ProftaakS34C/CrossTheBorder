@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -44,15 +43,18 @@ public class GamePusher extends TimerTask {
             publisher = new RemotePublisher();
 
             try {
-                registry = LocateRegistry.getRegistry(RMIConstants.REGISTRY_PORT);
-                //registry = LocateRegistry.createRegistry(RMIConstants.REGISTRY_PORT);
-            } catch (RemoteException e) {
+                //registry = LocateRegistry.getRegistry(RMIConstants.REGISTRY_PORT);
                 registry = LocateRegistry.createRegistry(RMIConstants.REGISTRY_PORT);
+            } catch (RemoteException e) {
+                LOGGER.log(Level.SEVERE, e.toString(), e);
+                //registry = LocateRegistry.createRegistry(RMIConstants.REGISTRY_PORT);
+                registry = LocateRegistry.getRegistry(RMIConstants.REGISTRY_PORT);
             }
 
             try {
                 registry.bind(bindingName, publisher);
             } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, e.toString(), e);
                 registry.rebind(bindingName, publisher);
             }
 

@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="SSTEngine-v0.2.0-alpha">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/SSTEngine-v0.2.0-alpha.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/SSTEngine-v0.2.0-alpha.jar!/javadoc" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>
