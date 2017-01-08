@@ -1,5 +1,6 @@
 package com.crosstheborder.game.shared;
 
+import com.sstengine.event.EventLog;
 import com.sstengine.game.GameSettings;
 import com.sstengine.map.Map;
 import com.sstengine.player.Player;
@@ -32,4 +33,6 @@ public interface IGame extends Remote {
     int getRemainingTurns() throws RemoteException;
 
     void pushInput(int playerId, PlayerInput input) throws RemoteException;
+
+    void executeEventLog(EventLog log) throws RemoteException;
 }

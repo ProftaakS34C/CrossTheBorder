@@ -20,7 +20,7 @@ import java.util.List;
  * @author Oscar de Leeuw
  */
 public class CrossTheBorderGame extends Game implements IGame {
-    private ObstacleFactory obstacleFactory;
+    private transient ObstacleFactory obstacleFactory;
 
     public CrossTheBorderGame(GameSettings settings, Map map, List<Team> teams) {
         super(settings, map, teams);

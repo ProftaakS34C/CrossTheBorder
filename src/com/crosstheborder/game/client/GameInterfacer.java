@@ -2,6 +2,7 @@ package com.crosstheborder.game.client;
 
 import com.crosstheborder.game.shared.IGame;
 import com.crosstheborder.game.shared.network.RMIConstants;
+import com.sstengine.event.EventLog;
 import fontyspublisher.IRemotePropertyListener;
 import fontyspublisher.IRemotePublisherForListener;
 import javafx.application.Platform;
@@ -40,12 +41,21 @@ public class GameInterfacer
             LOGGER.log(Level.INFO, "Found registry!");
 
 
-            LOGGER.log(Level.INFO, "Looking for game under " + publisherName);
+            LOGGER.log(Level.INFO, "Looking for publisher under " + publisherName);
             publisher = (IRemotePublisherForListener) registry.lookup(publisherName);
             LOGGER.log(Level.INFO, "Found publisher!");
 
+            LOGGER.info("Looking for game under " + publisherName + "game");
+            game = (IGame) registry.lookup(publisherName + "game");
+            LOGGER.info("Found game!");
+
+            LOGGER.info("Creating UI.");
+            client.createUI(game);
+            LOGGER.info("Created UI!");
+
+            LOGGER.info("Subscribing to the game property");
             publisher.subscribeRemoteListener(this, RMIConstants.GAME_PROPERTY_NAME);
-            LOGGER.log(Level.INFO, "Found the game property!");
+            LOGGER.log(Level.INFO, "Subscribed to the game property!");
 
         } catch (NotBoundException e) {
             LOGGER.log(Level.SEVERE, e.toString(), e);
@@ -63,11 +73,8 @@ public class GameInterfacer
 
     @Override
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) throws RemoteException {
-        game = (IGame) propertyChangeEvent.getNewValue();
-
-        if (!hasFoundGame) {
-            client.createUI(game);
-        }
+        EventLog log = (EventLog) propertyChangeEvent.getNewValue();
+        game.executeEventLog(log);
 
         hasFoundGame = true;
         Platform.runLater(() ->

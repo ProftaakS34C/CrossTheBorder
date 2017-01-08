@@ -2,6 +2,7 @@ package com.crosstheborder.game.server;
 
 import com.crosstheborder.game.shared.CrossTheBorderGame;
 import com.crosstheborder.game.shared.network.RMIConstants;
+import com.sstengine.event.EventLog;
 import fontyspublisher.RemotePublisher;
 
 import java.io.File;
@@ -43,22 +44,40 @@ public class GamePusher extends TimerTask {
             publisher = new RemotePublisher();
 
             try {
+                LOGGER.log(Level.INFO, "Creating registry at port " + RMIConstants.REGISTRY_PORT);
                 //registry = LocateRegistry.getRegistry(RMIConstants.REGISTRY_PORT);
                 registry = LocateRegistry.createRegistry(RMIConstants.REGISTRY_PORT);
+                LOGGER.log(Level.INFO, "Created registry.");
             } catch (RemoteException e) {
-                LOGGER.log(Level.SEVERE, e.toString(), e);
+                LOGGER.log(Level.INFO, "Could not create registry, getting it instead.");
                 //registry = LocateRegistry.createRegistry(RMIConstants.REGISTRY_PORT);
                 registry = LocateRegistry.getRegistry(RMIConstants.REGISTRY_PORT);
+                LOGGER.log(Level.INFO, "Got registry.");
             }
 
             try {
+                LOGGER.log(Level.INFO, "Trying to bind publisher.");
                 registry.bind(bindingName, publisher);
             } catch (Exception e) {
-                LOGGER.log(Level.SEVERE, e.toString(), e);
+                LOGGER.log(Level.INFO, "Could not bind, trying to rebind publisher.");
                 registry.rebind(bindingName, publisher);
             }
 
+            LOGGER.log(Level.INFO, "Publisher has been bound.");
+
+            try {
+                LOGGER.log(Level.INFO, "Trying to bind game.");
+                registry.bind(bindingName + "game", game);
+            } catch (Exception e) {
+                LOGGER.log(Level.INFO, "Could not bind, trying to rebind game.");
+                registry.rebind(bindingName + "game", publisher);
+            }
+
+            LOGGER.log(Level.INFO, "Game has been bound.");
+
+            LOGGER.log(Level.INFO, "Registering game property.");
             publisher.registerProperty(RMIConstants.GAME_PROPERTY_NAME);
+            LOGGER.log(Level.INFO, "Registered game property.");
 
         } catch (RemoteException e) {
             LOGGER.log(Level.SEVERE, e.toString(), e);
@@ -66,9 +85,9 @@ public class GamePusher extends TimerTask {
         }
     }
 
-    private void updateClients() {
+    private void updateClients(EventLog log) {
         try {
-            publisher.inform(RMIConstants.GAME_PROPERTY_NAME, null, game);
+            publisher.inform(RMIConstants.GAME_PROPERTY_NAME, null, log);
         } catch (RemoteException e) {
             LOGGER.log(Level.SEVERE, e.toString(), e);
         }
@@ -76,8 +95,8 @@ public class GamePusher extends TimerTask {
 
     @Override
     public void run() {
-        game.update();
-        updateClients();
+        EventLog log = game.update();
+        updateClients(log);
 
         if (game.isDone()) {
             LOGGER.log(Level.INFO, "Game is done.");
@@ -93,10 +112,10 @@ public class GamePusher extends TimerTask {
 
             cancel();
             LOGGER.log(Level.INFO, "Canceled timer.");
-            System.exit(0);
         }
 
-        //testSize(game.getMap(), "the map");
+        testSize(game, "Game");
+        testSize(log, "A log");
         //testSize(game.getMap().getTile(20,20), "a tile");
         //testSize(game.getMap().getTile(0,0).getObstacle(), "an obstacle");
     }

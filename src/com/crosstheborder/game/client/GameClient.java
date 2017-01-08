@@ -74,8 +74,6 @@ public class GameClient extends Application {
     public void start(Stage primaryStage) {
 
         try {
-            gameInterfacer = new GameInterfacer(ipAddress, publisherName, this);
-
             StackPane root = new StackPane();
             Scene scene = new Scene(root, 1080d, 720d);
 
@@ -90,6 +88,7 @@ public class GameClient extends Application {
 
             primaryStage.setScene(scene);
             primaryStage.show();
+            gameInterfacer = new GameInterfacer(ipAddress, publisherName, this);
         } catch (RemoteException e) {
             LOGGER.log(Level.SEVERE, e.toString(), e);
         }
