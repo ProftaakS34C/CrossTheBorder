@@ -102,6 +102,7 @@ public class GamePusher extends TimerTask {
             LOGGER.log(Level.INFO, "Game is done.");
 
             try {
+                publisher.inform(RMIConstants.GAME_PROPERTY_NAME, null, true);
                 publisher.unregisterProperty(RMIConstants.GAME_PROPERTY_NAME);
                 LOGGER.log(Level.INFO, "Unbound property.");
                 registry.unbind(bindingName);
