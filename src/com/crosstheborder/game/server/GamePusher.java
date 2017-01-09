@@ -114,8 +114,8 @@ public class GamePusher extends TimerTask {
             LOGGER.log(Level.INFO, "Canceled timer.");
         }
 
-        testSize(game, "Game");
-        testSize(log, "A log");
+        //testSize(game, "Game");
+        //testSize(log, "A log");
         //testSize(game.getMap().getTile(20,20), "a tile");
         //testSize(game.getMap().getTile(0,0).getObstacle(), "an obstacle");
     }
