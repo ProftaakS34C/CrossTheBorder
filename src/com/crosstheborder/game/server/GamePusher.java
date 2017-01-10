@@ -31,6 +31,8 @@ public class GamePusher extends TimerTask {
 
     private CrossTheBorderGame game;
 
+    private long logSizeChecker = 0;
+
     public GamePusher(CrossTheBorderGame game, String bindingName) {
         this.game = game;
         this.bindingName = bindingName;
@@ -120,13 +122,16 @@ public class GamePusher extends TimerTask {
         //testSize(game.getMap().getTile(0,0).getObstacle(), "an obstacle");
     }
 
-    private void testSize(Object object, String message) {
+    private long testSize(Object object, String message) {
         File temp = new File("temp.dat");
         temp.deleteOnExit();
+        long length = 0;
 
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(temp))) {
             oos.writeObject(object);
 
+            logSizeChecker += temp.length();
+            LOGGER.log(Level.INFO, "Average amount of bytes for " + message + ": " + (logSizeChecker / game.getElapsedTurns()));
             LOGGER.log(Level.INFO, "Amount of bytes for " + message + ": " + temp.length());
             oos.close();
         } catch (IOException e) {
@@ -134,5 +139,6 @@ public class GamePusher extends TimerTask {
         }
 
         temp.delete();
+        return length;
     }
 }
