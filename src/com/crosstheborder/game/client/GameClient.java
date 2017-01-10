@@ -107,16 +107,16 @@ public class GameClient extends Application {
         }
     }
 
+    public void endGame(){
+        timeline.stop();
+        //show the end screen here --- a screen with the final score, either victory or defeat and a continue button.
+        System.out.println("show end-screen here");
+
+
+    }
+
     public void render() {
-        try {
-            if (gameInterfacer.getGame().isDone()) {
-                timeline.stop();
-            } else {
-                ui.render();
-            }
-        } catch (RemoteException e) {
-            LOGGER.log(Level.SEVERE, e.toString(), e);
-        }
+        ui.render();
     }
 
     private void sendKeys() {

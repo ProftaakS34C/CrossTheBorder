@@ -75,7 +75,7 @@ public class GameInterfacer
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) throws RemoteException {
         Object newVal = propertyChangeEvent.getNewValue();
         if(!(newVal instanceof EventLog)) {
-            //Game == ended
+            client.endGame();
         }else {
             EventLog log = (EventLog) newVal;
 
