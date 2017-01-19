@@ -73,13 +73,19 @@ public class GameInterfacer
 
     @Override
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) throws RemoteException {
-        EventLog log = (EventLog) propertyChangeEvent.getNewValue();
-        game.executeEventLog(log);
+        Object newVal = propertyChangeEvent.getNewValue();
+        if((newVal instanceof EventLog)) {
+            EventLog log = (EventLog) newVal;
+            game.executeEventLog(log);
 
-        hasFoundGame = true;
-        Platform.runLater(() ->
-                client.render()
-        );
+            Platform.runLater(() ->
+                    client.render()
+            );
+        }else {
+            client.endGame();
+        }
+
+
 
         //LOGGER.log(Level.INFO, "Received new game status!");
     }

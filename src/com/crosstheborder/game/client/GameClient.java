@@ -2,8 +2,10 @@ package com.crosstheborder.game.client;
 
 import com.crosstheborder.game.client.painter.FXPainter;
 import com.crosstheborder.game.shared.IGame;
+import com.crosstheborder.game.shared.ui.EndScreen;
 import com.crosstheborder.game.shared.ui.PlayerEntityUI;
 import com.crosstheborder.game.shared.ui.TrumpUI;
+import com.crosstheborder.game.shared.ui.UIExtension;
 import com.sstengine.player.leader.Leader;
 import com.sstengine.ui.KeyboardKey;
 import com.sstengine.ui.UI;
@@ -37,7 +39,7 @@ public class GameClient extends Application {
     private static String playerName;
 
     private Canvas canvas;
-    private UI ui;
+    private UIExtension ui;
 
     private Timeline timeline;
     private List<KeyCode> activeKeys;
@@ -107,16 +109,15 @@ public class GameClient extends Application {
         }
     }
 
+    public void endGame(/*IGame game*/){
+        timeline.stop();
+        //show the end screen here --- a screen with the final score, either victory or defeat and a continue button.
+        System.out.println("show end-screen here");
+        ui.showEndScreen();
+    }
+
     public void render() {
-        try {
-            if (gameInterfacer.getGame().isDone()) {
-                timeline.stop();
-            } else {
-                ui.render();
-            }
-        } catch (RemoteException e) {
-            LOGGER.log(Level.SEVERE, e.toString(), e);
-        }
+        ui.render();
     }
 
     private void sendKeys() {

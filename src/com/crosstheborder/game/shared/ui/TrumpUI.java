@@ -27,23 +27,19 @@ import java.util.logging.Logger;
 /**
  * @author Oscar de Leeuw
  */
-public class TrumpUI extends UI {
+public class TrumpUI extends UIExtension {
     private static Logger LOGGER = Logger.getLogger(TrumpUI.class.getName());
 
-    private IGame game;
     private Map map;
-    private String name;
 
     private CrossTheBorderCamera camera;
     private TimeScoreCounter scoreCounter;
     private PlaceableTracker placeableTracker;
 
     public TrumpUI(Painter painter, IGame game, String name) throws RemoteException {
-        super(painter);
+        super(painter, game, name);
 
-        this.game = game;
         this.map = game.getMap();
-        this.name = name;
 
         camera = new CrossTheBorderCamera(map, new Point(0, 0), painter.getWidth(), painter.getHeight(), 40);
         camera.setCenter(new Point(10, 10));
@@ -80,7 +76,7 @@ public class TrumpUI extends UI {
     @Override
     public void render() {
         try {
-            map = game.getMap();
+            map = getGame().getMap();
         } catch (RemoteException e) {
             LOGGER.log(Level.SEVERE, e.toString(), e);
         }
@@ -113,8 +109,8 @@ public class TrumpUI extends UI {
     private void handleTrumpAction(TrumpAction action) throws RemoteException {
         switch (action) {
             case PLACE_OBSTACLE:
-                PlayerInput input = new TrumpInput(placeableTracker.getActiveType(), game.getMap().getTile(camera.getCenter()));
-                game.pushInput(getLeader().getId(), input);
+                PlayerInput input = new TrumpInput(placeableTracker.getActiveType(), getGame().getMap().getTile(camera.getCenter()));
+                getGame().pushInput(getLeader().getId(), input);
                 break;
             case SWITCH_TO_TRAP:
                 placeableTracker.setActiveType(CrossTheBorderPlaceableType.TRAP);
@@ -127,7 +123,7 @@ public class TrumpUI extends UI {
 
     private Leader getLeader() {
         try {
-            return (Leader) game.getPlayers().stream().filter(x -> x.getName().equals(name)).findFirst().get().getPlayable();
+            return (Leader) getGame().getPlayers().stream().filter(x -> x.getName().equals(getName())).findFirst().get().getPlayable();
         } catch (RemoteException e) {
             LOGGER.log(Level.SEVERE, e.toString(), e);
         }
