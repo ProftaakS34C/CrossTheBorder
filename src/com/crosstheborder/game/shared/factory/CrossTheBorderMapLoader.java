@@ -192,7 +192,7 @@ public class CrossTheBorderMapLoader {
                     country = null;
                 }
 
-                int id = j + (i*j);
+                int id = j + (i * height);
 
                 ret[i][j] = tileFactory.createTile(id, tileType, new Point(i,j));
                 ret[i][j].setObstacle(obstacle);
