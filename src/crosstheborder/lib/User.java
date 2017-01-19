@@ -1,5 +1,10 @@
 package crosstheborder.lib;
 
+import com.crosstheborder.lobby.shared.IRoom;
+
+import java.io.Serializable;
+import java.rmi.RemoteException;
+
 /**
  * Represents a user of the game.
  *
@@ -7,11 +12,11 @@ package crosstheborder.lib;
  * @author Oscar de Leeuw
  * @version 1.0
  */
-public class User {
+public class User implements Serializable {
     private String name;
-    private Player player;
-    private Lobby lobby;
+    private IRoom room;
     private boolean isComputer;
+    private int ID = 0;
 
     /**
      * This is the constructor method of the class "User"
@@ -23,17 +28,22 @@ public class User {
     }
 
     /**
-     * Checks if the user is owner of the lobby
-     * @return true if User is owner, false if not or if lobby is null.
+     * Checks if the user is owner of the room
+     * @return true if User is owner, false if not or if room is null.
      */
     public boolean isOwnerOfLobby(){
-        return lobby.getOwner().equals(this);
+        try {
+            return room.getOwner().getID() == (getID());
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     /**
      * Method used for filling the owner column.
      *
-     * @return A string that represents whether this user is the owner of the lobby.
+     * @return A string that represents whether this user is the owner of the room.
      */
     public String getOwner() {
         return isOwnerOfLobby() ? "Yes" : "No";
@@ -60,34 +70,22 @@ public class User {
     }
 
     /**
-     * This method sets the lobby of the player.
-     * @param lobby the lobby object the player is part of
+     * This method sets the room of the player.
+     * @param room the room object the player is part of
      */
-    public void joinLobby(Lobby lobby) {
-        this.lobby = lobby;
-        lobby.addUser(this);
+    public void setRoom(IRoom room) {
+        this.room = room;
     }
 
-    public void leaveLobby() {
-        if (this.lobby != null) {
-            this.lobby.removeUser(this);
-            this.lobby = null;
+    public void leaveRoom() {
+        if (this.room != null) {
+            try {
+                this.room.removeUser(this);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            this.room = null;
         }
-    }
-
-    /**
-     * This method is used to get the player object of the user
-     * @return Player the player object of the user
-     */
-    public Player getPlayer(){return player;}
-
-    /**
-     * This method sets the value of player
-     *
-     * @param player the player object the user is playing as
-     */
-    public void setPlayer(Player player) {
-        this.player = player;
     }
 
     /**
@@ -99,10 +97,18 @@ public class User {
     }
 
     /**
-     * This method gets the Lobby object this player is part of
-     * @return Lobby the lobby the user is in null if not in a lobby.
+     * This method gets the Room object this player is part of
+     * @return Room the room the user is in null if not in a room.
      */
-    public Lobby getLobby() {
-        return lobby;
+    public IRoom getRoom() {
+        return room;
+    }
+
+    public void setID(int id){
+        ID = id;
+    }
+
+    public int getID(){
+        return ID;
     }
 }

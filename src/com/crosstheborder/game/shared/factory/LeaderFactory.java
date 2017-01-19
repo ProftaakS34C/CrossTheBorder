@@ -1,6 +1,6 @@
 package com.crosstheborder.game.shared.factory;
 
-import com.crosstheborder.game.shared.util.CrossTheBorderPlaceableType;
+import com.crosstheborder.game.shared.util.enumeration.CrossTheBorderPlaceableType;
 import com.sstengine.player.leader.Leader;
 import com.sstengine.player.leader.PlaceableCounter;
 import com.sstengine.player.leader.PlaceableManager;

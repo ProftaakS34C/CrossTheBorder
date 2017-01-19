@@ -14,6 +14,6 @@ import java.util.Map;
 public class WallPlacementStrategy implements PlacementStrategy{
     @Override
     public boolean execute(PlaceableObstacle placeableObstacle, Map<OrdinalDirection, Tile> map, Tile tile) {
-        return true;
+        return tile.getObstacle() == null && tile.getPlayerEntity() == null && tile.getCountry() == null;
     }
 }

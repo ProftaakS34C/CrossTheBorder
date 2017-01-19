@@ -149,7 +149,8 @@ public class Game implements GameManipulator, GameInterface {
             }
         }
 
-        user.setPlayer(player);
+//        user.setPlayer(player);
+        //todo set player in gameclient
     }
 
     /**

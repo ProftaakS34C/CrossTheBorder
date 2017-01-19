@@ -1,59 +1,111 @@
 package com.crosstheborder.game.server;
 
-import com.crosstheborder.game.shared.network.Network;
-import com.crosstheborder.game.shared.network.Packet;
-import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Server;
+import com.crosstheborder.game.shared.CrossTheBorderGame;
+import com.crosstheborder.game.shared.factory.MainFactory;
+import com.crosstheborder.game.shared.network.RMIConstants;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Timer;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 /**
  * @author Oscar de Leeuw
  */
 public class GameServer {
-    private Server server;
-    private ServerListener listener;
-    //Map of PlayerId and Connection.
-    private Map<Integer, Connection> connections;
+    private static final Logger LOGGER = Logger.getLogger(GameServer.class.getName());
 
-    private int port;
+    private static String bindingName = "";
+    private static String mapName;
 
-    public GameServer(int port) throws IOException {
-        this.port = port;
-        this.server = new Server();
-        this.listener = new ServerListener(this);
-        this.connections = new HashMap<>();
+    private static Timer timer;
+    private static MainFactory mainFactory = new MainFactory();
+    private static CrossTheBorderGame game;
+    private static GamePusher pusher;
 
-        //Register all data types.
-        Network.register(server);
+    private static List<String> names;
 
-        //Bind the server.
-        server.bind(port, port);
-        //Start the server.
-        server.start();
-        //Add the ServerListener.
-        server.addListener(listener);
+    private static void fixLoggerForDebugging() {
+        LOGGER.setLevel(Level.ALL);
+        ConsoleHandler handler = new ConsoleHandler();
+        handler.setLevel(Level.ALL);
+        handler.setFormatter(new SimpleFormatter());
+        LOGGER.addHandler(handler);
+        LOGGER.fine("THIS IS ONLY FOR DEBUGGING. SHOULD NOT BE PRESENT IN PRODUCTION CODE.");
     }
 
-    public synchronized void registerPlayer(int playerId, Connection connection) {
-        System.out.println("Registering connection from " + connection.getRemoteAddressTCP().getHostString() + " under the ID " + playerId);
-        connections.put(playerId, connection);
-    }
+    public static void main(String[] args) {
+        //args[0] = -m
+        //args[1] = names with comma
+        //args[2] = mapname
+        timer = new Timer();
+        fixLoggerForDebugging();
 
-    public synchronized void sendPacket(int playerId, Packet packet) {
-        Connection conn = connections.get(playerId);
-        if (conn != null) {
-            System.out.println("Sending a packet to " + conn.getRemoteAddressTCP().getHostString());
-            conn.sendTCP(packet);
+        if (args[0].equals("-m")) {
+            names = new ArrayList<>(Arrays.asList(args[1].split(",")));
+            bindingName = String.join("", args[1].split(","));
+            mapName = args[2];
+        } else {
+            awaitLobbyConnection();
         }
+
+        // Creating new game
+        LOGGER.log(Level.FINE, "Creating game...");
+        game = mainFactory.createGame(mapName, names);
+        pusher = new GamePusher(game, bindingName);
+        LOGGER.log(Level.FINE, "Created game and pusher.");
+
+        setupTimer();
+        LOGGER.log(Level.FINE, "Started game.");
     }
 
-    public synchronized void receivedPacket(Connection connection, Packet packet) {
-        //Send the packet to a PacketManager.
-        System.out.println("Got a packet from " + connection.getRemoteAddressTCP().getHostString());
-        System.out.println("Packet contents:");
-        System.out.println(packet);
+    private static void awaitLobbyConnection() {
+        // Receiving list of players + sending bindingName
+        try{
+            ServerSocket serverSocket = new ServerSocket(RMIConstants.SOCKET_PORT);
+            LOGGER.log(Level.FINE, "Awaiting connection from lobby server.");
+            serverSocket.setSoTimeout(10000);
+
+            try (Socket socket = serverSocket.accept()) {
+                LOGGER.log(Level.FINE, "Got a connection from: " + socket.getInetAddress().getHostAddress());
+
+                // Creating streams
+                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+                ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+
+                // Getting list of names of streams
+                names = (List<String>) in.readObject();
+
+                // Creating bindingName + sending it back
+                for(String s : names){
+                    bindingName += s;
+                }
+                out.writeObject(bindingName);
+
+                // Receiving map name
+                mapName = (String) in.readObject();
+            } catch (ClassNotFoundException e) {
+                LOGGER.log(Level.SEVERE, e.toString(), e);
+                System.exit(2);
+            }
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, e.toString(), e);
+            System.exit(1);
+        }
+
+        //System.exit(0);
+    }
+
+    private static void setupTimer() {
+        timer.scheduleAtFixedRate(pusher, 0, 200);
     }
 }

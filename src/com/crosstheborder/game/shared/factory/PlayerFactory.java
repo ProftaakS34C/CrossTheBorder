@@ -1,7 +1,6 @@
 package com.crosstheborder.game.shared.factory;
 
 
-import com.crosstheborder.game.shared.util.CrossTheBorderCountryTag;
 import com.sstengine.player.Player;
 import com.sstengine.player.leader.Leader;
 import com.sstengine.player.playerentity.PlayerEntity;

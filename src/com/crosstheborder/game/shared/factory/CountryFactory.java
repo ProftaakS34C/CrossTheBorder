@@ -1,10 +1,10 @@
 package com.crosstheborder.game.shared.factory;
 
-import com.crosstheborder.game.shared.component.graphical.MexicoCountryGraphics;
-import com.crosstheborder.game.shared.component.graphical.USACountryGraphics;
+import com.crosstheborder.game.shared.component.graphical.countrygraphics.MexicoCountryGraphics;
+import com.crosstheborder.game.shared.component.graphical.countrygraphics.USACountryGraphics;
 import com.crosstheborder.game.shared.component.physical.MexicoCountryPhysical;
 import com.crosstheborder.game.shared.component.physical.USACountryPhysical;
-import com.crosstheborder.game.shared.util.CrossTheBorderCountryTag;
+import com.crosstheborder.game.shared.util.enumeration.CrossTheBorderCountryTag;
 import com.sstengine.country.Country;
 
 /**

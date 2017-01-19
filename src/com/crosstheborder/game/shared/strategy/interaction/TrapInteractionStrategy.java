@@ -1,6 +1,6 @@
 package com.crosstheborder.game.shared.strategy.interaction;
 
-import com.crosstheborder.game.shared.util.CrossTheBorderCountryTag;
+import com.crosstheborder.game.shared.util.enumeration.CrossTheBorderCountryTag;
 import com.sstengine.component.physical.Physical;
 import com.sstengine.event.events.ChangeObstacleTileEvent;
 import com.sstengine.event.events.ChangePlayerEntityStateEvent;
