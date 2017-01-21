@@ -34,9 +34,9 @@ public class LobbyServer {
         // Creating lobby
         try{
             lobby = new Lobby();
-            User henk = new User("henk1");
-            henk.setID(lobby.addUser(henk));
-            lobby.createRoom("Test room", 8, henk);
+/*            User henk = new User("henk1");
+              henk.setID(lobby.addUser(henk));
+              lobby.createRoom("Test room", 8, henk);*/
 //            lobby.createRoom("Kekkerdekek",8 , new User("henk2"));
 //            lobby.createRoom("Bla bla lbagsdgsg",8 , new User("henk3"));
 //            lobby.createRoom("Test 2",8 , new User("henk4"));

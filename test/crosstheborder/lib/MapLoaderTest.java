@@ -34,7 +34,7 @@ public class MapLoaderTest {
         int width = 40;
         int height = 40;
         Rectangle usaArea = new Rectangle(0, 0, 40, 4);
-        Rectangle mexArea = new Rectangle(0, 34, 40, 6);
+        Rectangle mexArea = new Rectangle(0, 29, 40, 6);
 
         // Width + Height
         Assert.assertEquals(width, map.getWidth());
