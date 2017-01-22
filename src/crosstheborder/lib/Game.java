@@ -66,6 +66,10 @@ public class Game implements GameManipulator, GameInterface {
         return this.map;
     }
 
+    public List<PlayerEntity> getPlayers() {
+        return players;
+    }
+
     /**
      * Gets the game settings for this game.
      *
@@ -79,13 +83,8 @@ public class Game implements GameManipulator, GameInterface {
      * Gets the Trump in the list of players.
      * @return The Trump object.
      */
-    private Trump getTrump() {
-        for (Player player : players) {
-            if (player instanceof Trump) {
-                return (Trump) player;
-            }
-        }
-        return null;
+    public Trump getTrump() {
+        return trump;
     }
 
     /**

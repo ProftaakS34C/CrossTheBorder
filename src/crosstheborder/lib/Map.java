@@ -45,6 +45,10 @@ public class Map {
         this.tiles = builder.tiles;
     }
 
+    public Tile[][] getTiles() {
+        return tiles;
+    }
+
     /**
      * Gets the width of the map.
      *
