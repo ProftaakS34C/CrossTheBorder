@@ -1,13 +1,9 @@
 package com.crosstheborder.lobby.shared;
 
-import crosstheborder.lib.Message;
-import crosstheborder.lib.User;
-
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringJoiner;
 
 /**
  * @author Yannic

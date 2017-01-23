@@ -1,4 +1,6 @@
-package crosstheborder.lib;
+package com.crosstheborder.lobby.shared;
+
+import com.crosstheborder.lobby.shared.User;
 
 import java.io.Serializable;
 import java.time.LocalTime;

@@ -1,4 +1,4 @@
-package crosstheborder.lib;
+package com.crosstheborder.lobby.shared;
 
 import com.crosstheborder.lobby.shared.IRoom;
 

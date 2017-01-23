@@ -1,6 +1,8 @@
 package crosstheborder.lib;
 
 import com.crosstheborder.lobby.server.Room;
+import com.crosstheborder.lobby.shared.Message;
+import com.crosstheborder.lobby.shared.User;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

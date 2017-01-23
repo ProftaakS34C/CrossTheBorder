@@ -4,11 +4,9 @@ package com.crosstheborder.lobby.client.controller;
 import com.crosstheborder.game.client.GameClient;
 import com.crosstheborder.lobby.client.ClientMain;
 import com.crosstheborder.lobby.client.RoomPuller;
-import crosstheborder.lib.Message;
-import crosstheborder.lib.User;
+import com.crosstheborder.lobby.shared.Message;
+import com.crosstheborder.lobby.shared.User;
 import com.crosstheborder.lobby.shared.IRoom;
-import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -16,7 +14,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.Timer;
 
 /**

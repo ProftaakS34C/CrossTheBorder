@@ -6,16 +6,12 @@ package com.crosstheborder.lobby.client;
  *
  */
 
-import com.crosstheborder.game.client.GameClient;
-import com.crosstheborder.lobby.client.controller.GameScreenController;
 import com.crosstheborder.lobby.client.controller.LayoutController;
 import com.crosstheborder.lobby.client.controller.RoomMenuController;
 import com.crosstheborder.lobby.client.controller.LobbyMenuController;
 import com.crosstheborder.lobby.shared.ILobby;
-import com.crosstheborder.lobby.shared.IRoom;
 import com.crosstheborder.lobby.shared.RMIConstants;
-import crosstheborder.lib.Map;
-import crosstheborder.lib.User;
+import com.crosstheborder.lobby.shared.User;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -27,14 +23,10 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,7 +36,7 @@ import java.util.logging.Logger;
  */
 public class ClientMain extends Application {
 
-    private static final Logger LOGGER = Logger.getLogger(Map.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(ClientMain.class.getName());
 
     private Stage primaryStage;
     private BorderPane root;
@@ -217,8 +209,6 @@ public class ClientMain extends Application {
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/GameScreen.fxml"));
             gameRoot = loader.load();
-            GameScreenController controller = loader.getController();
-            controller.setUp(this);
             root.setCenter(gameRoot);
             gameRoot.requestFocus();
             primaryStage.setTitle("In Game");

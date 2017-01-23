@@ -1,6 +1,6 @@
 package com.crosstheborder.lobby.server;
 
-import crosstheborder.lib.User;
+import com.crosstheborder.lobby.shared.User;
 import com.crosstheborder.lobby.shared.ILobby;
 import com.crosstheborder.lobby.shared.IRoom;
 
