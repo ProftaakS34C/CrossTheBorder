@@ -2,14 +2,11 @@ package com.crosstheborder.lobby.server;
 
 import com.crosstheborder.game.server.GameServer;
 import com.crosstheborder.game.shared.network.RMIConstants;
-import crosstheborder.lib.Game;
-import crosstheborder.lib.Message;
-import crosstheborder.lib.User;
-import crosstheborder.lib.interfaces.GameSettings;
+import com.crosstheborder.lobby.shared.Message;
+import com.crosstheborder.lobby.shared.User;
 import com.crosstheborder.lobby.shared.IRoom;
 
 import java.io.*;
-import java.net.Socket;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
@@ -34,8 +31,6 @@ public class Room extends UnicastRemoteObject implements IRoom, Serializable{
     private ArrayList<Message> messages;
     private ArrayList<User> users;
     private User owner;
-    private Game game;
-    private GameSettings settings;
 
     private String bindingName;
     private boolean gameStarted;
@@ -103,25 +98,8 @@ public class Room extends UnicastRemoteObject implements IRoom, Serializable{
         password = value;
     }
 
-    /**
-     * Gets the gameSettings of this room
-     * @return a GameSettings object containing all settings
-     */
-    public GameSettings getSettings() {
-        return settings;
-    }
-
-
     public boolean getIsPrivate() {
         return password.equals("") ? false : true;
-    }
-
-    /**
-     * This method gets the game of this room
-     * @return Game, the game object of this room
-     */
-    public Game getGame(){
-        return game;
     }
 
     /**
@@ -192,9 +170,6 @@ public class Room extends UnicastRemoteObject implements IRoom, Serializable{
 
                 //If we just removed the owner assign it to someone else.
                 if (users.isEmpty()) {
-                    if (game != null) {
-                        game.stop();
-                    }
                     return false;
                 } else if (owner.getID() == user.getID()) {
                     owner = users.get(0);

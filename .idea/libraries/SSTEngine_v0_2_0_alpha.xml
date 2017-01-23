@@ -1,10 +1,10 @@
 <component name="libraryTable">
   <library name="SSTEngine-v0.2.0-alpha">
     <CLASSES>
-      <root url="jar://D:/Dropbox/S3/Game/SSTEngine-v0.2.0-alpha.jar!/" />
+      <root url="jar://$PROJECT_DIR$/SSTEngine-v0.2.0-alpha.jar!/" />
     </CLASSES>
     <JAVADOC>
-      <root url="jar://D:/Dropbox/S3/Game/SSTEngine-v0.2.0-alpha.jar!/javadoc" />
+      <root url="jar://$PROJECT_DIR$/SSTEngine-v0.2.0-alpha.jar!/javadoc" />
     </JAVADOC>
     <SOURCES />
   </library>

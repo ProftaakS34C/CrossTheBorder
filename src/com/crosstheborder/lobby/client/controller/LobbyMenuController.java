@@ -5,7 +5,7 @@ import com.crosstheborder.lobby.client.ClientMain;
 import com.crosstheborder.lobby.client.LobbyPuller;
 import com.crosstheborder.lobby.client.UIRoom;
 import com.crosstheborder.lobby.client.dialog.CreateLobbyDialog;
-import crosstheborder.lib.User;
+import com.crosstheborder.lobby.shared.User;
 import com.crosstheborder.lobby.shared.ILobby;
 import com.crosstheborder.lobby.shared.IRoom;
 import javafx.fxml.FXML;

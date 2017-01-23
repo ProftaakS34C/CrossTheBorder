@@ -1,6 +1,5 @@
 package com.crosstheborder.lobby.shared;
 
-import crosstheborder.lib.User;
 import com.crosstheborder.lobby.server.Room;
 
 import java.rmi.Remote;
