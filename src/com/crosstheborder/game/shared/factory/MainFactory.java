@@ -88,7 +88,7 @@ public class MainFactory {
         return players;
     }
 
-    private enum PlayerType {
+    public enum PlayerType {
         Trump, Mexican, BorderPatrol
     }
 }

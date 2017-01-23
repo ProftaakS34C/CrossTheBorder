@@ -31,7 +31,7 @@ public class MessageTest {
      */
     @Test
     public void toStringTest() throws Exception {
-        Assert.assertEquals(LocalTime.now().getHour() + ":" + LocalTime.now().getMinute() +
+        Assert.assertEquals(LocalTime.now().getHour() + ":0" + LocalTime.now().getMinute() +
                                         " Henk: Wat een mooi spel is dit!", mes.toString());
     }
 }

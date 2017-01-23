@@ -36,7 +36,7 @@ public class RoomTest {
         }
 
         Assert.assertEquals(2, room.getMessages().size());
-        Assert.assertEquals(LocalTime.now().getHour() + ":" + LocalTime.now().getMinute() + " Henk: Dit is een mooi bericht",
+        Assert.assertEquals(LocalTime.now().getHour() + ":0" + LocalTime.now().getMinute() + " Henk: Dit is een mooi bericht",
                                                                                         room.getMessages().get(0).toString());
     }
 }
